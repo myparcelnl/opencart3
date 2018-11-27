@@ -1,2 +1,2 @@
-# opencart3
-MyParcel plugin Opencart 3
+# OpenCart 3
+Voor de handleiding en meer informatie ga naar: https://myparcelnl.github.io/opencart3/
