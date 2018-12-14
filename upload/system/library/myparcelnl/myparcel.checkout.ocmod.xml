@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>MyParcel NL - Default Checkout</name>
+    <version>1.0.0</version>
+    <code>MyParcelNL_default_checkout</code>
+    <author>MyParcel NL</author>
+    <link>http://www.myparcelnl.com</link>
+
+    <!-- ________________ SYSTEM\LIBRARY\CART\CART.PHP ________________ -->
+    <!-- _________________________ CART CLASS _________________________ -->
+    <!-- ______________________________________________________________ -->
+    <file path="system/library/cart/cart.php">
+        <operation>
+            <search><![CDATA[public function clear() {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Clear myparcel delivery options everytime cart is cleared */
+                if (isset($this->session->data['myparcel'])) {
+			        unset($this->session->data['myparcel']);
+		        }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function remove($cart_id) {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Clear myparcel delivery options everytime cart is cleared */
+                if (isset($this->session->data['myparcel'])) {
+			        unset($this->session->data['myparcel']);
+		        }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ SYSTEM\LIBRARY\CART\USER.PHP ________________ -->
+    <!-- _________________________ CART CLASS _________________________ -->
+    <!-- ______________________________________________________________ -->
+    <file path="system/library/cart/customer.php">
+        <operation>
+            <search><![CDATA[public function login($email, $password, $override = false) {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Clear myparcel delivery options everytime cart is cleared */
+                if (isset($this->session->data['myparcel'])) {
+			        unset($this->session->data['myparcel']);
+		        }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function logout() {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Clear myparcel delivery options everytime cart is cleared */
+                if (isset($this->session->data['myparcel'])) {
+			        unset($this->session->data['myparcel']);
+		        }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ CATALOG\MODEL\CHECKOUT\ORDER.PHP ________________ -->
+    <!-- ___________________________ ORDER MODEL __________________________ -->
+    <!-- __________________________________________________________________ -->
+    <file path="catalog/model/checkout/order.php">
+        <operation>
+            <search><![CDATA[if ($order_info) {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Add delivery options into order database */
+			       $this->load->model('extension/myparcelnl/helper');
+			       $this->model_extension_myparcelnl_helper->addDeliveryDataIntoOrder($order_info);
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ CHECKOUT.PHP ________________ -->
+    <!-- _____________ CHECKOUT CONTROLLER ____________ -->
+    <!-- ______________________________________________ -->
+    <file path="catalog/controller/checkout/checkout.php">
+        <operation>
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                $this->load->model('extension/myparcelnl/helper');
+
+                $this->model_extension_myparcelnl_helper->addCompatibleScript('delivery_iframe', $this->document);
+                $this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'checkout.css');
+
+                $data['myparcel_delivery_checkout_header'] = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_checkout_header');
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ SHIPPING_METHOD.PHP ________________ -->
+    <!-- _____________ SHIPPING METHOD CONTROLLER ____________ -->
+    <!-- _____________________________________________________ -->
+    <file path="catalog/controller/checkout/shipping_method.php">
+        <operation>
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                $this->load->model('extension/myparcelnl/helper');
+		        $this->model_extension_myparcelnl_helper->initMyParcel();
+				$data['myparcel_delivery_iframe'] = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_options');
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[if (isset($this->session->data['shipping_method']['code'])) {]]></search>
+            <add position="before"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                foreach ($data['shipping_methods'] as $i => $shipping_method) {
+                    $data['shipping_methods'][$i]['is_visible_shipping_quote'] = MyParcel()->shipment->checkout->isVisibleShippingQuote($shipping_method);
+                    $data['shipping_methods'][$i]['is_parcel_shipping_method'] = MyParcel()->shipment->checkout->isParcelShippingMethod($shipping_method);
+                }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function save() {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                $this->load->model('extension/myparcelnl/helper');
+				$this->model_extension_myparcelnl_helper->saveDeliveryOptionsInCheckout();
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ____________ SHIPPING_METHOD.TWIG _____________ -->
+    <!-- ______________________________________________ -->
+    <file path="catalog/view/theme/*/template/checkout/shipping_method.twig">
+        <operation>
+            <search><![CDATA[{% for shipping_method in shipping_methods %}]]></search>
+            <add position="before"><![CDATA[
+                {% set continue = false %}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[{% for shipping_method in shipping_methods %}]]></search>
+            <add position="after"><![CDATA[
+                {% if shipping_method.is_visible_shipping_quote == false %}
+                    {% set continue = true %}
+                {% endif %}
+
+                {% if not continue %}
+                    {% set valid_quote = shipping_method.is_parcel_shipping_method %}
+                    {% if valid_quote %}
+                        {% if valid_quote == code or code is empty %}
+                            {% set code = valid_quote %}
+                            <input type="radio" class="parcel-shipping-method" name="shipping_method" value="{{code}}" checked="checked" />
+                        {% else %}
+                            {% set code = valid_quote %}
+                            <input type="radio" class="parcel-shipping-method" name="shipping_method" value="{{code}}" />
+                        {% endif %}
+                        {{ myparcel_delivery_iframe }}
+                    {% else %}
+            ]]></add>
+        </operation>
+        <operation>
+            <search regex="true"><![CDATA[/<div class="alert alert-danger alert-dismissible">(?s)(.*?){% endif %}/]]></search>
+            <add><![CDATA[
+                <div class="alert alert-danger alert-dismissible">$1{% endif %}
+                {% endif %}
+                {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ CHECKOUT.TWIG ________________ -->
+    <!-- ______________________________________________ -->
+    <file path="catalog/view/theme/*/template/checkout/checkout.twig">
+        <operation>
+            <search><![CDATA[{{ header }}]]></search>
+            <add position="after"><![CDATA[
+                {{ myparcel_delivery_checkout_header }}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[data: $('#collapse-shipping-method input[type=\'radio\']:checked, #collapse-shipping-method textarea'),]]></search>
+            <add position="replace"><![CDATA[data: $('#collapse-shipping-method input[type=\'radio\']:checked, #collapse-shipping-method textarea, #mypa-input, #mypa-signed:checked, #mypa-recipient-only:checked'),]]></add>
+        </operation>
+    </file>
+    <!-- ******************************************************************** -->
+
+</modification>

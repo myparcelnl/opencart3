@@ -1,0 +1,831 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* Modified in 1.0.4 to:
+ - Fix the bug that order lang is overwritten by MyParcelNL lang
+-->
+<modification>
+    <name>MyParcel NL</name>
+    <version>1.0.1</version>
+    <code>MyParcelNL</code>
+    <author>MyParcel NL</author>
+    <link>https://www.myparcel.nl/</link>
+
+    <!-- checked with compatible with Opencart 1x-->
+    <!-- yes is compatible, no is no compatible -->
+    <!-- ****************** ORDER_LIST.TWIG ******************* -->
+    <!-- ***************************************************** -->
+    <file path="admin/view/template/sale/order_list.twig"><!-- checked -->
+        <operation><!-- yes -->
+            <search regex="true"><![CDATA[/<td(.*)column_action(.*)<\/td>/]]></search>
+            <add><![CDATA[
+                <td>Ship To</td>
+
+				<td$1column_header_myparcel$2</td>
+
+				<td$1column_action$2</td>
+            ]]></add>
+        </operation>
+
+		<operation>
+            <search regex="true"><![CDATA[/<td(.*)order.date_modified(.*)<\/td>/]]></search>
+            <add><![CDATA[
+                <td$1order.date_modified$2</td>
+                <!-- ~~~ Tap.Nguyen ~~~ -->
+                <td class="shipping_address" class="text-left">
+                    <div class="oc_shipment_options">
+                      {{ order.mp_packet_type }}
+                      <div class="oc_shipment_options_form" style="display: none;">
+                        {{ order.ship_to_myparcel }}
+                      </div>
+                    </div>
+                </td>
+                <!-- Tap.Nguyen -->
+
+				<td class="text-right" id="column-myparcel-order-{{ order.order_id }}">{{ order.column_myparcel }}</td>
+            ]]></add>
+        </operation>
+
+        <operation><!-- no -->
+            <search regex="true"><![CDATA[/<td(.*)order.order_status(.*)<\/td>/]]></search>
+            <add><![CDATA[
+				<td id="column-status-order-{{ order.order_id }}"$1order.order_status$2</td>
+            ]]></add>
+        </operation>
+
+        <operation><!-- yes -->
+            <search><![CDATA[<div id="content">]]></search>
+            <add position="after"><![CDATA[
+                {{ myparcel_popup_modal }}
+            ]]></add>
+        </operation>
+
+        <operation><!-- no -->
+            <search regex="true"><![CDATA[/<button(.*)button_shipping_print(.*)<\/button>/]]></search>
+            <add><![CDATA[
+                {{ print_batch }}
+                {{ export_batch }}
+                {{ export_print_batch }}
+                <button$1button_shipping_print$2</button>
+            ]]></add>
+        </operation>
+
+        <operation><!-- no -->
+            <search><![CDATA[$('#button-shipping, #button-invoice').prop('disabled', true);]]></search>
+            <add position="after"><![CDATA[
+                $('#button-print-batch').prop('disabled', true);
+                $('#button-export-batch').prop('disabled', true);
+                $('#button-export-print-batch').prop('disabled', true);
+            ]]></add>
+        </operation>
+
+        <operation><!-- no -->
+            <search><![CDATA[$('#button-invoice').prop('disabled', false);]]></search>
+            <add position="after"><![CDATA[
+                $('#button-print-batch').prop('disabled', false);
+                $('#button-export-batch').prop('disabled', false);
+                $('#button-export-print-batch').prop('disabled', false);
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[$('input[name*=\'selected\']').prop('checked', this.checked);"]]></search>
+            <add position="replace"><![CDATA[$('input[name*=\'selected\']').prop('checked', this.checked);" class="checkbox-for-all"]]></add>
+        </operation>
+    </file>
+
+    <!-- ****************** ORDER_INFO.TWIG ******************* -->
+    <!-- ***************************************************** -->
+    <file path="admin/view/template/sale/order_info.twig"><!-- checked -->
+        <operation><!-- yes -->
+            <search regex="true" limit="1"><![CDATA[/{\% if shipping_method \%}(?s)(.*?)endif \%}/]]></search>
+            <add offset="1"><![CDATA[
+                {% if shipping_method %}$1$2endif %}
+
+                <!-- MyParcel Hooks -->
+
+                {{ myparcel_actions }}
+
+                <!-- ~~~ Tap.Nguyen ~~~ -->
+                <tr>
+                    {{ tracktrace }}
+                </tr>
+
+                <tr>
+                    {{ shipment_sumary }}
+                </tr>
+
+                <tr>
+                    {{ checkout_delivery_options }}
+                </tr>
+
+                <tr>
+                    {{ checkout_delivery_details }}
+                </tr>
+                <!-- Tap.Nguyen -->
+
+                {{ myparcel_popup_modal }}
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <!-- ****************** HEADER.TWIG ******************* -->
+    <!-- ***************************************************** -->
+    <file path="admin/view/template/common/header.twig"><!-- checked -->
+        <operation><!-- yes -->
+            <search><![CDATA[</head>]]></search>
+            <add position="before"><![CDATA[
+                {{ myparcel_order_header }}
+                <script>var is_opencart1 = false;</script>
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <!-- ****** ORDER CONTROLLER ADMIN/SALE/ORDER.PHP ****** -->
+    <!-- *************************************************** -->
+
+	<file path="admin/controller/sale/order.php"><!-- checked -->
+        <!-- 1X -->
+		<operation><!-- yes -->
+            <search><![CDATA[
+            public function index() {
+            ]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('extension/myparcelnl/helper');
+				$this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
+				$this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
+            ]]></add>
+        </operation>
+
+        <operation><!-- yes -->
+            <search><![CDATA[
+             public function info() {
+            ]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('extension/myparcelnl/helper');
+				$this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
+				$this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
+            ]]></add>
+        </operation>
+
+        <operation><!-- yes -->
+            <search><![CDATA[
+            public function getForm() {
+            ]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('extension/myparcelnl/helper');
+				$this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
+				$this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
+				$data['use_addition_address'] =  Myparcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+            ]]></add>
+        </operation>
+
+        <operation><!-- yes -->
+            <search regex="true"><![CDATA[/'customer'(.*)=> \$result\['customer'],/]]></search>
+            <add><![CDATA[
+                'customer'$1=> $result['customer'],
+				'column_myparcel' 			=> $this->model_extension_myparcelnl_helper->getContent('column_myparcel', array('order_id' => $result['order_id'])),
+				'ship_to_myparcel'       => $this->model_extension_myparcelnl_helper->getContent('ship_to_myparcel', array('order_id' => $result['order_id'])),
+                'mp_packet_type' => $this->model_extension_myparcelnl_helper->getContent('myparcel_packet_type', array('order_id' => $result['order_id'])),
+            ]]></add>
+        </operation>
+
+		<operation><!-- no -->
+            <search regex="true"><![CDATA[/\$data\['user_token'](.*);/]]></search>
+            <add><![CDATA[
+                $data['user_token']$1;
+				$data['column_header_myparcel'] = $this->model_extension_myparcelnl_helper->getContent('column_header_myparcel');
+				$data['myparcel_popup_modal'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_popup_modal');
+            ]]></add>
+        </operation>
+
+        <!--
+            Add the contents from controller in order to render in order_info.twig
+        -->
+        <operation>
+            <search><![CDATA[$customer_group_info = $this->model_customer_customer_group->getCustomerGroup($order_info['customer_group_id']);]]></search>
+            <add position="after"><![CDATA[
+                $data['tracktrace'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_tracktrace', array('order_id' => $this->request->get['order_id']));
+                $data['shipment_sumary'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_shipment_summary', array('order_id' => $this->request->get['order_id']));
+                $data['myparcel_actions'] = $this->model_extension_myparcelnl_helper->getContent('order_details_myparcel_actions', array('order_id' => $order_info['order_id']));
+                $data['checkout_delivery_options'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_admin_checkout_delivery_options', array('order_id' => $order_info['order_id']));
+                $data['checkout_delivery_details'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_admin_checkout_delivery_details', array('order_id' => $order_info['order_id']));
+                $data['myparcel_popup_modal'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_popup_modal');
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice', 'user_token=' . $this->session->data['user_token'], true);]]></search>
+            <add position="before"><![CDATA[
+                $this->load->model('extension/myparcelnl/helper');
+                $data['print_batch'] = $this->model_extension_myparcelnl_helper->getContent('print_batch', array());
+                $data['export_batch'] = $this->model_extension_myparcelnl_helper->getContent('export_batch', array());
+                $data['export_print_batch'] = $this->model_extension_myparcelnl_helper->getContent('export_print_batch', array());
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[$results = $this->model_sale_order->getOrders($filter_data);]]></search>
+            <add position="after"><![CDATA[
+                MyParcel()->shipment->shipment_helper->syncShipmentForOrders($results);
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <!-- ****** ADMIN COMMON HEADER CONTROLLER ADMIN/CONTROLLER/COMMON/HEADER.PHP ****** -->
+    <!-- ************************************************************************* -->
+
+    <file path="admin/controller/common/header.php"><!-- checked -->
+    <operation><!-- yes -->
+        <search><![CDATA[
+            public function index() {
+            ]]></search>
+        <add position="after"><![CDATA[
+                /* MyParcel Ocmod Start */
+                    $this->load->model('extension/myparcelnl/helper');
+                    $data['myparcel_order_header'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_order_header');
+                /* MyParcel Ocmod End */
+            ]]></add>
+    </operation>
+    </file>
+
+    <!-- ****** CATALOG COMMON HEADER CONTROLLER CATALOG/CONTROLLER/COMMON/HEADER.PHP ****** -->
+    <!-- ************************************************************************* -->
+
+    <file path="catalog/controller/common/header.php"><!-- checked -->
+        <operation><!-- yes -->
+            <search><![CDATA[
+            public function index() {
+            ]]></search>
+            <add position="after"><![CDATA[
+                      /* MyParcel Ocmod Start */
+                    $this->load->model('extension/myparcelnl/helper');
+                    $this->model_extension_myparcelnl_helper->addCompatibleScript('myparcel_global', $this->document);
+                    $this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'myparcel_global.css');
+                    $data['myparcel_delivery_checkout_header'] = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_checkout_header');
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ****** Send info tracktrace via email ****** -->
+    <!-- *************************************************** -->
+    <file path="catalog/controller/mail/order.php"><!-- checked -->
+        <operation><!-- no -->
+            <search><![CDATA[$data['order_id'] = $order_info['order_id'];]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('extension/myparcelnl/helper');
+                $data['tracktrace'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_email_tracktrace', array('order_id' => $order_info['order_id']));
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/*/template/mail/order_add.twig"><!-- checked -->
+        <operation><!-- no -->
+            <search regex="true"><![CDATA[/{{ download }}(?s)(.*?)endif %}/]]></search>
+            <add><![CDATA[
+                {{ download }}$1endif %}
+                {% if tracktrace %} <p>{{ tracktrace.text }} {{ tracktrace.code|join(', ') }}</p> {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/model/checkout/order.php">
+        <operation>
+            <search><![CDATA[$mail->setText($message);]]></search>
+            <add position="after"><![CDATA[
+                $mail->setHtml(nl2br($message));
+            ]]></add>
+        </operation>
+    </file>
+    <!-- ________ CATALOG\VIEW\THEME\*\TEMPLATE\ACCOUNT\ORDER_LIST.TWIG ________ -->
+    <!-- ______________________ VIEW ACCOUNT ORDER_LIST _______________________ -->
+    <!-- ______________________________________________________________________ -->
+    <file path="catalog/view/theme/*/template/account/order_list.twig"><!-- checked -->
+        <operation><!-- no -->
+            <search><![CDATA[<td class="text-right"><a href="{{ order.view }}" data-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>]]></search>
+            <add position="replace"><![CDATA[<td class="text-right"><a href="{{ order.view }}" data-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa fa-eye"></i></a>{{ order.tracktrace_myaccount }}</td>]]></add>
+        </operation>
+    </file>
+
+    <!-- ________ CATALOG\VIEW\THEME\*\TEMPLATE\ACCOUNT\ORDER_INFO.TWIG ________ -->
+    <!-- ______________________ VIEW ACCOUNT ORDER_INFO _______________________ -->
+    <!-- ______________________________________________________________________ -->
+    <file path="catalog/view/theme/*/template/account/order_info.twig"><!-- checked -->
+        <operation><!-- no -->
+            <search><![CDATA[{{ header }}]]></search>
+            <add position="after"><![CDATA[{{ myparcel_order_header }}]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ CATALOG\CONTROLLER\ACCOUNT\ORDER.PHP ________________ -->
+    <!-- ______________________ ACCOUNT ORDER CONTROLLER ______________________ -->
+    <!-- ______________________________________________________________________ -->
+    <file path="catalog/controller/account/order.php">
+        <operation><!-- no -->
+            <search><![CDATA[
+                'view'       => $this->url->link('account/order/info', 'order_id=' . $result['order_id'], true),
+            ]]></search>
+            <add position="after"><![CDATA[
+                'tracktrace_myaccount'     => $this->model_extension_myparcelnl_helper->getContent('tracktrace_myaccount', array('order_id' => $result['order_id'])),
+            ]]></add>
+        </operation>
+        <operation><!-- yes -->
+            <search><![CDATA[
+                $order_total = $this->model_account_order->getTotalOrders();
+            ]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('extension/myparcelnl/helper');
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function info() {]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('extension/myparcelnl/helper');
+                $data['myparcel_order_header'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_order_header');
+				$this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ admin/view/template/sale/order_form.twig ________________ -->
+    <!-- _______________________ Admin Edit Order Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="admin/view/template/sale/order_form.twig">
+        <operation>
+            <search><![CDATA[data: $('#tab-shipping input[type=\'text\'], #tab-shipping input[type=\'hidden\'], #tab-shipping input[type=\'radio\']:checked, #tab-shipping input[type=\'checkbox\']:checked, #tab-shipping select, #tab-shipping textarea'),]]></search>
+            <add position="replace"><![CDATA[
+                data: $('input[name=\'order_id\'], #tab-shipping input[type=\'text\'], #tab-shipping input[type=\'hidden\'], #tab-shipping input[type=\'radio\']:checked, #tab-shipping input[type=\'checkbox\']:checked, #tab-shipping select, #tab-shipping textarea'),
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search regex="true"><![CDATA[/url:(.*)route=api\/cart\/products(.*)\,/]]></search>
+            <add><![CDATA[
+                url:$1route=api/cart/products$2,
+                data: $('input[name=\'order_id\']'),
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search regex="true"><![CDATA[/url:(.*)route=api\/shipping\/methods(.*)\,/]]></search>
+            <add><![CDATA[
+                url:$1route=api/shipping/methods$2,
+                data: $('input[name=\'order_id\']'),
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[<input type="text" name="address_2" value="{{ payment_address_2 }}" id="input-payment-address-2" class="form-control" />]]></search>
+            <add position="after"><![CDATA[
+            {% if( use_addition_address  and use_addition_address == 2 ) %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment-address-3">Address 3</label>
+            <div class="col-sm-10">
+                <input type="text" name="custom_field[address_3]" value="{% if (payment_custom_field.address_3) %}{{ payment_custom_field.address_3 }}{% endif %}" id="input-payment-address-3" class="form-control" />
+                {% endif %}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[<input type="text" name="address_2" value="{{ shipping_address_2 }}" id="input-shipping-address-2" class="form-control" />]]></search>
+            <add position="after"><![CDATA[
+            {% if( use_addition_address and use_addition_address == 2 ) %}
+            </div>
+        </div>
+        <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-shipping-address-3">Address 3</label>
+                <div class="col-sm-10">
+                  <input type="text" name="custom_field[address_3]" value="{% if (shipping_custom_field.address_3) %}{{ shipping_custom_field.address_3 }}{% endif %}" id="input-shipping-address-3" class="form-control" />
+                {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/view/theme/*/template/checkout/guest.twig ________________ -->
+    <!-- _______________________ Billing Info Guest Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/view/theme/*/template/checkout/guest.twig">
+        <operation>
+            <search><![CDATA[<input type="text" name="address_2" value="{{ address_2 }}" placeholder="{{ entry_address_2 }}" id="input-payment-address-2" class="form-control" />]]></search>
+            <add position="after"><![CDATA[
+            {% if( use_addition_address and use_addition_address == 2 ) %}
+            </div>
+                <div class="form-group">
+                    <label class="control-label" for="input-payment-address-3">Address 3</label>
+                    <input type="text" name="custom_field[address][address_3]" value="{% if (guest_custom_field.address_3) %}{{ guest_custom_field.address_3 }}{% endif %}" placeholder="Address 3" id="input-payment-address-3" class="form-control" />
+            {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/controller/checkout/guest.php ________________ -->
+    <!-- _______________________ Billing Info Guest Controller _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/controller/checkout/guest.php">
+        <operation>
+            <search><![CDATA[$this->load->language('checkout/checkout');]]></search>
+            <add position="before"><![CDATA[
+            $this->load->model('extension/myparcelnl/helper');
+            $data['use_addition_address'] =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$json['error']['address_1'] = $this->language->get('error_address_1');]]></search>
+            <add position="after"><![CDATA[
+            }
+            $this->load->model('extension/myparcelnl/helper');
+                $use_addition_address =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+                if ($use_addition_address == 2 ) {
+                    if (empty(trim($this->request->post['address_2']))) {
+                        $json['error']['address_2'] = MyParcel()->lang->get('error_address_2');
+                    }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/view/theme/*/template/checkout/guest_shipping.twig ________________ -->
+    <!-- _______________________ Shipping Info Guest Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/view/theme/*/template/checkout/guest_shipping.twig">
+        <operation>
+            <search><![CDATA[<input type="text" name="address_2" value="{{ address_2 }}" placeholder="{{ entry_address_2 }}" id="input-shipping-address-2" class="form-control" />]]></search>
+            <add position="after"><![CDATA[
+            {% if( use_addition_address  and use_addition_address == 2 ) %}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-shipping-address-3">Address 3</label>
+            <div class="col-sm-10">
+              <input type="text" name="custom_field[address][address_3]" value="{% if (address_custom_field.address_3) %}{{ address_custom_field.address_3 }}{% endif %}" placeholder="Address 3" id="input-shipping-address-3" class="form-control" />
+            {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/controller/checkout/guest.php ________________ -->
+    <!-- _______________________ Billing Info Guest Controller _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/controller/checkout/guest_shipping.php">
+        <operation>
+            <search><![CDATA[$this->load->language('checkout/checkout');]]></search>
+            <add position="before"><![CDATA[
+            $this->load->model('extension/myparcelnl/helper');
+            $data['use_addition_address'] =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$json['error']['address_1'] = $this->language->get('error_address_1');]]></search>
+            <add position="after"><![CDATA[
+            }
+            $this->load->model('extension/myparcelnl/helper');
+                $use_addition_address =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+                if ($use_addition_address == 2 ) {
+                    if (empty(trim($this->request->post['address_2']))) {
+                        $json['error']['address_2'] = MyParcel()->lang->get('error_address_2');
+                    }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/view/theme/*/template/checkout/register.twig ________________ -->
+    <!-- _______________________ Billing Info register Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/view/theme/*/template/checkout/register.twig">
+        <operation>
+            <search><![CDATA[<input type="text" name="address_2" value="" placeholder="{{ entry_address_2 }}" id="input-payment-address-2" class="form-control" />]]></search>
+            <add position="after"><![CDATA[
+            {% if( use_addition_address and use_addition_address == 2 ) %}
+            </div>
+              <div class="form-group">
+                <label class="control-label" for="input-payment-address-3">Address 3</label>
+                <input type="text" name="custom_field[address][address_3]" value="" placeholder="Address 3" id="input-payment-address-3" class="form-control" />
+            {% endif %}
+             ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/controller/checkout/register.php ________________ -->
+    <!-- _______________________ Billing Info register Controller _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/controller/checkout/register.php">
+        <operation>
+            <search><![CDATA[$this->load->language('checkout/checkout');]]></search>
+            <add position="before"><![CDATA[
+            $this->load->model('extension/myparcelnl/helper');
+            $data['use_addition_address'] =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$json['error']['address_1'] = $this->language->get('error_address_1');]]></search>
+            <add position="after"><![CDATA[
+            }
+            $this->load->model('extension/myparcelnl/helper');
+                $use_addition_address =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+                if ($use_addition_address == 2 ) {
+                    if (empty(trim($this->request->post['address_2']))) {
+                        $json['error']['address_2'] = MyParcel()->lang->get('error_address_2');
+                    }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/view/theme/*/template/checkout/payment_address.twig ________________ -->
+    <!-- _______________________ Billing Info Register Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/view/theme/*/template/checkout/payment_address.twig">
+        <operation>
+            <search><![CDATA[<input type="text" name="address_2" value="" placeholder="{{ entry_address_2 }}" id="input-payment-address-2" class="form-control" />]]></search>
+            <add position="after"><![CDATA[
+            {% if( use_addition_address and use_addition_address == 2 ) %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-payment-address-3">Address 3</label>
+            <div class="col-sm-10">
+                <input type="text" name="custom_field[address][address_3]" value="" placeholder="Address 3" id="input-payment-address-3" class="form-control" />
+            {% endif %}
+             ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/controller/checkout/payment_address.php ________________ -->
+    <!-- _______________________ Billing Info Payment Address Controller _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/controller/checkout/payment_address.php">
+        <operation>
+            <search><![CDATA[$this->load->language('checkout/checkout');]]></search>
+            <add position="before"><![CDATA[
+            $this->load->model('extension/myparcelnl/helper');
+            $data['use_addition_address'] =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$json['error']['address_1'] = $this->language->get('error_address_1');]]></search>
+            <add position="after"><![CDATA[
+            }
+            $this->load->model('extension/myparcelnl/helper');
+                $use_addition_address =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+                if ($use_addition_address == 2 ) {
+                    if (empty(trim($this->request->post['address_2']))) {
+                        $json['error']['address_2'] = MyParcel()->lang->get('error_address_2');
+                    }
+            ]]></add>
+        </operation>
+        <operation>
+            <search regex="true"><![CDATA[/elseif(.*)(\r\n|\r|\n)(\s*)\$json(.*)error_address(.*)(\r\n|\r|\n)(\s*)\}/]]></search>
+            <add position="replace"><![CDATA[
+            elseif (!in_array($this->request->post['address_id'], array_keys($this->model_account_address->getAddresses()))) {
+					$json['error']['warning'] = $this->language->get('error_address');
+			}
+            elseif (in_array($this->request->post['address_id'], array_keys($this->model_account_address->getAddresses()))) {
+                $this->load->model('extension/myparcelnl/helper');
+                $use_addition_address =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+                if ($use_addition_address == 2 ) {
+                    $account_address = $this->model_account_address->getAddresses();
+                    $account_address = $account_address[$this->request->post['address_id']];
+                    if (empty(trim($account_address['address_2']))) {
+                        $json['error']['warning'] = MyParcel()->lang->get('error_address_2_need_edit');
+                    }
+                }
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/view/theme/*/template/checkout/shipping_address.twig ________________ -->
+    <!-- _______________________ Shipping Info Register Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/view/theme/*/template/checkout/shipping_address.twig">
+        <operation>
+            <search><![CDATA[<input type="text" name="address_2" value="" placeholder="{{ entry_address_2 }}" id="input-shipping-address-2" class="form-control" />]]></search>
+            <add position="after"><![CDATA[
+            {% if( use_addition_address and use_addition_address == 2 ) %}
+            </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="input-shipping-address-3">Address 3</label>
+      <div class="col-sm-10">
+        <input type="text" name="custom_field[address][address_3]" value="" placeholder="Address 3" id="input-shipping-address-3" class="form-control" />
+        {% endif %}
+             ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/controller/checkout/shipping_address.php ________________ -->
+    <!-- _______________________ Shipping Info Payment Address Controller _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/controller/checkout/shipping_address.php">
+        <operation>
+            <search><![CDATA[$this->load->language('checkout/checkout');]]></search>
+            <add position="before"><![CDATA[
+            $this->load->model('extension/myparcelnl/helper');
+            $data['use_addition_address'] =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$json['error']['address_1'] = $this->language->get('error_address_1');]]></search>
+            <add position="after"><![CDATA[
+            }
+            $this->load->model('extension/myparcelnl/helper');
+                $use_addition_address =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+                if ($use_addition_address == 2 ) {
+                    if (empty(trim($this->request->post['address_2']))) {
+                        $json['error']['address_2'] = MyParcel()->lang->get('error_address_2');
+                    }
+            ]]></add>
+        </operation>
+        <operation>
+            <search regex="true"><![CDATA[/elseif(.*)(\r\n|\r|\n)(\s*)\$json(.*)error_address(.*)(\r\n|\r|\n)(\s*)\}/]]></search>
+            <add position="replace"><![CDATA[
+            elseif (!in_array($this->request->post['address_id'], array_keys($this->model_account_address->getAddresses()))) {
+				$json['error']['warning'] = $this->language->get('error_address');
+			}
+            elseif (in_array($this->request->post['address_id'], array_keys($this->model_account_address->getAddresses()))) {
+                $this->load->model('extension/myparcelnl/helper');
+                $use_addition_address =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+                if ($use_addition_address == 2 ) {
+                    $account_address = $this->model_account_address->getAddresses();
+                    $account_address = $account_address[$this->request->post['address_id']];
+                    if (empty(trim($account_address['address_2']))) {
+                        $json['error']['warning'] = MyParcel()->lang->get('error_address_2_need_edit');
+                    }
+                }
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/view/theme/*/template/account/address_form.twig ________________ -->
+    <!-- _______________________ Billing Info Register Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/view/theme/*/template/account/address_form.twig">
+        <operation>
+            <search><![CDATA[<input type="text" name="address_2" value="{{ address_2 }}" placeholder="{{ entry_address_2 }}" id="input-address-2" class="form-control" />]]></search>
+            <add position="after"><![CDATA[
+            {% if( use_addition_address and use_addition_address == 2 ) %}
+            </div>
+        </div>
+       <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-address-3">Address 3</label>
+            <div class="col-sm-10">
+              <input type="text" name="custom_field[address][address_3]" value="{% if (address_custom_field.address_3) %}{{ address_custom_field.address_3 }}{% endif %}" placeholder="Address 3" id="input-address-3" class="form-control" />
+            {% endif %}
+             ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/controller/account/address.php ________________ -->
+    <!-- _______________________ Billing Info Payment Address Controller _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/controller/account/address.php">
+        <operation>
+            <search><![CDATA[$data['breadcrumbs'] = array();]]></search>
+            <add position="after"><![CDATA[
+            $this->load->model('extension/myparcelnl/helper');
+            $data['use_addition_address'] =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/controller/api/cart.php ________________ -->
+    <!-- _____________ Set order delivery options to session _____________ -->
+    <!-- _________________________________________________________________ -->
+    <file path="catalog/controller/api/cart.php">
+        <operation>
+            <search><![CDATA[public function products() {]]></search>
+            <add position="after"><![CDATA[
+                if (isset($this->request->get['order_id'])) {
+                    if (!class_exists('MyParcel')) {
+                        require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                        MyParcel($this->registry);
+                    }
+                    MyParcel()->shipment->checkout->setSessionOrderDeliveryOptions($this->request->get['order_id']);
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/controller/api/cart.php ________________ -->
+    <!-- _____________ Set order delivery options to session _____________ -->
+    <!-- _________________________________________________________________ -->
+    <file path="catalog/controller/api/shipping.php">
+        <operation>
+            <search><![CDATA[public function address() {]]></search>
+            <add position="after"><![CDATA[
+                if (isset($this->request->post['order_id'])) {
+                    if (!class_exists('MyParcel')) {
+                        require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                        MyParcel($this->registry);
+                    }
+                    MyParcel()->shipment->checkout->setSessionOrderDeliveryOptions($this->request->post['order_id']);
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function methods() {]]></search>
+            <add position="after"><![CDATA[
+                if (isset($this->request->get['order_id'])) {
+                    $this->session->data['myparcel_order_id'] = $this->request->get['order_id'];
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ SHIPPING.PHP ________________ -->
+    <!-- ________________ SHIPPING TOTAL ______________ -->
+    <!-- _____________________________________________________ -->
+    <file path="catalog/model/extension/total/shipping.php">
+        <operation>
+            <search><![CDATA[public function getTotal($total) {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                 if (!class_exists('MyParcel')) {
+					require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+					MyParcel($this->registry);
+				 }
+
+                if (function_exists('MyParcel') && MyParcel()->shipment->checkout->appliedByParcel($total)) {
+                    return $total;
+                }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ COLUMN_LEFT.PHP ________________ -->
+    <!-- ____________ ADD MYPARCEL MENU TO ADMIN _________ -->
+    <!-- _________________________________________________ -->
+    <file path="admin/controller/common/column_left.php">
+        <operation>
+            <search><![CDATA[$system = array();]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                 if (!class_exists('MyParcel')) {
+                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                }
+                if (MyParcel()->helper->isModuleExist('myparcelnl')) {
+                    if(version_compare(VERSION, '2.3.0.0', '>=')) {
+                        $route = 'extension/module/myparcelnl';
+                    } else {
+                        $route = 'module/myparcelnl';
+                    }
+
+                    $system[] = array(
+                        'name' => MyParcel()->lang->get('text_myparcel_menu_title'),
+                        'href' => $this->url->link($route, 'user_token=' . $this->session->data['user_token'], true),
+                        'children' => null
+                    );
+                }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ MODIFY TOTAL TAX ________________ -->
+    <!-- _________ ADD SHIPPING TAX TO TOTAL OF TAX _______ -->
+    <!-- __________________________________________________ -->
+    <file path="catalog/model/extension/total/tax.php">
+        <operation>
+            <search><![CDATA[public function getTotal($total) {]]></search>
+            <add position="after"><![CDATA[
+                /* MyParcel Ocmod Start */
+                $tax = 0;
+                if (!empty($this->session->data['myparcel']['data'])) {
+                    /** @var MyParcel_Shipment_Checkout $checkout_helper * */
+                    $this->load->model('extension/myparcelnl/helper');
+                    $checkout_helper = MyParcel($this->registry)->shipment->checkout;
+                    $data = $this->session->data['myparcel'];
+
+                    $total_array = $checkout_helper->getTotalArray($data, false, null, '', true);
+                    $total_price = 0;
+
+                    foreach ($total_array as $total_code => $total_item) {
+                        $total_price += $total_item['price'];
+                    }
+
+                    $total_array = $checkout_helper->getTotalArray($data, false, null, '', false);
+                    $total_price_without_tax = 0;
+
+                    foreach ($total_array as $total_code => $total_item) {
+                        $total_price_without_tax += $total_item['price'];
+                    }
+
+                    $tax = max($total_price - $total_price_without_tax, 0);
+                }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[if ($value > 0) {]]></search>
+            <add position="after"><![CDATA[
+                /* MyParcel Ocmod Start */
+                $value += $tax;
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

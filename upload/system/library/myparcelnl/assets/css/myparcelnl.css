@@ -1,0 +1,85 @@
+.table_shipping_methods_package_types tr td {
+    padding-bottom: 5px;
+    padding-left: 6px;
+}
+.v-center td {
+    vertical-align: center;
+}
+
+#table_mailbox td {
+    padding-bottom: 5px;
+}
+
+.content .box input[name="myparcelnl_fields_general[api]"] {
+    width: 100%;
+}
+
+.color-picker-field{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    background: url(../img/colorpicker/select2.png);
+}
+
+.color-picker-field div {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 28px;
+    height: 28px;
+    background: url(../img/colorpicker/select2.png) center;
+}
+.color-picker-holder {
+    top: 32px;
+    left: 0;
+    width: 356px;
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+}
+
+.color-picker-holder .colorpicker {
+    background-image: url(../img/colorpicker/custom_background.png);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.color-picker-holder .colorpicker_hue div {
+    background-image: url(../img/colorpicker/custom_indic.gif);
+}
+.color-picker-holder .colorpicker_hex {
+    background-image: url(../img/colorpicker/custom_hex.png);
+}
+.color-picker-holder .colorpicker_rgb_r {
+    background-image: url(../img/colorpicker/custom_rgb_r.png);
+}
+.color-picker-holder .colorpicker_rgb_g {
+    background-image: url(../img/colorpicker/custom_rgb_g.png);
+}
+.color-picker-holder .colorpicker_rgb_b {
+    background-image: url(../img/colorpicker/custom_rgb_b.png);
+}
+.color-picker-holder .colorpicker_hsb_s {
+    background-image: url(../img/colorpicker/custom_hsb_s.png);
+    display: none;
+}
+.color-picker-holder .colorpicker_hsb_h {
+    background-image: url(../img/colorpicker/custom_hsb_h.png);
+    display: none;
+}
+.color-picker-holder .colorpicker_hsb_b {
+    background-image: url(../img/colorpicker/custom_hsb_b.png);
+    display: none;
+}
+.color-picker-holder .colorpicker_submit {
+    background-image: url(../img/colorpicker/custom_submit.png);
+}
+.color-picker-holder .colorpicker input {
+    color: #778398;
+}
+.color-selector-custom-widget {
+    position: relative;
+    height: 36px;
+}

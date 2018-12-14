@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>MyParcel NL - Ajax Quick Checkout</name>
+    <version>1.1.2</version>
+    <code>MyParcelNL_ajax_checkout</code>
+    <author>MyParcel NL</author>
+    <link>https://www.myparcel.nl/</link>
+
+    <!-- ________________ SYSTEM\LIBRARY\CART\CART.PHP ________________ -->
+    <!-- _________________________ CART CLASS _________________________ -->
+    <!-- ______________________________________________________________ -->
+    <file path="system/library/cart/cart.php">
+        <operation>
+            <search><![CDATA[public function clear() {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Clear myparcel delivery options everytime cart is cleared */
+                if (isset($this->session->data['myparcel'])) {
+			        unset($this->session->data['myparcel']);
+		        }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function remove($cart_id) {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Clear myparcel delivery options everytime cart is cleared */
+                if (isset($this->session->data['myparcel'])) {
+			        unset($this->session->data['myparcel']);
+		        }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ SYSTEM\LIBRARY\CART\USER.PHP ________________ -->
+    <!-- _________________________ CART CLASS _________________________ -->
+    <!-- ______________________________________________________________ -->
+    <file path="system/library/cart/customer.php">
+        <operation>
+            <search><![CDATA[public function login($email, $password, $override = false) {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Clear myparcel delivery options everytime cart is cleared */
+                if (isset($this->session->data['myparcel'])) {
+			        unset($this->session->data['myparcel']);
+		        }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function logout() {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Clear myparcel delivery options everytime cart is cleared */
+                if (isset($this->session->data['myparcel'])) {
+			        unset($this->session->data['myparcel']);
+		        }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ CATALOG\MODEL\CHECKOUT\ORDER.PHP ________________ -->
+    <!-- ___________________________ ORDER MODEL __________________________ -->
+    <!-- __________________________________________________________________ -->
+    <file path="catalog/model/checkout/order.php">
+        <operation>
+            <search><![CDATA[if ($order_info) {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start -- Add delivery options into order database */
+			       $this->load->model('extension/myparcelnl/helper');
+			       $this->model_myparcelnl_helper->addDeliveryDataIntoOrder($order_info);
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ CHECKOUT.PHP ________________ -->
+    <!-- _____________ CHECKOUT CONTROLLER ____________ -->
+    <!-- ______________________________________________ -->
+    <file path="catalog/controller/checkout/checkout.php">
+        <operation>
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                $this->load->model('extension/myparcelnl/helper');
+
+                $this->model_myparcelnl_helper->addCompatibleScript('delivery_iframe', $this->document);
+                $this->document->addStyle($this->model_myparcelnl_helper->getCssUrl() . 'checkout.css');
+
+                $data['myparcel_delivery_checkout_header'] = $this->model_myparcelnl_helper->getContent('iframe_delivery_checkout_header');
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ PAYMENT_ADDRESS.PHP ________________ -->
+    <!-- _______________ AQC LAYOUT CONTROLLER _______________ -->
+    <!-- _____________________________________________________ -->
+    <file path="catalog/controller/extension/d_quickcheckout/payment_address.php">
+        <operation>
+            <search><![CDATA[public function index($config){]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                $this->load->model('extension/myparcelnl/helper');
+		        $this->model_myparcelnl_helper->initMyParcel();
+				$data['myparcel_delivery_iframe'] = $this->model_myparcelnl_helper->getContent('iframe_delivery_options');
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ SHIPPING_METHOD.PHP ________________ -->
+    <!-- ______________ CLEAN SHIPPING METHODS _______________ -->
+    <!-- _____________________________________________________ -->
+    <file path="catalog/controller/extension/d_quickcheckout/shipping_method.php">
+        <operation>
+            <search><![CDATA[$json['shipping_methods'] = $this->session->data['shipping_methods'];]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                    $this->load->model('extension/myparcelnl/helper');
+                    $this->model_myparcelnl_helper->initMyParcel();
+                    $json['shipping_methods'] = MyParcel()->shipment->checkout->cleanShippingMethods($json['shipping_methods']);
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ PAYMENT_ADDRESS.TPL ________________ -->
+    <!-- ____________ AQC PAYMENT ADDRESS TEMPLATE ___________ -->
+    <!-- _____________________________________________________ -->
+    <file path="catalog/view/theme/default/template/d_quickcheckout/cart.tpl">
+        <operation>
+            <search><![CDATA[}));]]></search>
+            <add position="after"><![CDATA[
+                 $.ajax({
+                    url: window.myparcel_ajax_get_delivery_iframe_content,
+                    type: 'POST',
+                    dataType: 'json',
+                    beforeSend: function() {
+
+                    },
+                    success: function(res) {
+                        if (res.status == 'success') {
+                            $('#cart_view').before(res.html);
+                            MYPARCEL_CHECKOUT.activateIframe();
+                        }
+                    }
+                });
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ PAYMENT_ADDRESS.TWIG ________________ -->
+    <!-- ____________ AQC PAYMENT ADDRESS TEMPLATE ___________ -->
+    <!-- _____________________________________________________ -->
+    <file path="catalog/view/theme/default/template/d_quickcheckout/cart.twig">
+        <operation>
+            <search><![CDATA[}));]]></search>
+            <add position="after"><![CDATA[
+                 $.ajax({
+                    url: window.myparcel_ajax_get_delivery_iframe_content,
+                    type: 'POST',
+                    dataType: 'json',
+                    beforeSend: function() {
+
+                    },
+                    success: function(res) {
+                        if (res.status == 'success') {
+                            $('#cart_view').before(res.html);
+                            MYPARCEL_CHECKOUT.activateIframe();
+                        }
+                    }
+                });
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ CHECKOUT LAYOUT ___________________ -->
+    <!-- ____________________________________________________ -->
+    <file path="catalog/view/theme/default/template/checkout/d_quickcheckout.tpl">
+        <operation>
+            <search><![CDATA[<?php echo $header; ?>]]></search>
+            <add position="after"><![CDATA[
+                <?php echo $myparcel_delivery_checkout_header ?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ CHECKOUT LAYOUT ___________________ -->
+    <!-- ____________________________________________________ -->
+    <file path="catalog/view/theme/default/template/checkout/d_quickcheckout.twig">
+        <operation>
+            <search><![CDATA[{{ header }}]]></search>
+            <add position="after"><![CDATA[
+                {{ myparcel_delivery_checkout_header }}
+            ]]></add>
+        </operation>
+    </file>
+
+
+</modification>

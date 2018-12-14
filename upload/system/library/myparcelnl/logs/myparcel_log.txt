@@ -1,0 +1,4233 @@
+2017-11-08 11:37:08 *** -------------------------- ***
+2017-11-08 11:37:08 *** Creating shipments started ***
+2017-11-08 11:37:08 Prepared data:
+array (
+  0 => 
+  array (
+    'recipient' => 
+    array (
+      'cc' => 'BE',
+      'city' => 'Brussels',
+      'person' => 'Minh Dang',
+      'company' => '',
+      'email' => 'minhdang@yopmail.com',
+      'phone' => '',
+      'street' => 'Street name',
+      'number' => '',
+      'number_suffix' => '',
+      'postal_code' => '1000',
+    ),
+    'options' => 
+    array (
+      'package_type' => 1,
+      'only_recipient' => 1,
+      'signature' => 1,
+      'return' => 0,
+      'large_format' => 1,
+      'label_description' => '875',
+      'delivery_type' => 4,
+      'delivery_date' => '2017-11-09 00:00:00',
+    ),
+    'carrier' => 1,
+    'pickup' => 
+    array (
+      'postal_code' => '1180',
+      'street' => 'RUE EMILE CLAUS',
+      'city' => 'UCCLE',
+      'number' => '56',
+      'location_name' => 'KARIBOO C\'EST LE BOUQUET',
+      'location_code' => 'BE0T57',
+      'retail_network_id' => 'LD-01',
+    ),
+  ),
+)
+2017-11-08 11:37:08 https://api.myparcel.nl/shipments
+2017-11-08 11:37:09 API response (order 875):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'ids' => 
+      array (
+        0 => 
+        array (
+          'id' => 27537421,
+        ),
+      ),
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 08 Nov 2017 10:37:14 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-11-08 11:37:09 *** Label request started ***
+2017-11-08 11:37:09 Shipment ID's: 27537421
+2017-11-08 11:37:09 https://api.myparcel.nl/shipment_labels/27537421
+2017-11-08 11:37:09 array (
+  0 => 'Accept: application/json; charset=UTF-8',
+  1 => 'Authorization: basic YzY0N2FjZWM5OWEzOWIwM2Y3ZTU1OGI1MzhhMzRmODVjNGMxNjI0Yg==',
+)
+2017-11-08 11:37:09 c647acec99a39b03f7e558b538a34f85c4c1624b
+2017-11-08 11:37:11 API response:
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'pdfs' => 
+      array (
+        'url' => '/pdfs/2b7eeb7d037c691eb29361ca412f654c117a22ba',
+      ),
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 08 Nov 2017 10:37:17 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-11-08 11:37:11 *** -------------------- ***
+2017-11-08 11:37:11 *** Get Shipment Started ***
+2017-11-08 11:37:11 https://api.myparcel.nl/shipments/27537421
+2017-11-08 11:37:13 API response (shipment 27537421):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => '3SMYPA3463568',
+          'id' => 27537421,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'BE',
+            'city' => 'Brussels',
+            'person' => 'Minh Dang',
+            'company' => '',
+            'email' => 'minhdang@yopmail.com',
+            'phone' => '',
+            'street' => 'Street name',
+            'number' => '',
+            'number_suffix' => '',
+            'postal_code' => '1000',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 2,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 1,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '875',
+            'delivery_type' => 4,
+            'delivery_date' => '2017-11-09 00:00:00',
+            'insurance' => 
+            array (
+              'amount' => 50000,
+              'currency' => 'EUR',
+            ),
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => 
+          array (
+            'postal_code' => '1180',
+            'street' => 'RUE EMILE CLAUS',
+            'city' => 'UCCLE',
+            'number' => '56',
+            'location_name' => 'KARIBOO C\'EST LE BOUQUET',
+            'location_code' => 'BE0T57',
+            'retail_network_id' => 'LD-01',
+          ),
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-11-08 11:37:15',
+          'modified' => '2017-11-08 11:37:15',
+          'reference_identifier' => NULL,
+          'created_by' => NULL,
+          'modified_by' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 1059,
+          ),
+          'region' => 'EU',
+        ),
+      ),
+      'results' => 5000,
+      'page' => 1,
+      'size' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 08 Nov 2017 10:37:18 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-11-08 11:38:39 https://api.myparcel.nl/shipments/27537421
+2017-11-08 11:38:40 API response (shipment 27537421):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => '3SMYPA3463568',
+          'id' => 27537421,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'BE',
+            'city' => 'Brussels',
+            'person' => 'Minh Dang',
+            'company' => '',
+            'email' => 'minhdang@yopmail.com',
+            'phone' => '',
+            'street' => 'Street name',
+            'number' => '',
+            'number_suffix' => '',
+            'postal_code' => '1000',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 2,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 1,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '875',
+            'delivery_type' => 4,
+            'delivery_date' => '2017-11-09 00:00:00',
+            'insurance' => 
+            array (
+              'amount' => 50000,
+              'currency' => 'EUR',
+            ),
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => 
+          array (
+            'postal_code' => '1180',
+            'street' => 'RUE EMILE CLAUS',
+            'city' => 'UCCLE',
+            'number' => '56',
+            'location_name' => 'KARIBOO C\'EST LE BOUQUET',
+            'location_code' => 'BE0T57',
+            'retail_network_id' => 'LD-01',
+          ),
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-11-08 11:37:15',
+          'modified' => '2017-11-08 11:37:15',
+          'reference_identifier' => NULL,
+          'created_by' => NULL,
+          'modified_by' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 1059,
+          ),
+          'region' => 'EU',
+        ),
+      ),
+      'results' => 5000,
+      'page' => 1,
+      'size' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 08 Nov 2017 10:38:46 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-11-08 11:38:40 https://api.myparcel.nl/shipments/27537421
+2017-11-08 11:38:42 API response (shipment 27537421):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => '3SMYPA3463568',
+          'id' => 27537421,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'BE',
+            'city' => 'Brussels',
+            'person' => 'Minh Dang',
+            'company' => '',
+            'email' => 'minhdang@yopmail.com',
+            'phone' => '',
+            'street' => 'Street name',
+            'number' => '',
+            'number_suffix' => '',
+            'postal_code' => '1000',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 2,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 1,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '875',
+            'delivery_type' => 4,
+            'delivery_date' => '2017-11-09 00:00:00',
+            'insurance' => 
+            array (
+              'amount' => 50000,
+              'currency' => 'EUR',
+            ),
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => 
+          array (
+            'postal_code' => '1180',
+            'street' => 'RUE EMILE CLAUS',
+            'city' => 'UCCLE',
+            'number' => '56',
+            'location_name' => 'KARIBOO C\'EST LE BOUQUET',
+            'location_code' => 'BE0T57',
+            'retail_network_id' => 'LD-01',
+          ),
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-11-08 11:37:15',
+          'modified' => '2017-11-08 11:37:15',
+          'reference_identifier' => NULL,
+          'created_by' => NULL,
+          'modified_by' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 1059,
+          ),
+          'region' => 'EU',
+        ),
+      ),
+      'results' => 5000,
+      'page' => 1,
+      'size' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 08 Nov 2017 10:38:47 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-11-08 11:38:47 *** Label request started ***
+2017-11-08 11:38:47 Shipment ID's: 27537421
+2017-11-08 11:38:47 https://api.myparcel.nl/shipment_labels/27537421
+2017-11-08 11:38:47 array (
+  0 => 'Accept: application/pdf',
+  1 => 'Authorization: basic YzY0N2FjZWM5OWEzOWIwM2Y3ZTU1OGI1MzhhMzRmODVjNGMxNjI0Yg==',
+)
+2017-11-08 11:38:47 c647acec99a39b03f7e558b538a34f85c4c1624b
+2017-11-08 11:38:49 PDF data received
+2017-11-08 11:38:49 https://api.myparcel.nl/shipments/27537421
+2017-11-08 11:38:51 API response (shipment 27537421):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => '3SMYPA3463568',
+          'id' => 27537421,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'BE',
+            'city' => 'Brussels',
+            'person' => 'Minh Dang',
+            'company' => '',
+            'email' => 'minhdang@yopmail.com',
+            'phone' => '',
+            'street' => 'Street name',
+            'number' => '',
+            'number_suffix' => '',
+            'postal_code' => '1000',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 2,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 1,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '875',
+            'delivery_type' => 4,
+            'delivery_date' => '2017-11-09 00:00:00',
+            'insurance' => 
+            array (
+              'amount' => 50000,
+              'currency' => 'EUR',
+            ),
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => 
+          array (
+            'postal_code' => '1180',
+            'street' => 'RUE EMILE CLAUS',
+            'city' => 'UCCLE',
+            'number' => '56',
+            'location_name' => 'KARIBOO C\'EST LE BOUQUET',
+            'location_code' => 'BE0T57',
+            'retail_network_id' => 'LD-01',
+          ),
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-11-08 11:37:15',
+          'modified' => '2017-11-08 11:37:15',
+          'reference_identifier' => NULL,
+          'created_by' => NULL,
+          'modified_by' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 1059,
+          ),
+          'region' => 'EU',
+        ),
+      ),
+      'results' => 5000,
+      'page' => 1,
+      'size' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 08 Nov 2017 10:38:56 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-11-08 11:38:51 https://api.myparcel.nl/shipments/27537421
+2017-11-08 11:38:52 API response (shipment 27537421):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => '3SMYPA3463568',
+          'id' => 27537421,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'BE',
+            'city' => 'Brussels',
+            'person' => 'Minh Dang',
+            'company' => '',
+            'email' => 'minhdang@yopmail.com',
+            'phone' => '',
+            'street' => 'Street name',
+            'number' => '',
+            'number_suffix' => '',
+            'postal_code' => '1000',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 2,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 1,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '875',
+            'delivery_type' => 4,
+            'delivery_date' => '2017-11-09 00:00:00',
+            'insurance' => 
+            array (
+              'amount' => 50000,
+              'currency' => 'EUR',
+            ),
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => 
+          array (
+            'postal_code' => '1180',
+            'street' => 'RUE EMILE CLAUS',
+            'city' => 'UCCLE',
+            'number' => '56',
+            'location_name' => 'KARIBOO C\'EST LE BOUQUET',
+            'location_code' => 'BE0T57',
+            'retail_network_id' => 'LD-01',
+          ),
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-11-08 11:37:15',
+          'modified' => '2017-11-08 11:37:15',
+          'reference_identifier' => NULL,
+          'created_by' => NULL,
+          'modified_by' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 1059,
+          ),
+          'region' => 'EU',
+        ),
+      ),
+      'results' => 5000,
+      'page' => 1,
+      'size' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 08 Nov 2017 10:38:57 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2018-03-27 08:44:40 https://api.myparcel.nl/shipments/23247825
+2018-03-27 08:44:47 API response (shipment 23247825):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => NULL,
+          'id' => 23247825,
+          'parent_id' => 23245485,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 2,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 1,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '829',
+            'insurance' => 
+            array (
+              'amount' => 25000,
+              'currency' => 'EUR',
+            ),
+            'cooled_delivery' => 0,
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-05-16 08:57:50',
+          'modified' => '2017-05-16 08:57:50',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 919,
+          ),
+          'region' => 'NL',
+          'payment_status' => 'unpaid',
+          'external_provider' => NULL,
+        ),
+      ),
+      'results' => 10000,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.12.1',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Tue, 27 Mar 2018 06:44:45 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 06:37:29 *** -------------------------- ***
+2018-08-15 06:37:29 *** Creating shipments started ***
+2018-08-15 06:37:29 Prepared data:
+array (
+  0 => 
+  array (
+    'recipient' => 
+    array (
+      'cc' => 'NL',
+      'city' => 'hoofddorp',
+      'person' => 'Nam Dang',
+      'company' => '',
+      'email' => '',
+      'phone' => '',
+      'street' => 'Hoofdweg',
+      'number' => '679',
+      'number_suffix' => '',
+      'postal_code' => '2131BC',
+    ),
+    'options' => 
+    array (
+      'package_type' => 1,
+      'only_recipient' => 1,
+      'signature' => 0,
+      'return' => 0,
+      'large_format' => 0,
+      'label_description' => '',
+      'delivery_type' => 3,
+      'delivery_date' => '2018-08-21 18:00:00',
+    ),
+    'carrier' => 1,
+  ),
+)
+2018-08-15 06:37:29 https://api.myparcel.nl/shipments
+2018-08-15 06:37:31 API response (order 19):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'ids' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143312,
+        ),
+      ),
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 06:36:15 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 06:39:09 *** -------------------------- ***
+2018-08-15 06:39:09 *** Creating shipments started ***
+2018-08-15 06:39:09 Prepared data:
+array (
+  0 => 
+  array (
+    'recipient' => 
+    array (
+      'cc' => 'NL',
+      'city' => 'hoofddorp',
+      'person' => 'Nam Dang',
+      'company' => '',
+      'email' => '',
+      'phone' => '',
+      'street' => 'Hoofdweg',
+      'number' => '679',
+      'number_suffix' => '',
+      'postal_code' => '2131BC',
+    ),
+    'options' => 
+    array (
+      'package_type' => 1,
+      'only_recipient' => 1,
+      'signature' => 0,
+      'return' => 0,
+      'large_format' => 0,
+      'label_description' => '',
+      'delivery_type' => 3,
+      'delivery_date' => '2018-08-21 18:00:00',
+    ),
+    'carrier' => 1,
+  ),
+)
+2018-08-15 06:39:09 https://api.myparcel.nl/shipments
+2018-08-15 06:39:12 API response (order 19):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'ids' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+        ),
+      ),
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 06:37:56 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 06:48:59 *** -------------------------- ***
+2018-08-15 06:48:59 *** Creating shipments started ***
+2018-08-15 08:27:18 https://api.myparcel.nl/shipments/36143412
+2018-08-15 08:27:20 API response (shipment 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:26:04 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:28:08 https://api.myparcel.nl/shipments/36143412
+2018-08-15 08:28:10 API response (shipment 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:26:54 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:28:21 *** -------------------------- ***
+2018-08-15 08:28:21 *** Creating shipments started ***
+2018-08-15 08:28:21 Prepared data:
+array (
+  0 => 
+  array (
+    'recipient' => 
+    array (
+      'cc' => 'NL',
+      'city' => 'hoofddorp',
+      'person' => 'Nam Dang',
+      'company' => '',
+      'email' => '',
+      'phone' => '',
+      'street' => 'Hoofdweg',
+      'number' => '679',
+      'number_suffix' => 'bb',
+      'postal_code' => '2131BC',
+    ),
+    'options' => 
+    array (
+      'package_type' => 1,
+      'only_recipient' => 1,
+      'signature' => 0,
+      'return' => 0,
+      'large_format' => 0,
+      'label_description' => '',
+      'delivery_type' => 1,
+      'delivery_date' => '2018-08-21 08:00:00',
+    ),
+    'carrier' => 1,
+  ),
+)
+2018-08-15 08:28:21 https://api.myparcel.nl/shipments
+2018-08-15 08:28:23 API response (order 20):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'ids' => 
+      array (
+        0 => 
+        array (
+          'id' => 36148618,
+        ),
+      ),
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:27:07 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:36:53 https://api.myparcel.nl/shipments/36148618;36143412
+2018-08-15 08:36:56 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:35:40 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:38:06 https://api.myparcel.nl/shipments/36148618;36143412
+2018-08-15 08:38:08 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:36:52 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:38:11 https://api.myparcel.nl/shipments/36148618
+2018-08-15 08:38:13 API response (shipment 36148618):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:36:57 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:38:13 https://api.myparcel.nl/shipments/36148618
+2018-08-15 08:38:14 API response (shipment 36148618):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:36:58 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9997',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:38:38 https://api.myparcel.nl/shipments/36148618;36143412
+2018-08-15 08:38:40 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:37:24 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:39:34 https://api.myparcel.nl/shipments/36148618;36143412
+2018-08-15 08:39:36 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:38:20 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9997',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:50:29 https://api.myparcel.nl/shipments/36148618;36143412
+2018-08-15 08:50:33 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:49:17 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:50:33 https://api.myparcel.nl/shipments/36148618;36143412
+2018-08-15 08:50:35 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:49:19 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-08-15 08:51:09 https://api.myparcel.nl/shipments/36148618;36143412
+2018-08-15 08:51:11 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Wed, 15 Aug 2018 08:49:56 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9997',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-09-14 10:00:13 https://api.myparcel.nl/shipments/36148618;36143412
+2018-09-14 10:00:16 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Fri, 14 Sep 2018 09:58:43 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-09-14 10:01:10 https://api.myparcel.nl/shipments/36148618
+2018-09-14 10:01:11 API response (shipment 36148618):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Fri, 14 Sep 2018 09:59:38 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-09-14 10:01:11 https://api.myparcel.nl/shipments/36148618
+2018-09-14 10:01:13 API response (shipment 36148618):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+        ),
+      ),
+      'results' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Fri, 14 Sep 2018 09:59:39 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9997',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-11-05 08:47:32 https://api.myparcel.nl/shipments/36148618;36143412
+2018-11-05 08:47:35 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Mon, 05 Nov 2018 08:45:33 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-11-05 08:47:37 https://api.myparcel.nl/shipments/36148618;36143412
+2018-11-05 08:47:38 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Mon, 05 Nov 2018 08:45:36 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9997',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-11-05 08:47:46 https://api.myparcel.nl/shipments/36148618
+2018-11-05 08:47:47 API response (shipment 36148618):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+      ),
+      'results' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Mon, 05 Nov 2018 08:45:45 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9996',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-11-05 08:47:47 https://api.myparcel.nl/shipments/36148618
+2018-11-05 08:47:49 API response (shipment 36148618):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+      ),
+      'results' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Mon, 05 Nov 2018 08:45:47 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-11-05 08:48:11 https://api.myparcel.nl/shipments/36148618;36143412
+2018-11-05 08:48:12 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Mon, 05 Nov 2018 08:46:10 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9997',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)
+2018-11-05 08:48:28 *** Label request started ***
+2018-11-05 08:48:28 Shipment ID's: 33971184
+2018-11-05 08:48:28 https://api.myparcel.nl/shipment_labels/33971184
+2018-11-05 08:48:28 array (
+  0 => 'Accept: application/pdf',
+  1 => 'Authorization: basic YzY0N2FjZWM5OWEzOWIwM2Y3ZTU1OGI1MzhhMzRmODVjNGMxNjI0Yg==',
+)
+2018-11-05 08:48:28 c647acec99a39b03f7e558b538a34f85c4c1624b
+2018-11-05 08:48:30 PDF data received
+2018-11-05 08:48:31 https://api.myparcel.nl/shipments/36148618;36143412
+2018-11-05 08:48:32 API response (shipment 36148618, 36143412):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'id' => 36143412,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 3,
+            'delivery_date' => '2018-08-21 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T08:37:56+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 710,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+        1 => 
+        array (
+          'id' => 36148618,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Nam Dang',
+            'company' => '',
+            'email' => '',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => 'bb',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 0,
+            'label_description' => '',
+            'delivery_type' => 1,
+            'delivery_date' => '2018-08-21 08:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+            'tracktrace' => 
+            array (
+              'send_track_trace_emails' => 0,
+              'email_on_handed_to_courier' => 1,
+              'bcc' => 0,
+              'delivery_notification' => 0,
+              'carrier_email_basic_notification' => 1,
+            ),
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2018-08-15T00:00:00+02:00',
+          'modified' => '2018-08-15T10:27:07+02:00',
+          'reference_identifier' => NULL,
+          'created_by' => 8390,
+          'modified_by' => 8390,
+          'transaction_status' => 'unpaid',
+          'barcode' => NULL,
+          'price' => 
+          array (
+            'amount' => 1585,
+            'currency' => 'EUR',
+          ),
+          'region' => 'NL',
+          'external_provider' => NULL,
+          'external_provider_id' => NULL,
+          'payment_status' => 'unpaid',
+          'carrier_id' => 1,
+          'platform_id' => 1,
+          'origin' => 'opencart',
+          'user_agent' => 'OpenCart/2.3.0.2',
+          'secondary_shipments' => 
+          array (
+          ),
+          'multi_collo_main_shipment_id' => NULL,
+        ),
+      ),
+      'results' => 2,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.14.0',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'Cache-Control' => 'no-cache, private',
+    'Date' => 'Mon, 05 Nov 2018 08:46:30 GMT',
+    'X-RateLimit-Limit' => '9999',
+    'X-RateLimit-Remaining' => '9998',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, ETag',
+  ),
+)

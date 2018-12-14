@@ -1,0 +1,38 @@
+.iframe_loading_icon {
+    margin: auto;
+}
+
+.delivery-reset-wrapper {
+    margin: 10px 0;
+}
+
+.modal {
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+    .modal:before {
+        display: inline-block;
+        vertical-align: middle;
+        content: " ";
+        height: 100%;
+    }
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.button-myparcel-total-details {
+    cursor: pointer;
+}
+
+.parcel-shipping-method {
+    display: none;
+}
+
+.text-right {
+    text-align: right;
+}

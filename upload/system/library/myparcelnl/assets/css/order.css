@@ -1,0 +1,150 @@
+.tracktrace_status {
+    border-spacing: 10px;
+    border-collapse: separate;
+}
+
+.text-right .myparcel-modal {
+    text-align: left;
+}
+
+.text-right #modal-body-myparcel-shipment {
+    padding: 15px;
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+#modal-body-myparcel-shipment {
+    text-align: center;
+}
+
+.table_shipping_methods_package_types {
+    border-spacing: 10px;
+    border-collapse: separate;
+    width: 100%;
+    margin-top: -10px;
+}
+
+.table_shipping_methods_package_types td:first-child {
+    width: 10%;
+}
+
+/* shipment options form styling */
+.oc_shipment_options_form table {
+    width: 100%;
+}
+
+.oc_shipment_options_form input[type=number] {
+    width: 50px;
+    text-align: center;
+}
+
+.oc_shipment_options_form input[type="checkbox"],
+.oc_shipment_options_form input[type="radio"] {
+    margin-right: 8px;
+}
+
+.oc_shipment_options_form td {
+    border: none;
+    padding: 0px 7px 2px !important;
+    vertical-align: middle !important;
+}
+
+.oc_shipment_options_form{
+    width: 450px;
+    border: 1px solid #ccc;
+    background: white;
+    position: absolute;
+    z-index: 999;
+    padding: 10px;
+}
+
+.oc_shipment_options_form td.oc_option_cost {
+    width: 60px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.oc_shipment_options_form .calculated_weight {
+    font-size: 80%;
+    color: #999;
+}
+
+
+
+.oc_spinner{
+    display: none;
+}
+
+.widefat .column-order_actions .oc_spinner {
+    position: absolute;
+}
+
+.oc_spinner,
+.oc_save_shipment_settings input{
+    vertical-align: middle;
+}
+
+.ocmp_shipment_options_form .ocmyparcel_settings_table td {
+    border: none;
+    padding: 0px 7px 2px !important;
+    vertical-align: middle !important;
+}
+
+.oc_save_shipment_settings .save{
+    cursor: pointer;
+}
+
+/* Return shipment form */
+.return-shipment-form-wrapper {
+    text-align: left;
+    font-size: 14px;
+}
+
+.return-shipment-form-wrapper table {
+    border-spacing: 10px;
+    border-collapse: separate;
+}
+
+.return-shipment-form-wrapper .ocmyparcel_settings_table input[type='checkbox'] {
+    margin-right: 10px;
+}
+
+.wcmp_shipment_summary_list{
+    width: auto;
+    border: 1px solid #ccc;
+    background: white;
+    position: absolute;
+    z-index: 999;
+    padding: 10px;
+}
+.encircle {
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    line-height: 10px;
+    padding: 2px;
+    border: 1px solid #666;
+    color: #666;
+    text-align: center;
+}
+.wcmp_shipment_summary{
+    display: block;
+}
+
+.button-myparcel-total-details{
+    cursor: pointer;
+}
+
+#form-order .button-myparcel-total-details {
+    visibility: hidden;
+}
+
+.opencart1.alert.err {
+    padding: 5px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 10px;
+}

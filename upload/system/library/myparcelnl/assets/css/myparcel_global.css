@@ -1,0 +1,7 @@
+.dropdown-menu  .button-myparcel-total-details, .checkout-cart .button-myparcel-total-details {
+    display: none;
+}
+
+#d_quickcheckout iframe#myparcel-iframe {
+    height: 400px;
+}
