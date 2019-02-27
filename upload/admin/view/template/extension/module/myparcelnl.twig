@@ -396,182 +396,6 @@
 
                                 <div id="settings_delivery" class="{{ (module_myparcelnl_fields_checkout.enable_delivery and module_myparcelnl_fields_checkout.enable_delivery==1)?'show':'hidden'}}">
 
-                                    <div class="form-group">
-                                        <label class="text-left col-sm-2 control-label" for="input-title" ><{{ entry_tab_3_label_home_address_only }}</label>
-                                        <div class="col-sm-10 col-md-6 col-lg-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.only_recipient_enabled and module_myparcelnl_fields_checkout.only_recipient_enabled==1)?'checked="checked"':'' %}
-                                                    <input type="hidden" name="module_myparcelnl_fields_checkout[only_recipient_enabled]" value="0" />
-                                                    <input id="checkbox_home_address_only" class="checkbox_delivery_options" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[only_recipient_enabled]" />
-                                                </label>
-
-                                            </div>
-                                            <table id="table_home_address_only" class="v-center {{ (module_myparcelnl_fields_checkout.only_recipient_enabled and module_myparcelnl_fields_checkout.only_recipient_enabled==1)?'show':'hidden'}}">
-                                                <tr>
-                                                    <td>{{ entry_tab_3_label_additional_fee }}: </td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">&euro;</span>
-                                                            <input class="form-control" type="text" name="module_myparcelnl_fields_checkout[only_recipient_fee]" value="{{  (module_myparcelnl_fields_checkout.only_recipient_fee) ? module_myparcelnl_fields_checkout.only_recipient_fee : '' }}">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_signature_on_delivery }}</label>
-                                        <div class="col-sm-10 col-md-6 col-lg-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.signed_enabled and module_myparcelnl_fields_checkout.signed_enabled==1)?'checked="checked"':'' %}
-                                                    <input type="hidden" name="module_myparcelnl_fields_checkout[signed_enabled]" value="0" />
-                                                    <input id="checkbox_signature_on_delivery" class="checkbox_delivery_options" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[signed_enabled]" />
-                                                </label>
-
-                                            </div>
-                                            <table id="table_signature_on_delivery" class="v-center {{ (module_myparcelnl_fields_checkout.signed_enabled and module_myparcelnl_fields_checkout.signed_enabled==1)?'show':'hidden' }}">
-                                                <tr>
-                                                    <td>{{ entry_tab_3_label_additional_fee }}: </td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">&euro;</span>
-                                                            <input class="form-control" type="text" name="module_myparcelnl_fields_checkout[signed_fee]" value="{{ (module_myparcelnl_fields_checkout.signed_fee) ? module_myparcelnl_fields_checkout.signed_fee : '' }}">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_standard_delivery }}</label>
-                                        <div class="col-sm-10 col-md-6 col-lg-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.default_enabled and module_myparcelnl_fields_checkout.default_enabled==1)?'checked="checked"':'' %}
-                                                    <input type="hidden" name="module_myparcelnl_fields_checkout[default_enabled]" value="0" />
-                                                    <input id="checkbox_standard_delivery" class="checkbox_delivery_options" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[default_enabled]" />
-                                                </label>
-
-                                            </div>
-                                            <table id="table_standard_delivery" class="v-center {{ (module_myparcelnl_fields_checkout.default_enabled and module_myparcelnl_fields_checkout.default_enabled==1)?'show':'hidden' }}">
-                                                <tr>
-                                                    <td>{{ entry_tab_3_label_additional_fee }}: </td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">&euro;</span>
-                                                            <input class="form-control" type="text" name="module_myparcelnl_fields_checkout[default_fee]" value="{{ (module_myparcelnl_fields_checkout.default_fee) ? module_myparcelnl_fields_checkout.default_fee : '' }}">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_evening_delivery }}</label>
-                                        <div class="col-sm-10 col-md-6 col-lg-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.night_enabled and module_myparcelnl_fields_checkout.night_enabled==1)?'checked="checked"':'' %}
-                                                    <input type="hidden" name="module_myparcelnl_fields_checkout[night_enabled]" value="0" />
-                                                    <input id="checkbox_evening_delivery" class="checkbox_delivery_options" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[night_enabled]" />
-                                                </label>
-
-                                            </div>
-                                            <table id="table_evening_delivery" class="v-center {{ (module_myparcelnl_fields_checkout.night_enabled and module_myparcelnl_fields_checkout.night_enabled==1)?'show':'hidden' }}">
-                                                <tr>
-                                                    <td>{{ entry_tab_3_label_additional_fee }}: </td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">&euro;</span>
-                                                            <input class="form-control" type="text" name="module_myparcelnl_fields_checkout[night_fee]" value="{{ (module_myparcelnl_fields_checkout.night_fee) ? module_myparcelnl_fields_checkout.night_fee : '' }}">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_morning_delivery }}</label>
-                                        <div class="col-sm-10 col-md-6 col-lg-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.morning_enabled and module_myparcelnl_fields_checkout.morning_enabled==1) ? 'checked="checked"':'' %}
-                                                    <input type="hidden" name="module_myparcelnl_fields_checkout[morning_enabled]" value="0" />
-                                                    <input id="checkbox_morning_delivery" class="checkbox_delivery_options" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[morning_enabled]" />
-                                                </label>
-
-                                            </div>
-                                            <table id="table_morning_delivery" class="{{ (module_myparcelnl_fields_checkout.morning_enabled and module_myparcelnl_fields_checkout.morning_enabled==1) ? 'show':'hidden' }}">
-                                                <tr>
-                                                    <td>{{ entry_tab_3_label_additional_fee }}: </td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">&euro;</span>
-                                                            <input class="form-control" type="text" name="module_myparcelnl_fields_checkout[morning_fee]" value="{{ (module_myparcelnl_fields_checkout.morning_fee) ? module_myparcelnl_fields_checkout.morning_fee : '' }}">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_postnl_pickup }}</label>
-                                        <div class="col-sm-10 col-md-6 col-lg-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.pickup_enabled and module_myparcelnl_fields_checkout.pickup_enabled==1)?'checked="checked"':'' %}
-                                                    <input type="hidden" name="module_myparcelnl_fields_checkout[pickup_enabled]" value="0" />
-                                                    <input id="checkbox_postnl_pickup" class="checkbox_delivery_options" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[pickup_enabled]" />
-                                                </label>
-
-                                            </div>
-                                            <table id="table_postnl_pickup" class="{{ (module_myparcelnl_fields_checkout.pickup_enabled and module_myparcelnl_fields_checkout.pickup_enabled==1)?'show':'hidden' }}">
-                                                <tr>
-                                                    <td>{{ entry_tab_3_label_additional_fee }}: </td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">&euro;</span>
-                                                            <input class="form-control" type="text" name="module_myparcelnl_fields_checkout[pickup_fee]" value="{{ (module_myparcelnl_fields_checkout.pickup_fee) ? module_myparcelnl_fields_checkout.pickup_fee : '' }}">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_early_postnl_pickup }}</label>
-                                        <div class="col-sm-10 col-md-6 col-lg-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.pickup_express_enabled and module_myparcelnl_fields_checkout.pickup_express_enabled==1)?'checked="checked"':'' %}
-                                                    <input type="hidden" name="module_myparcelnl_fields_checkout[pickup_express_enabled]" value="0" />
-                                                    <input id="checkbox_early_postnl_pickup" class="checkbox_delivery_options" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[pickup_express_enabled]" />
-                                                </label>
-
-                                            </div>
-                                            <table id="table_early_postnl_pickup" class="{{ (module_myparcelnl_fields_checkout.pickup_express_enabled and  module_myparcelnl_fields_checkout.pickup_express_enabled==1)?'show':'hidden' }}">
-                                                <tr>
-                                                    <td>{{ entry_tab_3_label_additional_fee }}: </td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">&euro;</span>
-                                                            <input class="form-control" type="text" name="module_myparcelnl_fields_checkout[pickup_express_fee]" value="{{ (module_myparcelnl_fields_checkout.pickup_express_fee) ? module_myparcelnl_fields_checkout.pickup_express_fee : '' }}">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
                                     <!-- MAILBOX SETTINGS -->
                                     <div class="form-group">
                                         <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_mailbox_settings }}</label>
@@ -612,42 +436,231 @@
                                             </table>
                                         </div>
                                     </div>
-
-                                    <!-- BELGIUM PRICES SETTINGS -->
-                                    <div class="form-group">
-                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_belgium_settings }}</label>
-                                        <div class="col-sm-10 col-md-6 col-lg-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.belgium_enabled and module_myparcelnl_fields_checkout.belgium_enabled==1)?'checked="checked"':'' %}
-                                                    <input type="hidden" name="module_myparcelnl_fields_checkout[belgium_enabled]" value="0" />
-                                                    <input id="checkbox_mailbox" class="checkbox_delivery_options" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[belgium_enabled]" />
-                                                </label>
-
-                                            </div>
-                                            <table id="table_mailbox" class="{{ (module_myparcelnl_fields_checkout.belgium_enabled and module_myparcelnl_fields_checkout.belgium_enabled==1)?'show':'hidden' }}">
-                                                <tr>
-                                                    <td>{{ entry_tab_3_label_belgium_default_fee }}:</td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">&euro;</span>
-                                                            <input class="form-control" type="text" name="module_myparcelnl_fields_checkout[belgium_default_fee]" value="{{ (module_myparcelnl_fields_checkout.belgium_default_fee) ? module_myparcelnl_fields_checkout.belgium_default_fee : '' }}">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{{ entry_tab_3_label_belgium_pickup_fee }}:</td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">&euro;</span>
-                                                            <input class="form-control" type="text" name="module_myparcelnl_fields_checkout[belgium_pickup_fee]" value="{{ (module_myparcelnl_fields_checkout.belgium_pickup_fee) ? module_myparcelnl_fields_checkout.belgium_pickup_fee : '' }}">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
+									
+									<!-- NEW SHIPPING PRICES -->
+									
+									<div class="form-group" style="background: #DDD;">
+										<label class="text-right col-sm-2 control-label">{{ entry_subtotal }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;">>=</label>
+										<div class="col-sm-2">
+											<div class="input-group">
+												<span class="input-group-addon" id="subtotal-1-min"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[subtotal1_min]" value="{{ (module_myparcelnl_fields_checkout.subtotal1_min) ? module_myparcelnl_fields_checkout.subtotal1_min : '0' }}" />
+											</div>
+										</div>
+										<div class="col-sm-2">
+											<div class="input-group">
+												<span class="input-group-addon" id="subtotal-2-min"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[subtotal2_min]" value="{{ (module_myparcelnl_fields_checkout.subtotal2_min) ? module_myparcelnl_fields_checkout.subtotal2_min : '50.01' }}" />
+											</div>
+										</div>
+									</div>
+									
+									<div class="form-group" style="background: #DDD;">
+										<label class="text-right col-sm-2 control-label">{{ entry_subtotal }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;"><</label>
+										<div class="col-sm-2">
+											<div class="input-group">
+												<span class="input-group-addon" id="subtotal-1-min"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[subtotal1_max]" value="{{ (module_myparcelnl_fields_checkout.subtotal1_max) ? module_myparcelnl_fields_checkout.subtotal1_max : '50' }}" />
+											</div>
+										</div>
+										<div class="col-sm-2">
+											<div class="input-group">
+												<span class="input-group-addon" id="subtotal-2-min"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[subtotal2_max]" value="{{ (module_myparcelnl_fields_checkout.subtotal2_max) ? module_myparcelnl_fields_checkout.subtotal2_max : '1000000' }}" />
+											</div>
+										</div>
+									</div>
+									
+									<div class="form-group">
+									{% set input_checked = (module_myparcelnl_fields_checkout.only_recipient_enabled and module_myparcelnl_fields_checkout.only_recipient_enabled==1)?'checked':'' %}
+									{% set class_checked = (module_myparcelnl_fields_checkout.only_recipient_enabled and module_myparcelnl_fields_checkout.only_recipient_enabled==1)?'show':'hidden' %}
+										<label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_home_address_only }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;">
+											<input type="hidden" name="module_myparcelnl_fields_checkout[only_recipient_enabled]" value="0" />
+											<input class="checkbox_delivery_options_2" {{ input_checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[only_recipient_enabled]" />
+										</label>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[only_recipient_fee]" value="{{ (module_myparcelnl_fields_checkout.only_recipient_fee) ? module_myparcelnl_fields_checkout.only_recipient_fee : '0' }}" />
+											</div>										
+										</div>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[only_recipient_fee2]" value="{{ (module_myparcelnl_fields_checkout.only_recipient_fee2) ? module_myparcelnl_fields_checkout.only_recipient_fee2 : '0' }}" />
+											</div>										
+										</div>
+									</div>
+									
+									<div class="form-group">
+									{% set input_checked = (module_myparcelnl_fields_checkout.signed_enabled and module_myparcelnl_fields_checkout.signed_enabled==1)?'checked':'' %}
+									{% set class_checked = (module_myparcelnl_fields_checkout.signed_enabled and module_myparcelnl_fields_checkout.signed_enabled==1)?'show':'hidden' %}
+										<label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_signature_on_delivery }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;">
+											<input type="hidden" name="module_myparcelnl_fields_checkout[signed_enabled]" value="0" />
+											<input class="checkbox_delivery_options_2" {{ input_checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[signed_enabled]" />
+										</label>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[signed_fee]" value="{{ (module_myparcelnl_fields_checkout.signed_fee) ? module_myparcelnl_fields_checkout.signed_fee : '0' }}" />
+											</div>										
+										</div>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[signed_fee2]" value="{{ (module_myparcelnl_fields_checkout.signed_fee2) ? module_myparcelnl_fields_checkout.signed_fee2: '0' }}" />
+											</div>										
+										</div>
+									</div>
+									
+									<div class="form-group">
+									{% set input_checked = (module_myparcelnl_fields_checkout.default_enabled and module_myparcelnl_fields_checkout.default_enabled==1)?'checked':'' %}
+									{% set class_checked = (module_myparcelnl_fields_checkout.default_enabled and module_myparcelnl_fields_checkout.default_enabled==1)?'show':'hidden' %}
+										<label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_standard_delivery }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;">
+											<input type="hidden" name="module_myparcelnl_fields_checkout[default_enabled]" value="0" />
+											<input class="checkbox_delivery_options_2" {{ input_checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[default_enabled]" />
+										</label>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[default_fee]" value="{{ (module_myparcelnl_fields_checkout.default_fee) ? module_myparcelnl_fields_checkout.default_fee: '0' }}" />
+											</div>										
+										</div>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[default_fee2]" value="{{ (module_myparcelnl_fields_checkout.default_fee2) ? module_myparcelnl_fields_checkout.default_fee2: '0' }}" />
+											</div>										
+										</div>
+									</div>
+									
+									<div class="form-group">
+									{% set input_checked = (module_myparcelnl_fields_checkout.night_enabled and module_myparcelnl_fields_checkout.night_enabled==1)?'checked':'' %}
+									{% set class_checked = (module_myparcelnl_fields_checkout.night_enabled and module_myparcelnl_fields_checkout.night_enabled==1)?'show':'hidden' %}
+										<label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_evening_delivery }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;">
+											<input type="hidden" name="module_myparcelnl_fields_checkout[night_enabled]" value="0" />
+											<input class="checkbox_delivery_options_2" {{ input_checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[night_enabled]" />
+										</label>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[night_fee]" value="{{ (module_myparcelnl_fields_checkout.night_fee) ? module_myparcelnl_fields_checkout.night_fee: '0' }}" />
+											</div>										
+										</div>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[night_fee2]" value="{{ (module_myparcelnl_fields_checkout.night_fee2) ? module_myparcelnl_fields_checkout.night_fee2: '0' }}" />
+											</div>										
+										</div>
+									</div>
+									
+									<div class="form-group">
+									{% set input_checked = (module_myparcelnl_fields_checkout.morning_enabled and module_myparcelnl_fields_checkout.morning_enabled==1)?'checked':'' %}
+									{% set class_checked = (module_myparcelnl_fields_checkout.morning_enabled and module_myparcelnl_fields_checkout.morning_enabled==1)?'show':'hidden' %}
+										<label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_morning_delivery }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;">
+											<input type="hidden" name="module_myparcelnl_fields_checkout[morning_enabled]" value="0" />
+											<input class="checkbox_delivery_options_2" {{ input_checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[morning_enabled]" />
+										</label>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[morning_fee]" value="{{ (module_myparcelnl_fields_checkout.morning_fee) ? module_myparcelnl_fields_checkout.morning_fee: '0' }}" />
+											</div>										
+										</div>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[morning_fee2]" value="{{ (module_myparcelnl_fields_checkout.morning_fee2) ? module_myparcelnl_fields_checkout.morning_fee2: '0' }}" />
+											</div>										
+										</div>
+									</div>
+									
+									<div class="form-group">
+									{% set input_checked = (module_myparcelnl_fields_checkout.pickup_enabled and module_myparcelnl_fields_checkout.pickup_enabled==1)?'checked':'' %}
+									{% set class_checked = (module_myparcelnl_fields_checkout.pickup_enabled and module_myparcelnl_fields_checkout.pickup_enabled==1)?'show':'hidden' %}
+										<label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_postnl_pickup }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;">
+											<input type="hidden" name="module_myparcelnl_fields_checkout[pickup_enabled]" value="0" />
+											<input class="checkbox_delivery_options_2" {{ input_checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[pickup_enabled]" />
+										</label>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[pickup_fee]" value="{{ (module_myparcelnl_fields_checkout.pickup_fee) ? module_myparcelnl_fields_checkout.pickup_fee: '0' }}" />
+											</div>										
+										</div>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[pickup_fee2]" value="{{ (module_myparcelnl_fields_checkout.pickup_fee2) ? module_myparcelnl_fields_checkout.pickup_fee2: '0' }}" />
+											</div>										
+										</div>
+									</div>
+									
+									<div class="form-group">
+									{% set input_checked = (module_myparcelnl_fields_checkout.pickup_express_enabled and module_myparcelnl_fields_checkout.pickup_express_enabled==1)?'checked':'' %}
+									{% set class_checked = (module_myparcelnl_fields_checkout.pickup_express_enabled and module_myparcelnl_fields_checkout.pickup_express_enabled==1)?'show':'hidden' %}
+										<label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_early_postnl_pickup }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;">
+											<input type="hidden" name="module_myparcelnl_fields_checkout[pickup_express_enabled]" value="0" />
+											<input class="checkbox_delivery_options_2" {{ input_checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[pickup_express_enabled]" />
+										</label>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[pickup_express_fee]" value="{{ (module_myparcelnl_fields_checkout.pickup_express_fee) ? module_myparcelnl_fields_checkout.pickup_express_fee: '0' }}" />
+											</div>										
+										</div>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[pickup_express_fee2]" value="{{ (module_myparcelnl_fields_checkout.pickup_express_fee2) ? module_myparcelnl_fields_checkout.pickup_express_fee2: '0' }}" />
+											</div>										
+										</div>
+									</div>
+									
+									<div class="form-group">
+									{% set input_checked = (module_myparcelnl_fields_checkout.belgium_enabled and module_myparcelnl_fields_checkout.belgium_enabled==1)?'checked':'' %}
+									{% set class_checked = (module_myparcelnl_fields_checkout.belgium_enabled and module_myparcelnl_fields_checkout.belgium_enabled==1)?'show':'hidden' %}
+										<label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_belgium_settings }}</label>
+										<label class="text-center col-sm-1" style="padding-top: 9px;">
+											<input type="hidden" name="module_myparcelnl_fields_checkout[belgium_enabled]" value="0" />
+											<input class="checkbox_delivery_options_2" {{ input_checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[belgium_enabled]" />
+										</label>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<p>{{ entry_tab_3_label_belgium_default_fee }}:</p>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[belgium_default_fee]" value="{{ (module_myparcelnl_fields_checkout.belgium_default_fee) ? module_myparcelnl_fields_checkout.belgium_default_fee: '0' }}" />
+											</div>	
+											<p style="margin-top: 1em;">{{ entry_tab_3_label_belgium_pickup_fee }}:</p>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[belgium_pickup_fee]" value="{{ (module_myparcelnl_fields_checkout.belgium_pickup_fee) ? module_myparcelnl_fields_checkout.belgium_pickup_fee: '0' }}" />
+											</div>
+										</div>
+										<div class="col-sm-2 col-input {{ class_checked }}">
+											<p>&nbsp;</p>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[belgium_default_fee2]" value="{{ (module_myparcelnl_fields_checkout.belgium_default_fee2) ? module_myparcelnl_fields_checkout.belgium_default_fee2: '0' }}" />
+											</div>	
+											<p style="margin-top: 1em;">&nbsp;</p>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-eur"></i></span>
+												<input type="number" min="0" step="any" class="form-control" name="module_myparcelnl_fields_checkout[belgium_pickup_fee2]" value="{{ (module_myparcelnl_fields_checkout.belgium_pickup_fee2) ? module_myparcelnl_fields_checkout.belgium_pickup_fee2: '0' }}" />
+											</div>									
+										</div>
+									</div>
+								
                                     <!-- END  MAILBOX SETTINGS -->
 
                                     <h2>{{ entry_tab_3_title_shipment_processing_parameters }}</h2>

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$heading_title = 'Myparcel NL v1.0.1';
+$heading_title = 'Myparcel NL v1.0.4';
 $_['heading_title'] = $heading_title;
 // Text
 $_['text_module']         = 'Modules';
@@ -85,6 +85,7 @@ $_['entry_tab_2_select_insured_up_to_250'] = 'Insured up to &euro; 250 (+ &euro;
 $_['entry_tab_2_select_insured_up_to_500'] = 'Insured up to &euro; 500 (+ &euro; 1.65)';
 $_['entry_tab_2_select_insured_500']       = '> &euro; 500 insured (+ &euro; 1.65 / &euro; 500)';
 
+$_['entry_subtotal']                                   = 'Subtotal';
 $_['entry_tab_3_title_delivery_option']                = 'Delivery options';
 $_['entry_tab_3_label_enable_delivery']                = 'Enable MyParcel delivery options';
 $_['entry_tab_3_label_home_address_only']              = 'Home address only';

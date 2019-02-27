@@ -277,7 +277,7 @@
                 overflow: hidden;
             }
             #mypa-location-container{
-                overflow: scroll;
+                overflow-y: scroll;
                 max-height: 100%
             }
             .mypa-price {
@@ -459,6 +459,12 @@
                 width:20px;
                 height:20px;
                 transform: rotate(45deg);
+                cursor: pointer;
+            }
+            .mypa-delivery-content {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
             }
 
             <?php //-------------------------- CUSTOM STYLES -------------------------- ?>

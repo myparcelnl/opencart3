@@ -12,6 +12,10 @@ $delivery_options = $checkout_helper::$delivery_extra_options;
 
 // get delivery option fees/prices
 $registry = MyParcel::$registry;
+
+$config = $registry->get('config');
+$theme = !empty($config->get('config_template')) ? $config->get('config_template') : $config->get('config_theme');
+
 $cart = $registry->get('cart');
 $config = $registry->get('config');
 $session = $registry->get('session');
@@ -27,9 +31,9 @@ $export_default_settings    = $config->get('module_myparcelnl_fields_export');
 $price_options = array_merge( $delivery_options, $delivery_types );
 
 if (MyParcel()->helper->isModuleExist('d_quickcheckout', true)) {
-    $prices = $checkout_helper->getDeliveryPrices(true, false, '+ ');
+    $prices = $checkout_helper->getDeliveryPrices(true, false, '+ ', true, 0, $cart->getSubTotal());
 } else {
-    $prices = $checkout_helper->getDeliveryPrices();
+    $prices = $checkout_helper->getDeliveryPrices(true, true, '', true, 0, $cart->getSubTotal());
 }
 
 // exclude delivery types
@@ -217,5 +221,6 @@ $ajax_get_loading_icon =  MyParcel()->getImageUrl() . 'myparcel-spin.gif';
         window.myparcel_ajax_get_delivery_iframe_content = "<?php echo $myparcel_ajax_get_delivery_iframe_content ?>";
         window.myparcel_loading_icon = "<?php echo $ajax_get_loading_icon ?>";
         window.entry_loading = "<?php echo MyParcel()->lang->get('entry_loading') . '...' ?>";
+        window.myparcel_current_theme = "<?php echo $theme; ?>"
     });
 </script>

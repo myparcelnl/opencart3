@@ -76,6 +76,9 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
         //TODO discriminate OC 2 and OC 1
         if (version_compare(VERSION, '2.0.0.0', '>=')) {
             $address_data = isset($session->data['shipping_address']) ? $session->data['shipping_address'] : (isset($session->data['payment_address']) ? $session->data['payment_address'] : null);
+            $address_data['address_1'] = !empty($_POST['address_1']) ? $_POST['address_1'] : $address_data['address_1'];
+            $address_data['address_2'] = !empty($_POST['address_2']) ? $_POST['address_2'] : $address_data['address_2'];
+            $address_data['city'] = !empty($_POST['city']) ? $_POST['city'] : $address_data['city'];
         } else {
             if (MyParcel()->helper->isModuleExist('d_quickcheckout', true)) {
                 $address_data['address_1'] = $session->data['shipping_address']['address_1'];

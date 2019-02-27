@@ -76,6 +76,19 @@ $(document).ready(function() {
         }
     });
 
+    $('.checkbox_delivery_options_2').change(function(){
+		var container = $(this);
+		var input = container.closest('.form-group').find('.col-input');
+		
+		if (container.prop('checked')) {
+			if(input.hasClass('hidden'))
+				input.removeClass('hidden').addClass('show');
+		}else{
+			if(input.hasClass('show'))
+				input.removeClass('show').addClass('hidden');
+		}
+	});
+
     $("#checkbox_insured").change(function(){
         if($(this).prop('checked') == true){
             if ($('#div_checkbox_insured').hasClass("hidden")) {

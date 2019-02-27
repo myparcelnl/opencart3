@@ -5,7 +5,7 @@
 -->
 <modification>
     <name>MyParcel NL</name>
-    <version>1.0.1</version>
+    <version>1.0.4</version>
     <code>MyParcelNL</code>
     <author>MyParcel NL</author>
     <link>https://www.myparcel.nl/</link>
@@ -403,6 +403,23 @@
         </operation>
     </file>
 
+    <!-- ________________ catalog/view/theme/journal2/template/journal2/checkout/address_form.twig ________________ -->
+    <!-- _______________________ All Address Form Info Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/view/theme/journal2/template/journal2/checkout/address_form.twig">
+        <operation>
+            <search><![CDATA[id="input-{{ type }}-address-2" class="form-control"/>]]></search>
+            <add position="after"><![CDATA[
+            {% if( use_addition_address and use_addition_address == 2 ) %}
+            </div>
+                 <div class="form-group address-3-input">
+                    <label class="col-sm-2 control-label" for="input-{{ type }}-address-3">Address 3</label>
+                    <input type="text" name="{{ type }}_custom_field[address][address_3]" value="{{staticCall('Journal2Utils', 'getProperty', [order_data, type ~ '_custom_field.address.address_3', ''])}}" placeholder="Address 3" id="input-{{ type }}-address-3" class="form-control"/>
+            {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
     <!-- ________________ catalog/view/theme/*/template/checkout/guest.twig ________________ -->
     <!-- _______________________ Billing Info Guest Template _______________________ -->
     <!-- _________________________________________________________________________ -->
@@ -662,8 +679,9 @@
     <!-- _________________________________________________________________________ -->
     <file path="catalog/view/theme/*/template/account/address_form.twig">
         <operation>
-            <search><![CDATA[<input type="text" name="address_2" value="{{ address_2 }}" placeholder="{{ entry_address_2 }}" id="input-address-2" class="form-control" />]]></search>
-            <add position="after"><![CDATA[
+            <search regex="true"><![CDATA[/<input type="text" name="address_2" value="{{ address_2 }}" placeholder="{{ entry_address_2 }}" id="input-address-2" class="form-control"(.*?)\/>/]]></search>
+            <add><![CDATA[
+            <input type="text" name="address_2" value="{{ address_2 }}" placeholder="{{ entry_address_2 }}" id="input-address-2" class="form-control"/>
             {% if( use_addition_address and use_addition_address == 2 ) %}
             </div>
         </div>

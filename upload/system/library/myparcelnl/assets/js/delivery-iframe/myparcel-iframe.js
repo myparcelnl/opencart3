@@ -41,7 +41,7 @@
             };
 
             function _agfh(n) {
-                var gfli = "<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=" + n + "'>";
+                var gfli = "<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=" + n + "'>";
                 document.head.innerHTML = document.head.innerHTML + gfli;
             }
 

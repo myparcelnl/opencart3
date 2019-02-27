@@ -57,6 +57,7 @@ class MyParcel_Shipment_Checkout
         }
 
         $registry               = MyParcel::$registry;
+		$cart                   = $registry->get('cart');
         $config                 = $registry->get('config');
         $checkout_settings      = $config->get('module_myparcelnl_fields_checkout');
         $belgium_enabled        = !empty($checkout_settings['belgium_enabled']) ? true : false;
@@ -68,7 +69,7 @@ class MyParcel_Shipment_Checkout
 
         if ($belgium_enabled && $country_code == 'BE' && !empty($delivery_options['price_comment'])) {
 
-            $prices = $this->getDeliveryPrices($price_format, true, '', $taxIncluded);
+            $prices = $this->getDeliveryPrices($price_format, true, '', $taxIncluded, $order_id, $cart->getSubTotal());
 
             $total_array = array();
 
@@ -128,6 +129,9 @@ class MyParcel_Shipment_Checkout
         if (!$delivery_type_text) {
             $delivery_type_text = 'default';
         }
+		
+		$registry = MyParcel::$registry;
+		$cart = $registry->get('cart');
 
         if (!empty($order_id) && is_numeric($order_id)) {
             $registry = MyParcel::$registry;
@@ -153,7 +157,7 @@ class MyParcel_Shipment_Checkout
         }
 
         if (empty($prices)) {
-            $prices = $this->getDeliveryPrices($price_format, false, $prefix, $taxIncluded); // Get Prices without formatting
+            $prices = $this->getDeliveryPrices($price_format, false, $prefix, $taxIncluded, $order_id, $cart->getSubTotal()); // Get Prices without formatting
             $country_code           = MyParcel()->helper->getCountryIsoCodeFromSession();
             $prices = !empty($country_code) ? $prices[$country_code] : $prices;
         }
@@ -270,7 +274,7 @@ class MyParcel_Shipment_Checkout
      * @param string prefix
      * @return array prices of delivery types
      */
-    function getDeliveryPrices($price_format = true, $color_format = true, $prefix = '', $taxIncluded = true)
+    function getDeliveryPrices($price_format = true, $color_format = true, $prefix = '', $taxIncluded = true, $order_id = 0, $value = 0)
     {
         $registry = MyParcel::$registry;
         /** @var \Cart\Cart $cart **/
@@ -281,6 +285,27 @@ class MyParcel_Shipment_Checkout
         $checkout_settings          = $config->get('module_myparcelnl_fields_checkout');
         $price_options = array_merge( self::$delivery_extra_options, self::$delivery_types );
         $prices = array();
+		
+		// default settings
+        $price_type = 0;
+		$subtotal1_min = isset($checkout_settings['subtotal1_min']) ? $checkout_settings['subtotal1_min'] : 0;
+		$subtotal1_max = isset($checkout_settings['subtotal1_max']) ? $checkout_settings['subtotal1_max'] : 50;
+		$subtotal2_min = isset($checkout_settings['subtotal2_min']) ? $checkout_settings['subtotal2_min'] : 50.01;
+		$subtotal2_max = isset($checkout_settings['subtotal2_max']) ? $checkout_settings['subtotal2_max'] : 1000000;
+
+        if($order_id > 0) {
+            $loader = $registry->get('load');
+			$loader->model('checkout/order'); 
+			$model_order = $registry->get('model_checkout_order');
+            $order = $model_order->getOrder($order_id);
+            $value = $order['total'];
+            
+            if($subtotal2_min <= $value && $value < $subtotal2_max)
+                $price_type = 1;
+        }else{
+            if($subtotal2_min <= $value && $value < $subtotal2_max)
+                $price_type = 1;
+		}
 
         foreach ($price_options as $key => $option) {
             // JS API correction
@@ -291,24 +316,50 @@ class MyParcel_Shipment_Checkout
             $option_enabled = (!empty($checkout_settings[$option.'_enabled'])) ? true : false;
 
             if ($option_enabled) {
-                if (!empty($checkout_settings[$option . '_fee'])) {
-                    $fee = $checkout_settings[$option . '_fee'];
-                    $fee = $this->convertPriceToFloat($fee);
+                if ($price_type == 0 && !empty($checkout_settings[$option . '_fee'])) {
+                    $fee = $checkout_settings[$option . '_fee'];                    
 
-                    //$fee += $this->getMyParcelShippingCost();
-                    if ($taxIncluded) {
-                        $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
-                    } else {
-                        $fee_including_tax = $fee;
+                    if($fee > 0) {
+                        $fee = $this->convertPriceToFloat($fee);
+
+                        //$fee += $this->getMyParcelShippingCost();
+                        if ($taxIncluded) {
+                            $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
+                        } else {
+                            $fee_including_tax = $fee;
+                        }
+
+                        if ($price_format) {
+                            $formatted_fee = $this->formatDeliveryPrice($fee_including_tax, $currency, $color_format, $prefix);
+                        } else {
+                            $formatted_fee = $fee_including_tax;
+                        }
+
+                        $prices[$option] = $formatted_fee;
                     }
+                }
+                
+                if ($price_type == 1 && !empty($checkout_settings[$option . '_fee2'])) {
+                    $fee = $checkout_settings[$option . '_fee2'];                    
 
-                    if ($price_format) {
-                        $formatted_fee = $this->formatDeliveryPrice($fee_including_tax, $currency, $color_format, $prefix);
-                    } else {
-                        $formatted_fee = $fee_including_tax;
+                    if($fee > 0) {
+                        $fee = $this->convertPriceToFloat($fee);
+
+                        //$fee += $this->getMyParcelShippingCost();
+                        if ($taxIncluded) {
+                            $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
+                        } else {
+                            $fee_including_tax = $fee;
+                        }
+
+                        if ($price_format) {
+                            $formatted_fee = $this->formatDeliveryPrice($fee_including_tax, $currency, $color_format, $prefix);
+                        } else {
+                            $formatted_fee = $fee_including_tax;
+                        }
+
+                        $prices[$option] = $formatted_fee;
                     }
-
-                    $prices[$option] = $formatted_fee;
                 }
             } else {
                 if (in_array($option, self::$delivery_extra_options)) {
@@ -332,8 +383,20 @@ class MyParcel_Shipment_Checkout
 
                 $formatted_fee = '';
 
-                if (!empty($checkout_settings['belgium_' . $option . '_fee'])) {
+                if ($price_type == 0 && !empty($checkout_settings['belgium_' . $option . '_fee'])) {
                     $fee = $checkout_settings['belgium_' . $option . '_fee'];
+                    $fee = $this->convertPriceToFloat($fee);
+                    $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
+                    //$fee_including_tax = $fee;
+                    if ($price_format) {
+                        $formatted_fee = $this->formatDeliveryPrice($fee_including_tax, $currency, $color_format, $prefix);
+                    } else {
+                        $formatted_fee = $fee_including_tax;
+                    }
+                }
+
+                if ($price_type == 1 && !empty($checkout_settings['belgium_' . $option . '_fee2'])) {
+                    $fee = $checkout_settings['belgium_' . $option . '_fee2'];
                     $fee = $this->convertPriceToFloat($fee);
                     $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
                     //$fee_including_tax = $fee;
@@ -626,6 +689,7 @@ class MyParcel_Shipment_Checkout
     function addDeliveryDataIntoOrder($order_info)
     {
         $registry = MyParcel::$registry;
+		$cart = $registry->get('cart');
         $session = $registry->get('session');
         $loader = $registry->get('load');
         $loader->model(MyParcel()->getModelPath('shipment'));
@@ -672,7 +736,7 @@ class MyParcel_Shipment_Checkout
              * @var MyParcel_Shipment_Checkout $checkout;
              **/
             $checkout = MyParcel()->shipment->checkout;
-            $current_prices = $checkout->getDeliveryPrices(true, false, '', false);
+            $current_prices = $checkout->getDeliveryPrices(true, false, '', false, $order_info['order_id'], $cart->getSubTotal());
 
             /**
              * Reset the delivery options in session after saving it to database

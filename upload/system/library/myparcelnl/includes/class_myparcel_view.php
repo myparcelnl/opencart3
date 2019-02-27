@@ -576,6 +576,8 @@ class MyParcel_View extends MyParcel_View_Core
     **/
     function iframe_delivery_options($order_info = false)
     {
+        global $config;
+
         $delivery_enable = intval(MyParcel()->settings->checkout->enable_delivery);
         if (empty($delivery_enable)) {
             return '';
@@ -614,6 +616,9 @@ class MyParcel_View extends MyParcel_View_Core
         $belgium_enabled = intval(MyParcel()->settings->checkout->belgium_enabled);
         $country_allowed = ($myparcel_country == 'NL' || ($myparcel_country == 'BE' && $belgium_enabled)) ? true : false;
 
+        // Find out if journal2 theme is active
+        $config = empty($config) ? $registry->get('config') : $config;
+        $data['theme'] = !empty($config->get('config_template')) ? $config->get('config_template') : $config->get('config_theme');
         if (!$order_info && !$country_allowed && !MyParcel()->helper->isModuleExist('d_quickcheckout', true)) {
             return '';
         }

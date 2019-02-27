@@ -1,5 +1,5 @@
 <div id="delivery-options-wrapper" <?php echo ((!empty($myparcel_country) && $myparcel_country != 'NL' && !$is_order_info) ? 'style="display:none;"' : '' ) ?>>
-<?php if ((!$is_order_info && !empty($data['info']) && !MyParcel()->helper->isModuleExist('d_quickcheckout', true)) || (!empty($data['info']) && $is_order_info)) : ?>
+<?php if ((isset($data['theme']) && $data['theme'] != 'journal2') && ((!$is_order_info && !empty($data['info']) && !MyParcel()->helper->isModuleExist('d_quickcheckout', true)) || (!empty($data['info']) && $is_order_info))) : ?>
     <?php $info = $data['info'] ?>
     <?php $time = array_shift($info['time']) ?>
     <?php

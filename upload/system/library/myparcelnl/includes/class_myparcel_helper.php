@@ -697,6 +697,7 @@ class MyParcel_Helper
         $data['entry_tab_2_select_insured_up_to_500'] = $language->get('entry_tab_2_select_insured_up_to_500');
         $data['entry_tab_2_select_insured_500']       = $language->get('entry_tab_2_select_insured_500');
 
+        $data['entry_subtotal'] = $language->get('entry_subtotal');
         $data['entry_tab_3_title_delivery_option'] = $language->get('entry_tab_3_title_delivery_option');
         $data['entry_tab_3_label_enable_delivery'] = $language->get('entry_tab_3_label_enable_delivery');
         $data['entry_tab_3_label_home_address_only'] = $language->get('entry_tab_3_label_home_address_only');

@@ -434,6 +434,7 @@
             setDefaultDelivery(response.data.delivery[0]);
         }
         preparePickup(response.data.pickup);
+        window.parent.window.MYPARCEL_CHECKOUT.journalThemeEventActivated();
         $('#mypa-delivery-options-title').on('click', function() {
             var date;
             if (window.mypa.settings.cc === NATIONAL) {
@@ -469,7 +470,10 @@
             }
         });
         // End custom code
-
+        // Custom code for journal2 theme
+        $("#mypa-delivery-options-container").on("click", "input[name='mypa-delivery-time'], input[name='mypa-delivery-type'], .mypa-onoffswitch-checkbox,  input[name='mypa-pickup-option']", function(){
+            window.parent.window.MYPARCEL_CHECKOUT.journalThemeEventActivated();
+        });
         return updateInputField();
     };
 
@@ -531,10 +535,14 @@
         }
         showDefaultPickupLocation('#mypa-pickup-address', filter[PICKUP_TIMES[NORMAL_PICKUP]][0]);
         if (window.mypa.settings.cc === NATIONAL) {
-            showDefaultPickupLocation('#mypa-pickup-express-address', filter[PICKUP_TIMES[MORNING_PICKUP]][0]);
+            if (PICKUP_TIMES[MORNING_PICKUP] in filter) {
+                showDefaultPickupLocation('#mypa-pickup-express-address', filter[PICKUP_TIMES[MORNING_PICKUP]][0]);
+            }
         }
         $('#mypa-pickup-address').off().bind('click', renderPickup);
+        $('#mypa-pickup-address').siblings(".edit").off().bind('click', renderPickup);
         $('#mypa-pickup-express-address').off().bind('click', renderExpressPickup);
+        $('#mypa-pickup-express-address').siblings(".edit").off().bind('click', renderExpressPickup);
         return $('.mypa-pickup-selector').on('click', updateInputField);
     };
 
@@ -714,7 +722,7 @@
                 $('input#mypa-only-recipient').prop('checked', true).prop('disabled', true);
                 $('label[for=mypa-only-recipient] span.mypa-price').html('incl.');
             } else {
-                onlyRecipientPrice = window.mypa.settings.price[this.cc].only_recipient;
+                onlyRecipientPrice = window.mypa.settings.price[window.mypa.settings.cc].only_recipient;
                 $('input#mypa-only-recipient').prop('disabled', false);
                 $('label[for=mypa-only-recipient] span.mypa-price').html(onlyRecipientPrice);
             }
