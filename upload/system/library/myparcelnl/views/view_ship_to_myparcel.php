@@ -104,7 +104,17 @@
 			<td class="oc_option_cost">
 			</td>
 		</tr>
-
+		<tr>
+            <td>
+                <?php
+                $checked = (isset($export_settings['age_check']) && ($export_settings['age_check']==1))?'checked="checked"':'';
+                ?>
+                <input type="hidden" name="myparcel_options[<?php echo $order_id; ?>][age_check]" value="0" />
+                <input <?php echo $checked; ?> type="checkbox" name="myparcel_options[<?php echo $order_id; ?>][age_check]" value="1" class=""><?php echo $data['entry_order_myparcel_text_age_check']; ?>
+            </td>
+            <td class="oc_option_cost">
+            </td>
+        </tr>
 		<tr>
 			<td>
 				<?php

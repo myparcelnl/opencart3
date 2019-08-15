@@ -468,17 +468,17 @@ class MyParcel_Helper
      * @param Array $errors
      * @return HTML content of errors
      *
-    **/
+     **/
     function renderErrors($errors)
     {
         if (empty($errors)) {
             return '';
         }
         ob_start();
-?>
+        ?>
         <div id="myparcel-error-messages-wrapper" class="alert alert-danger">
             <ul>
-<?php
+                <?php
                 foreach ($errors as $error)
                 {
                     ?>
@@ -488,10 +488,10 @@ class MyParcel_Helper
                     </li>
                     <?php
                 }
-?>
+                ?>
             </ul>
         </div>
-<?php
+        <?php
         $html = ob_get_clean();
 
         return $html;
@@ -661,6 +661,7 @@ class MyParcel_Helper
         $data['entry_tab_1_keep_old_shipments'] = $language->get('entry_tab_1_keep_old_shipments');
         $data['entry_tab_1_checkbox_keep_old_shipments'] = $language->get('entry_tab_1_checkbox_keep_old_shipments');
         $data['entry_tab_1_label_use_addition_address_as_number_suffix'] = $language->get('entry_tab_1_label_use_addition_address_as_number_suffix');
+        $data['entry_tab_1_checkbox_use_address1_and_address2'] = $language->get('entry_tab_1_checkbox_use_address1_and_address2');
         $data['entry_tab_1_checkbox_use_address2_as_number_suffix'] = $language->get('entry_tab_1_checkbox_use_address2_as_number_suffix');
         $data['entry_tab_1_checkbox_use_address3_as_number_suffix'] = $language->get('entry_tab_1_checkbox_use_address3_as_number_suffix');
         $data['entry_tab_1_diagnostic_tools'] = $language->get('entry_tab_1_diagnostic_tools');
@@ -684,6 +685,8 @@ class MyParcel_Helper
         $data['entry_tab_2_checkbox_return_no_answer']       = $language->get('entry_tab_2_checkbox_return_no_answer');
         $data['entry_tab_2_title_insured_shipment']          = $language->get('entry_tab_2_title_insured_shipment');
         $data['entry_tab_2_title_insured_amount']            = $language->get('entry_tab_2_title_insured_amount');
+        $data['entry_tab_2_title_age_check']                 = $language->get('entry_tab_2_title_age_check');
+        $data['entry_tab_2_title_age_check_desrition']       = $language->get('entry_tab_2_title_age_check_desrition');
         $data['entry_tab_2_title_insured_amount_custom']     = $language->get('entry_tab_2_title_insured_amount_custom');
         $data['entry_tab_2_checkbox_insured_shipment']       = $language->get('entry_tab_2_checkbox_insured_shipment');
         $data['entry_tab_2_title_label_description']         = $language->get('entry_tab_2_title_label_description');
@@ -779,7 +782,7 @@ class MyParcel_Helper
      * @param string $module
      * @param boolean $check_status
      * @return boolean
-    **/
+     **/
 
     function isModuleExist($module, $check_status = false)
     {
@@ -839,7 +842,17 @@ class MyParcel_Helper
 
         return $country_code;
     }
+    public function getTaxRate($tax_rate_id){
+        $registry = MyParcel::$registry;
+        $db = $registry->get('db');
+        $tax_query =$db->query("SELECT * FROM " . DB_PREFIX . "tax_rate WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
 
+        if ($tax_query->num_rows) {
+            return $tax_query->row;
+        } else {
+            return false;
+        }
+    }
 }
 
 return new MyParcel_Helper();

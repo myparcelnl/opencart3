@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-* Modified in 1.0.4 to:
+* Modified in 1.0.5 to:
  - Fix the bug that order lang is overwritten by MyParcelNL lang
 -->
 <modification>
     <name>MyParcel NL</name>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <code>MyParcelNL</code>
     <author>MyParcel NL</author>
     <link>https://www.myparcel.nl/</link>
@@ -20,13 +20,13 @@
             <add><![CDATA[
                 <td>Ship To</td>
 
-				<td$1column_header_myparcel$2</td>
+                <td$1column_header_myparcel$2</td>
 
-				<td$1column_action$2</td>
+                <td$1column_action$2</td>
             ]]></add>
         </operation>
 
-		<operation>
+        <operation>
             <search regex="true"><![CDATA[/<td(.*)order.date_modified(.*)<\/td>/]]></search>
             <add><![CDATA[
                 <td$1order.date_modified$2</td>
@@ -41,14 +41,14 @@
                 </td>
                 <!-- Tap.Nguyen -->
 
-				<td class="text-right" id="column-myparcel-order-{{ order.order_id }}">{{ order.column_myparcel }}</td>
+                <td class="text-right" id="column-myparcel-order-{{ order.order_id }}">{{ order.column_myparcel }}</td>
             ]]></add>
         </operation>
 
         <operation><!-- no -->
             <search regex="true"><![CDATA[/<td(.*)order.order_status(.*)<\/td>/]]></search>
             <add><![CDATA[
-				<td id="column-status-order-{{ order.order_id }}"$1order.order_status$2</td>
+                <td id="column-status-order-{{ order.order_id }}"$1order.order_status$2</td>
             ]]></add>
         </operation>
 
@@ -145,16 +145,16 @@
     <!-- ****** ORDER CONTROLLER ADMIN/SALE/ORDER.PHP ****** -->
     <!-- *************************************************** -->
 
-	<file path="admin/controller/sale/order.php"><!-- checked -->
+    <file path="admin/controller/sale/order.php"><!-- checked -->
         <!-- 1X -->
-		<operation><!-- yes -->
+        <operation><!-- yes -->
             <search><![CDATA[
             public function index() {
             ]]></search>
             <add position="after"><![CDATA[
                 $this->load->model('extension/myparcelnl/helper');
-				$this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
-				$this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
+                $this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
+                $this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
             ]]></add>
         </operation>
 
@@ -164,8 +164,8 @@
             ]]></search>
             <add position="after"><![CDATA[
                 $this->load->model('extension/myparcelnl/helper');
-				$this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
-				$this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
+                $this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
+                $this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
             ]]></add>
         </operation>
 
@@ -175,9 +175,9 @@
             ]]></search>
             <add position="after"><![CDATA[
                 $this->load->model('extension/myparcelnl/helper');
-				$this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
-				$this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
-				$data['use_addition_address'] =  Myparcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
+                $this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
+                $this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
+                $data['use_addition_address'] =  Myparcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
             ]]></add>
         </operation>
 
@@ -185,18 +185,18 @@
             <search regex="true"><![CDATA[/'customer'(.*)=> \$result\['customer'],/]]></search>
             <add><![CDATA[
                 'customer'$1=> $result['customer'],
-				'column_myparcel' 			=> $this->model_extension_myparcelnl_helper->getContent('column_myparcel', array('order_id' => $result['order_id'])),
-				'ship_to_myparcel'       => $this->model_extension_myparcelnl_helper->getContent('ship_to_myparcel', array('order_id' => $result['order_id'])),
+                'column_myparcel'           => $this->model_extension_myparcelnl_helper->getContent('column_myparcel', array('order_id' => $result['order_id'])),
+                'ship_to_myparcel'       => $this->model_extension_myparcelnl_helper->getContent('ship_to_myparcel', array('order_id' => $result['order_id'])),
                 'mp_packet_type' => $this->model_extension_myparcelnl_helper->getContent('myparcel_packet_type', array('order_id' => $result['order_id'])),
             ]]></add>
         </operation>
 
-		<operation><!-- no -->
+        <operation><!-- no -->
             <search regex="true"><![CDATA[/\$data\['user_token'](.*);/]]></search>
             <add><![CDATA[
                 $data['user_token']$1;
-				$data['column_header_myparcel'] = $this->model_extension_myparcelnl_helper->getContent('column_header_myparcel');
-				$data['myparcel_popup_modal'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_popup_modal');
+                $data['column_header_myparcel'] = $this->model_extension_myparcelnl_helper->getContent('column_header_myparcel');
+                $data['myparcel_popup_modal'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_popup_modal');
             ]]></add>
         </operation>
 
@@ -344,7 +344,7 @@
             <add position="after"><![CDATA[
                 $this->load->model('extension/myparcelnl/helper');
                 $data['myparcel_order_header'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_order_header');
-				$this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
+                $this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
             ]]></add>
         </operation>
     </file>
@@ -594,8 +594,8 @@
             <search regex="true"><![CDATA[/elseif(.*)(\r\n|\r|\n)(\s*)\$json(.*)error_address(.*)(\r\n|\r|\n)(\s*)\}/]]></search>
             <add position="replace"><![CDATA[
             elseif (!in_array($this->request->post['address_id'], array_keys($this->model_account_address->getAddresses()))) {
-					$json['error']['warning'] = $this->language->get('error_address');
-			}
+                    $json['error']['warning'] = $this->language->get('error_address');
+            }
             elseif (in_array($this->request->post['address_id'], array_keys($this->model_account_address->getAddresses()))) {
                 $this->load->model('extension/myparcelnl/helper');
                 $use_addition_address =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
@@ -657,8 +657,8 @@
             <search regex="true"><![CDATA[/elseif(.*)(\r\n|\r|\n)(\s*)\$json(.*)error_address(.*)(\r\n|\r|\n)(\s*)\}/]]></search>
             <add position="replace"><![CDATA[
             elseif (!in_array($this->request->post['address_id'], array_keys($this->model_account_address->getAddresses()))) {
-				$json['error']['warning'] = $this->language->get('error_address');
-			}
+                $json['error']['warning'] = $this->language->get('error_address');
+            }
             elseif (in_array($this->request->post['address_id'], array_keys($this->model_account_address->getAddresses()))) {
                 $this->load->model('extension/myparcelnl/helper');
                 $use_addition_address =  MyParcel($this->registry)->settings->general->use_addition_address_as_number_suffix;
@@ -760,9 +760,9 @@
             <add position="after"><![CDATA[
                  /* MyParcel Ocmod Start */
                  if (!class_exists('MyParcel')) {
-					require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
-					MyParcel($this->registry);
-				 }
+                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                 }
 
                 if (function_exists('MyParcel') && MyParcel()->shipment->checkout->appliedByParcel($total)) {
                     return $total;
@@ -807,7 +807,7 @@
     <!-- __________________________________________________ -->
     <file path="catalog/model/extension/total/tax.php">
         <operation>
-            <search><![CDATA[public function getTotal($total) {]]></search>
+            <search><![CDATA[if ($value > 0) {]]></search>
             <add position="after"><![CDATA[
                 /* MyParcel Ocmod Start */
                 $tax = 0;
@@ -815,31 +815,30 @@
                     /** @var MyParcel_Shipment_Checkout $checkout_helper * */
                     $this->load->model('extension/myparcelnl/helper');
                     $checkout_helper = MyParcel($this->registry)->shipment->checkout;
+                    $helper = MyParcel()->helper;
                     $data = $this->session->data['myparcel'];
 
-                    $total_array = $checkout_helper->getTotalArray($data, false, null, '', true);
-                    $total_price = 0;
+                    if ((is_array($data['data']) && count($data['data'])) || (!is_array($data['data']) && count(json_decode(html_entity_decode($data['data']), true)))) {
+                        $total_array = $checkout_helper->getTotalArray($data, false, null, '', false);
+                        $total_price_without_tax = 0;
 
-                    foreach ($total_array as $total_code => $total_item) {
-                        $total_price += $total_item['price'];
+                        foreach ($total_array as $total_code => $total_item) {
+                            $total_price_without_tax += $total_item['price'];
+                        }
+                        //get tax
+                        $currentTax =$helper->getTaxRate($key);
+                        if($currentTax !== false){
+                            switch ($currentTax['type']){
+                                case 'P' :
+                                    $tax = $total_price_without_tax * ($currentTax['rate']/100);
+                                    break;
+                                case 'F':
+                                    $tax = $currentTax['rate'];
+                                    break;
+                            }
+                        }
                     }
-
-                    $total_array = $checkout_helper->getTotalArray($data, false, null, '', false);
-                    $total_price_without_tax = 0;
-
-                    foreach ($total_array as $total_code => $total_item) {
-                        $total_price_without_tax += $total_item['price'];
-                    }
-
-                    $tax = max($total_price - $total_price_without_tax, 0);
                 }
-                /* MyParcel Ocmod End */
-            ]]></add>
-        </operation>
-        <operation>
-            <search><![CDATA[if ($value > 0) {]]></search>
-            <add position="after"><![CDATA[
-                /* MyParcel Ocmod Start */
                 $value += $tax;
                 /* MyParcel Ocmod End */
             ]]></add>

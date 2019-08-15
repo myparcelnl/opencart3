@@ -148,3 +148,81 @@
     color: white;
     margin-bottom: 10px;
 }
+
+.overlay-content .container {
+    width: 100%
+}
+
+.overlay-content-container {
+    min-height: 44px;
+    padding: 2rem
+}
+
+
+.no-scroll {
+    overflow: hidden
+}
+
+.overlay .paper {
+    margin: auto;
+    height: 336px;
+    width: 298px;
+    border: 1px solid #000
+}
+
+.overlay .a6-label {
+    background: #fa684b;
+    display: inline-block;
+    height: 149px;
+    width: 129px;
+    margin-top: 12px;
+    margin-left: 12px;
+    border: 1px solid #333;
+    position: relative;
+    float: left;
+}
+
+.overlay .a6-label.active {
+    background: #01a3ac
+}
+
+.overlay .a6-label:hover {
+    background: #fff
+}
+
+.overlay .a6-label:hover .fa-check {
+    color: #01a3ac;
+    padding-top: 0
+}
+
+.overlay .a6-label:active {
+    box-shadow: inset 0 2px 3px 2px rgba(0, 0, 0, .25)
+}
+
+.overlay .a6-label i {
+    font-size: 62px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.overlay i.fa-check {
+    color: #fff
+}
+
+.icon-check:before {
+    content: '\E810'
+}
+.icon-cancel:before {
+    content: '\e809'
+}
+
+.overlay #printer_radio_btn {
+    padding-left: 20px
+}
+
+.overlay #print-format,
+.overlay .print-type-message {
+    padding-bottom: 10px
+}

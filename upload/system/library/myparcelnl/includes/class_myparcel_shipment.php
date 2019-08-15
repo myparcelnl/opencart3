@@ -231,7 +231,7 @@ class MyParcel_Shipment
      * @param string $label_response_type
      * @return response from api
      **/
-    function printPdf($order_ids, $label_response_type = NULL)
+    function printPdf($order_ids, $label_response_type = NULL, $position = null)
     {
         if (empty($order_ids)) {
            $this->errors[] = 'No order specified for printing PDF';
@@ -257,7 +257,10 @@ class MyParcel_Shipment
 
         MyParcel()->log->add("*** Label request started ***");
         MyParcel()->log->add("Shipment ID's: ".implode(', ', $shipment_ids));
-
+        $params = array();
+        if($position != null){
+            $params['positions'] = $position;
+        }
         try {
             if ($label_response_type == 'url') {
                 $response = $api->getShipmentLabels( $shipment_ids, array(), 'link' );
@@ -270,7 +273,7 @@ class MyParcel_Shipment
                     MyParcel()->log->add(MyParcel()->lang->get('error_unknown'));
                 }
             } else {
-                $response = $api->getShipmentLabels( $shipment_ids, array(), 'pdf' );
+                $response = $api->getShipmentLabels( $shipment_ids, $params, 'pdf' );
 
                 if (isset($response['body'])) {
                     MyParcel()->log->add(MyParcel()->lang->get("log_pdf_data_received"));

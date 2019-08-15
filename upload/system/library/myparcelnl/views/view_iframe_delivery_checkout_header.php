@@ -40,7 +40,7 @@ if (MyParcel()->helper->isModuleExist('d_quickcheckout', true)) {
 $exclude_delivery_types = array();
 foreach ($checkout_helper::$delivery_types_as_value as $delivery_type => $key) {
     // JS API correction
-    if ($delivery_type == 'standard' || $delivery_type == 'mailbox') {
+    if ($delivery_type == 'standard' || $delivery_type == 'mailbox' || $delivery_type == 'avond') {
         continue;
     }
     if (!isset($checkout_settings[$delivery_type.'_enabled']) || (isset($checkout_settings[$delivery_type.'_enabled']) && empty($checkout_settings[$delivery_type.'_enabled']) ) ) {
@@ -51,7 +51,7 @@ $exclude_delivery_types = implode(';', $exclude_delivery_types);
 
 /**
  * Get cut_off_time based on current day
-**/
+ **/
 $cut_off_time = !empty($checkout_settings['cut_off_time']) ? $checkout_settings['cut_off_time'] : '';
 // If cut_off_time by weekdays enabled
 $cut_off_time_weekdays_enabled = !empty($checkout_settings['cut_off_weekday']) ? $checkout_settings['cut_off_weekday'] : '';
@@ -102,9 +102,15 @@ if (version_compare(VERSION, '2.0.0.0', '>=')) {
             $settings['street'] = isset($shipping_address['address_1']) ? $shipping_address['address_1'] : '';
             $settings['number'] = isset($shipping_address['address_2']) ? $shipping_address['address_2'] : '';
         } else {
-        $address_parts = MyParcel()->helper->getAddressComponents($shipping_address['address_1']);
-        $settings['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
-        $settings['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
+
+            //'Address field 1' and 'address field 2' will both be used for the full address
+            if($use_addition_address_as_number_suffix == 0){
+                $shipping_address['address_1'] .=  ' ' .$shipping_address['address_2'];
+            }
+
+            $address_parts = MyParcel()->helper->getAddressComponents($shipping_address['address_1']);
+            $settings['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
+            $settings['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
         }
     }
 } else {

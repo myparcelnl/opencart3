@@ -24,8 +24,9 @@ class MyParcel_Shipment_Checkout
 
     static $delivery_types_as_value = array(
         'morning'           => self::DELIVERY_TYPE_MORNING,
-        'default'          => self::DELIVERY_TYPE_STANDARD,
+        'default'           => self::DELIVERY_TYPE_STANDARD,
         'night'             => self::DELIVERY_TYPE_NIGHT,
+        'avond'             => self::DELIVERY_TYPE_NIGHT,
         'pickup'            => self::DELIVERY_TYPE_PICKUP,
         'pickup_express'    => self::DELIVERY_TYPE_PICKUP_EXPRESS,
         'mailbox'           => self::DELIVERY_TYPE_MAILBOX
@@ -219,7 +220,7 @@ class MyParcel_Shipment_Checkout
             // Regular
             if ( empty($myparcel_delivery_options['price_comment']) && !empty($myparcel_delivery_options['time']) ) {
                 // check if we have a price_comment in the time option
-                $delivery_time = array_shift($myparcel_delivery_options['time']);
+                $delivery_time = ($myparcel_delivery_options['time']);
                 if (isset($delivery_time['price_comment'])) {
                     $delivery_type = $delivery_time['price_comment'];
                 }
@@ -255,7 +256,7 @@ class MyParcel_Shipment_Checkout
 
             $delivery_type = $this->getDeliveryTypeFromSavedData( $myparcel_delivery_options );
             if ( in_array($delivery_type, array(self::DELIVERY_TYPE_MORNING, self::DELIVERY_TYPE_NIGHT)) && !empty($myparcel_delivery_options['time']) ) {
-                $delivery_time_options = array_shift($myparcel_delivery_options['time']);
+                $delivery_time_options = ($myparcel_delivery_options['time']);
                 $delivery_time = $delivery_time_options['start'];
             } else {
                 $delivery_time = '00:00:00';
@@ -833,7 +834,7 @@ class MyParcel_Shipment_Checkout
         }
 
         foreach ($totals as $total_item) {
-            if ($total_item['code'] == 'total_myparcel_total') {
+            if (strpos($total_item['code'],'myparcel_total') !== false) {
                 return true;
             }
         }

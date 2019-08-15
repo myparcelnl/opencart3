@@ -32,7 +32,7 @@ class MyParcel_View extends MyParcel_View_Core
         }
 
         ob_start();
-        $this->render('view_print_batch', array('formAction' => $formAction));
+        $this->render('view_print_batch', array('formAction' => $formAction,'position_label_title' => $lang->get('entry_title_choose_position_label')));
         $html = ob_get_clean();
         return $html;
     }
@@ -155,8 +155,16 @@ class MyParcel_View extends MyParcel_View_Core
             unset($listing_actions['add_return']);
         }
 
+        $listing_position_label = array();
+        if(isset($listing_actions['get_labels'])){
+            $listing_position_label = array(
+                'title'     => $lang->get('entry_title_choose_position_label'),
+                'url' => $listing_actions['get_labels']['url'],
+            );
+        }
+        
         ob_start();
-        $this->render('view_column_myparcel', array('listing_actions' => $listing_actions, 'order_id' => $order_id, 'screen' => $screen));
+        $this->render('view_column_myparcel', array('listing_actions' => $listing_actions,'listing_position_label' => $listing_position_label ,'order_id' => $order_id, 'screen' => $screen));
         $html = ob_get_clean();
 
         return $html;
@@ -245,6 +253,7 @@ class MyParcel_View extends MyParcel_View_Core
         $data['entry_order_myparcel_text_home_address_only'] = $lang->get('entry_order_myparcel_text_home_address_only');
         $data['entry_order_myparcel_text_signature_on_delivery'] = $lang->get('entry_order_myparcel_text_signature_on_delivery');
         $data['entry_order_myparcel_text_return_if_no_answer'] = $lang->get('entry_order_myparcel_text_return_if_no_answer');
+        $data['entry_order_myparcel_text_age_check'] = $lang->get('entry_order_myparcel_text_age_check');
         $data['entry_order_myparcel_text_insured_home'] = $lang->get('entry_order_myparcel_text_insured_home');
         $data['entry_order_myparcel_text_standar_insurance'] = $lang->get('entry_order_myparcel_text_standar_insurance');
         $data['entry_order_myparcel_text_insurance'] = $lang->get('entry_order_myparcel_text_insurance');

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$heading_title = 'Myparcel NL v1.0.4';
+$heading_title = 'Myparcel NL v1.0.5';
 $_['heading_title'] = $heading_title;
 // Text
 $_['text_module']         = 'Modules';
@@ -24,6 +24,7 @@ $_['entry_title_package_types']         = 'Package Types';
 $_['entry_title_button_export']         = 'Export to MyParcel';
 $_['entry_title_button_print']          = 'Print MyParcel label';
 $_['entry_title_button_return']         = 'Email return label';
+$_['entry_title_choose_position_label'] = 'Choose position label print';
 $_['entry_mailbox'] = 'Mailbox';
 $_['entry_delivery_type'] = 'Package Type';
 
@@ -48,6 +49,7 @@ $_['entry_tab_1_automatic_order_status'] = 'Automatic order status';
 $_['entry_tab_1_keep_old_shipments'] = 'Keep old shipments';
 $_['entry_tab_1_checkbox_keep_old_shipments'] = 'With this option enabled, data from previous shipments (track & trace links) will be kept in the order when you export more than once.';
 $_['entry_tab_1_label_use_addition_address_as_number_suffix'] = 'Use addition address as number suffix';
+$_['entry_tab_1_checkbox_use_address1_and_address2'] = "'Address field 1' and  'address field 2' will both be used for the full address";
 $_['entry_tab_1_checkbox_use_address2_as_number_suffix'] = 'With this option enabled, value inputted in address 2 will be considered as number suffix in the customer address';
 $_['entry_tab_1_diagnostic_tools'] = 'Diagnostic tools';
 $_['entry_tab_1_log_api_communication'] = 'Log API communication';
@@ -84,6 +86,9 @@ $_['entry_tab_2_select_insured_up_to_50']  = 'Insured up to &euro; 50 (+ &euro; 
 $_['entry_tab_2_select_insured_up_to_250'] = 'Insured up to &euro; 250 (+ &euro; 1.00)';
 $_['entry_tab_2_select_insured_up_to_500'] = 'Insured up to &euro; 500 (+ &euro; 1.65)';
 $_['entry_tab_2_select_insured_500']       = '> &euro; 500 insured (+ &euro; 1.65 / &euro; 500)';
+$_['entry_tab_2_title_age_check']       = 'Age check';
+$_['entry_tab_2_title_age_check_desrition']       = 'The recipient must sign for the package and must be at least 18 years old.';
+
 
 $_['entry_subtotal']                                   = 'Subtotal';
 $_['entry_tab_3_title_delivery_option']                = 'Delivery options';
@@ -202,6 +207,7 @@ $_['entry_order_myparcel_text_extra_large_size'] = 'Extra large size';
 $_['entry_order_myparcel_text_home_address_only'] = 'Home address only';
 $_['entry_order_myparcel_text_signature_on_delivery'] = 'Signature on delivery';
 $_['entry_order_myparcel_text_return_if_no_answer']  = 'Return if no answer';
+$_['entry_order_myparcel_text_age_check']  = 'Age check';
 $_['entry_order_myparcel_text_insured_home'] = 'Insured + home address only + signature on delivery';
 $_['entry_order_myparcel_text_standar_insurance'] = 'Standard insurance up to €500 + signature on delivery';
 $_['entry_order_myparcel_text_insurance'] = 'Insurance';

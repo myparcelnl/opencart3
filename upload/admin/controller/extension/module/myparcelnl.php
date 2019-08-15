@@ -192,7 +192,8 @@ class ControllerExtensionModuleMyparcelnl extends Controller
                     break;
                 case 'get_labels':
                     $order_ids = isset($request['order_ids']) ? $request['order_ids'] : null;
-                    $shipment->printPdf($order_ids);
+                    $position = isset($request['position']) ? $request['position'] : null;
+                    $shipment->printPdf($order_ids,NULL,$position);
                     break;
                 case 'add_return':
                     $shipment->addReturn($request); // Get return form and show in a popup
@@ -218,7 +219,8 @@ class ControllerExtensionModuleMyparcelnl extends Controller
         } elseif (isset($this->request->get['order_id'])) {
             $orders[] = $this->request->get['order_id'];
         }
-        $shipment->printPdf($orders);
+        $position = isset($this->request->post['positions']) ? $this->request->post['positions'] : null;
+        $shipment->printPdf($orders,NULL,$position);
     }
 
     public function exportBatch()

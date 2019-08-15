@@ -64,6 +64,33 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
              * [Event Click]
              * **/
             $(document).on('click', '.get_labels', function() {
+                // setTimeout( function() {
+                //     location.reload();
+                // }, 2000);
+                // return true;
+            });
+
+            $(document).on('click','.btn-print-label-order',function () {
+                var element = this;
+                var order_id = $(element).attr('data-order-id');
+                var position_label = new Array();
+                var url = $(element).attr('data-url');
+
+                var elePosition = $('#position_label_modal_' + order_id +' .a6-label');
+
+                for(var i = 0; i < elePosition.length ; i++){
+                    if($(elePosition[i]).hasClass('active')){
+                        var number = $(elePosition[i]).find('.fa-check').attr('data-position_number');
+                        position_label.push(number)
+                    }
+                }
+                if(position_label.length > 1){
+                    alert('You only choose 1 position.')
+                    return false;
+                }
+
+                url += '&position=' + position_label.join(',');
+                window.open(url,'_blank');
                 setTimeout( function() {
                     location.reload();
                 }, 2000);
@@ -280,45 +307,75 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
              * Click print batch in list order
              * **/
             $(document).on('click', '#button-print-batch', function() {
-
-                if ($(this).data('version') != 1) {
-                    setTimeout( function() {
-                        location.reload();
-                    }, 2000);
-                    return true;
-                }
-
                 if ($('input[name="selected[]"]:checked').length <= 0) {
                     return false;
                 }
-                var button_id = '#'+$(this).attr("id");
-                var loader_content = '<img src="' + $(this).data('loader') + '">';
-                var btn = $(this);
-
-                $.ajax({
-                    url: $(this).attr('formaction'),
-                    data: $('input[name="selected[]"]:checked:visible'),
-                    type: 'POST',
-                    dataType: 'json',
-                    beforeSend: function() {
-                        btn.prop('disabled', true);
-                        MYPARCEL_SHIPMENT.helper.showLoadingIconInButton(button_id, loader_content);
-                    },
-                    success: function(res) {
-                        btn.prop('disabled', false);
-                        MYPARCEL_SHIPMENT.helper.hideLoadingIconInButton(button_id);
-
-                        if (res.status == 'success') {
-                            setTimeout( function() {
-                                location.reload();
-                            }, 2000);
-                            $('#form_selected_orders').html(res.html);
-                            $('#form_selected_orders').submit();
-                        }
-                    }
-                });
+                unCheckAllPaper();
+                var elePosition = $('#position_label_modal .a6-label');
+                var eleInputSeleted = $('input[name="selected[]"]:checked');
+                var count = elePosition.length;
+                if(count > eleInputSeleted.length){
+                    count = eleInputSeleted.length
+                }
+                for (var i = 0; i < count; i++){
+                    $(elePosition[i]).click();
+                }
+                $('#position_label_modal').modal('show');
                 return false;
+
             });
+
+            $(document).on('click','.btn-print-multi-label-order',function (e) {
+                if ($('input[name="selected[]"]:checked').length <= 0) {
+                    return false;
+                }
+                var elePosition = $('#position_label_modal .a6-label');
+                var eleInputSeleted = $('input[name="selected[]"]:checked');
+                var position_label = new Array();
+                for(var i = 0; i < elePosition.length ; i++){
+                    if($(elePosition[i]).hasClass('active')){
+                        var number = $(elePosition[i]).find('.fa-check').attr('data-position_number');
+                        position_label.push(number)
+                    }
+                }
+                if(position_label.length > eleInputSeleted.length){
+                    alert('You can only select up to '+ eleInputSeleted.length +' position.')
+                    return false;
+                }
+                //position_label.sort();
+                $('#form-order').append('<input type="hidden" value="'+ position_label.join(';') +'" name="positions">');
+                setTimeout( function() {
+                    location.reload();
+                }, 2000);
+                return true;
+            });
+
+            $(document).on('click','.a6-label',function () {
+                var element = this;
+
+               if($(element).hasClass('active')){
+                   $(element).removeClass('active');
+                   $(element).find('.fa-check').addClass('hidden');
+                   $(element).find('.fa-times').removeClass('hidden');
+               }
+               else{
+                   $(element).addClass('active');
+                   $(element).find('.fa-check').removeClass('hidden');
+                   $(element).find('.fa-times').addClass('hidden');
+               }
+
+            });
+
+            function unCheckAllPaper(){
+                var element = $('#position_label_modal .a6-label');
+                for(var i = 0; i< element.length; i++){
+                    if($(element).hasClass('active')){
+                        $(element).removeClass('active');
+                        $(element).find('.fa-check').addClass('hidden');
+                        $(element).find('.fa-times').removeClass('hidden');
+                    }
+                }
+            }
 
             $(document).on('change', '.checkbox-for-all', function() {
                 $('#button-print-batch').prop('disabled', !$(this).prop('checked'));
