@@ -497,10 +497,13 @@
      */
 
     setDefaultDelivery = function(deliveryObj) {
+        var time = { 0: deliveryObj.time[0] };
+        var options = {date: deliveryObj.date, time:time};
         var json;
-        json = JSON.stringify(deliveryObj.time[0]);
+        json = JSON.stringify(options);
         return $('#mypa-delivery-option-check').val(json);
     };
+
 
     preparePickup = function(pickupOptions) {
         var filter, i, j, len, len1, name1, pickupExpressPrice, pickupLocation, pickupPrice, ref, time;

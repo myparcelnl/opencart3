@@ -849,7 +849,7 @@ class MyParcel_Shipment_Checkout
      **/
     function setSessionOrderDeliveryOptions($order_id)
     {
-        if (!MyParcel()->helper->isModuleExist('module_myparcelnl')) {
+        if (!MyParcel()->helper->isModuleExist('myparcelnl')) {
             return;
         }
 

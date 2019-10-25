@@ -239,7 +239,7 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
 
         $order_id = isset($_POST['myparcel_order_id']) ? $_POST['myparcel_order_id'] : null;
 
-        $total_array = $checkout_helper->getTotalArray($data, true, $order_id, 'incl ', false); // Get total with prices saved in myparcel_shipment
+        $total_array = $checkout_helper->getTotalArray($data, true, $order_id, 'excl ', false); // Get total with prices saved in myparcel_shipment
 
         ob_start();
         foreach ($total_array as $total_code => $total_item) {

@@ -853,6 +853,23 @@ class MyParcel_Helper
             return false;
         }
     }
+
+    public function getHeightMyparcelIframe($sub_total,$iso_code_2){
+        $height = 250; //default height
+
+        $shipment_class = MyParcel()->shipment;
+        /** @var MyParcel_Shipment_Checkout $checkout_helper **/
+        $checkout_helper = $shipment_class->checkout;
+        $delivery_prices = $checkout_helper->getDeliveryPrices(false, true, '', true, 0,$sub_total);
+        if(isset($delivery_prices[$iso_code_2])){
+            foreach ($delivery_prices[$iso_code_2] as $key => $value){
+                if($value != 'disabled'){
+                    $height += 25;
+                }
+            }
+        }
+        return $height.'px';
+    }
 }
 
 return new MyParcel_Helper();

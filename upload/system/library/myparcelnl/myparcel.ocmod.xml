@@ -238,17 +238,17 @@
     <!-- ************************************************************************* -->
 
     <file path="admin/controller/common/header.php"><!-- checked -->
-    <operation><!-- yes -->
-        <search><![CDATA[
+        <operation><!-- yes -->
+            <search><![CDATA[
             public function index() {
             ]]></search>
-        <add position="after"><![CDATA[
+            <add position="after"><![CDATA[
                 /* MyParcel Ocmod Start */
                     $this->load->model('extension/myparcelnl/helper');
                     $data['myparcel_order_header'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_order_header');
                 /* MyParcel Ocmod End */
             ]]></add>
-    </operation>
+        </operation>
     </file>
 
     <!-- ****** CATALOG COMMON HEADER CONTROLLER CATALOG/CONTROLLER/COMMON/HEADER.PHP ****** -->
@@ -280,6 +280,28 @@
                 $data['tracktrace'] = $this->model_extension_myparcelnl_helper->getContent('myparcel_email_tracktrace', array('order_id' => $order_info['order_id']));
             ]]></add>
         </operation>
+        <operation><!-- no -->
+            <search><![CDATA[// Vouchers]]></search>
+            <add position="before"><![CDATA[
+                if(isset($this->session->data['myparcel']['data'])){
+                    $myparcel = str_replace('&quot;','"',$this->session->data['myparcel']['data']);
+                    $myparcel = json_decode($myparcel,true);
+                    if(isset($myparcel['location'])){
+                        $language->load('extension/module/myparcel');
+                        $data['text_pickup_location'] = 'Pickup Location';
+                        $data['pickup_location'] = implode("<br>", array($myparcel['location'],$myparcel['street'] . ' ' . $myparcel['number'], $myparcel['city'] . ' (' . $myparcel['distance'] . 'm)'));
+                    }
+                }
+                else if(isset($this->session->data['myparcel_order_id'])){
+                    $this->load->model('extension/myparcelnl/shipment');
+                    $myparcel_delivery_options = $this->model_extension_myparcelnl_shipment->getMyParcelDeliveryOptions($this->session->data['myparcel_order_id']);
+                    if(isset($myparcel_delivery_options['location'])){
+                        $data['text_pickup_location'] = 'Pickup Location';
+                        $data['pickup_location'] = implode("<br>", array($myparcel_delivery_options['location'],$myparcel_delivery_options['street'] . ' ' . $myparcel_delivery_options['number'], $myparcel_delivery_options['city'] . ' (' . $myparcel_delivery_options['distance'] . 'm)'));
+                    }
+                }
+            ]]></add>
+        </operation>
     </file>
 
     <file path="catalog/view/theme/*/template/mail/order_add.twig"><!-- checked -->
@@ -288,6 +310,22 @@
             <add><![CDATA[
                 {{ download }}$1endif %}
                 {% if tracktrace %} <p>{{ tracktrace.text }} {{ tracktrace.code|join(', ') }}</p> {% endif %}
+            ]]></add>
+        </operation>
+        <operation><!-- no -->
+            <search><![CDATA[<td style="font-size: 12px; border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 7px; color: #222222;">{{ text_shipping_address }}</td>]]></search>
+            <add position="after"><![CDATA[
+                {% if pickup_location %}
+                <td style="font-size: 12px; border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 7px; color: #222222;">{{ text_pickup_location  }}</td>
+                {% endif %}
+            ]]></add>
+        </operation>
+        <operation><!-- no -->
+            <search><![CDATA[<td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">{{ shipping_address }}</td>]]></search>
+            <add position="after"><![CDATA[
+                {% if pickup_location %}
+                  <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">{{ pickup_location }}</td>
+                {% endif %}
             ]]></add>
         </operation>
     </file>
@@ -399,6 +437,12 @@
                 <div class="col-sm-10">
                   <input type="text" name="custom_field[address_3]" value="{% if (shipping_custom_field.address_3) %}{{ shipping_custom_field.address_3 }}{% endif %}" id="input-shipping-address-3" class="form-control" />
                 {% endif %}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$('#button-save').button('reset');]]></search>
+            <add position="after"><![CDATA[
+                $('#button-refresh').click();
             ]]></add>
         </operation>
     </file>

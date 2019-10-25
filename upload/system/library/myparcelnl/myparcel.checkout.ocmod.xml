@@ -4,7 +4,7 @@
     <version>1.0.0</version>
     <code>MyParcelNL_default_checkout</code>
     <author>MyParcel NL</author>
-    <link>http://www.myparcelnl.com</link>
+    <link>http://www.myparcel.nl</link>
 
     <!-- ________________ SYSTEM\LIBRARY\CART\CART.PHP ________________ -->
     <!-- _________________________ CART CLASS _________________________ -->
@@ -152,6 +152,11 @@
 		        $this->model_extension_myparcelnl_helper->initMyParcel();
 				$this->data['myparcel_delivery_iframe'] = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_options');
 				$this->data['myparcel_delivery_checkout_header'] = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_checkout_header');
+                if (!class_exists('MyParcel')) {
+                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                }
+                $this->data['myparcel_delivery_iframe_height'] = MyParcel()->helper->getHeightMyparcelIframe($this->cart->getSubTotal(),$this->session->data['shipping_address']['iso_code_2']);
                 /* MyParcel Ocmod End */
             ]]></add>
         </operation>
@@ -193,6 +198,30 @@
                     if (empty(trim($this->request->post[$key. 'address_2']))) {
                         $errors[$key . 'address_2'] = MyParcel()->lang->get('error_address_2');
                     }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA['postcode'      => Journal2Utils::getProperty($this->request->post, 'shipping_postcode'),]]></search>
+            <add position="after"><![CDATA[
+                'address_1'      => Journal2Utils::getProperty($this->request->post, 'shipping_address_1'),
+                'address_2'      => Journal2Utils::getProperty($this->request->post, 'shipping_address_2'),
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/journal2/template/journal2/checkout/checkout.twig">
+        <operation>
+            <search><![CDATA[data[type + '_zone_id'] = $('select[name="' + type + '_zone_id"]').val();]]></search>
+            <add position="after"><![CDATA[
+                data[type + '_address_1'] = $('input[name="' + type + '_address_1"]').val();
+                data[type + '_address_2'] = $('input[name="' + type + '_address_2"]').val();
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[data['shipping_zone_id'] = $('select[name="' + type + '_zone_id"]').val();]]></search>
+            <add position="after"><![CDATA[
+                data['shipping_address_1'] = $('input[name="' + type + '_address_1"]').val();
+                data['shipping_address_2'] = $('input[name="' + type + '_address_2"]').val();
             ]]></add>
         </operation>
     </file>

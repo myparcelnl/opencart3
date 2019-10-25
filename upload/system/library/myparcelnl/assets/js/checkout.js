@@ -31,7 +31,12 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
 
                 // For journal theme
                 if (settings.url.indexOf('route=journal2/checkout/shipping') > 0) {
-                    $("#myparcel-iframe").css({'height': '650px'});
+                    var height = '450px';
+                    if($('#myparcel_delivery_iframe_height').length > 0){
+                        height = $('#myparcel_delivery_iframe_height').val();
+                    }
+
+                    $("#myparcel-iframe").css({'height': height});
                     var a = MYPARCEL_CHECKOUT.activateIframe();
                     return true;
                 }
