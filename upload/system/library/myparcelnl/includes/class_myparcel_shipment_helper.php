@@ -14,7 +14,7 @@ class MyParcel_Shipment_Helper
 
         $shipment = array(
             'recipient' => $this->getRecipient( $order_data ),
-            'options'	=> $this->getOptions( $order_data ),
+            'options'	=> $this->getOptions( $order_data , false, true ),
             'carrier'	=> 1, // default to POSTNL for now
         );
 
@@ -32,7 +32,9 @@ class MyParcel_Shipment_Helper
                 $shipment['pickup']['retail_network_id'] = $pickup['retail_network_id'];
             }
         }
-
+        if($shipment['options'] == null){
+            return null;
+        }
         return $shipment;
     }
 
@@ -51,7 +53,7 @@ class MyParcel_Shipment_Helper
         );
 
         $use_addition_address_as_number_suffix = MyParcel()->settings->general->use_addition_address_as_number_suffix;
-
+        $general_custom_field_homenumber_suffix = MyParcel()->settings->general->general_custom_field_homenumber_suffix;
 		// MyParcel_Helper $helper
 		$helper = MyParcel()->helper;
         $iso_code = @ $order['shipping_iso_code_2'];
@@ -69,7 +71,8 @@ class MyParcel_Shipment_Helper
 				} elseif ($use_addition_address_as_number_suffix == 2) {
 					$address_parts['street'] = isset($order['shipping_address_1']) ? $order['shipping_address_1'] : '';
 					$address_parts['house_number'] = isset($order['shipping_address_2']) ? $order['shipping_address_2'] : '';
-					$number_addition = isset($order['shipping_custom_field']['address_3']) ? $order['shipping_custom_field']['address_3'] : '';
+//					$number_addition = isset($order['shipping_custom_field']['address_3']) ? $order['shipping_custom_field']['address_3'] : '';
+                    $number_addition = isset($order['shipping_custom_field'][$general_custom_field_homenumber_suffix]) ? $order['shipping_custom_field'][$general_custom_field_homenumber_suffix] : '';
 				} else {
 					$number_addition = isset($address_parts['number_addition']) ? $address_parts['number_addition'] : '';
 				}
@@ -81,7 +84,11 @@ class MyParcel_Shipment_Helper
 					'postal_code' => $order['shipping_postcode'],
 				);
         }
-
+        if($address_intl['number'] == ''){
+            if(MyParcel()->helper->isModuleExist('xnlpostcode', true)){
+                $address_intl['number'] = MyParcel()->helper->getAddressNumberXNLPostcode($order,'shipping_');
+            }
+        }
         $address = array_merge($address, $address_intl);
 
         return $address;
@@ -95,7 +102,7 @@ class MyParcel_Shipment_Helper
      * @return array
      *
     **/
-    public function getOptions( $order_data , $view = false )
+    public function getOptions( $order_data , $view = false , $export = false)
     {
         /** @var ModelMyparcelnlShipment $model_shipment **/
         $registry = MyParcel::$registry;
@@ -268,7 +275,13 @@ class MyParcel_Shipment_Helper
 
         // Load delivery options stored from Frontend Checkout
         $myparcel_delivery_options = $model_shipment->getMyParcelDeliveryOptions($order_id);
-
+        //get myparcel shipment type
+        if(!empty($myparcel_delivery_options)){
+            $myparcel_shipment_type = $model_shipment->getData($order_id,'type');
+            if($myparcel_shipment_type != null && $myparcel_shipment_type != $order_data['shipping_code']){
+                $myparcel_delivery_options = array();
+            }
+        }
         // Set delivery type
         $options['delivery_type'] = $checkout_helper->getDeliveryTypeFromSavedData($myparcel_delivery_options);
 
@@ -281,6 +294,41 @@ class MyParcel_Shipment_Helper
         // delivery date (postponed delivery & pickup)
         if ($delivery_date = $checkout_helper->getDeliveryDateFromSavedData( $myparcel_delivery_options ) ) {
             $date_time = explode(' ', $delivery_date); // split date and time
+            if($export){
+                if(date('Y-m-d') >= date('Y-m-d',strtotime($date_time[0]))){
+                    //if date is outdate, will update it to next working date
+                    $next_working_date = MyParcel()->helper->getDeliveryNextWorkingDate($options['delivery_type'],$order_data,$this->isPickup( $order_id ));
+                    if($next_working_date == null){
+                        return null;
+                    }
+                    $delivery_time = $date_time[1];
+//                    $time_end = '';
+//                    //check if the next working date is  saturday, create only standard delivery
+//                    if(date('w', strtotime($next_working_date)) == 6){
+//                        $delivery_time = '12:00:00';
+//                        $time_end = '14:30:00';
+//                    }
+
+                    //START update delivery_option in myparcel_shipment table
+                    $myparcel_delivery_options['date'] = $next_working_date;
+//                    if(!empty($time_end)){
+//                        $time_detail_option = $myparcel_delivery_options['time'];
+//                        if(count($time_detail_option) == 1){
+//                            $time_detail_option = array_shift($myparcel_delivery_options['time']);
+//                            $time_detail_option['start'] = $delivery_time;
+//                            $time_detail_option['end'] = $time_end;
+//                            $time_detail_option['price_comment'] = 'standard';
+//                        }
+//                        $myparcel_delivery_options['time'][] = $time_detail_option;
+//                    }
+                    $model_shipment->update($order_id,'delivery_options',$myparcel_delivery_options);
+                    //END update delivery_option in myparcel_shipment table
+
+                    $delivery_date = "{$next_working_date} {$delivery_time}";
+                    $options['delivery_date'] = $delivery_date;
+                }
+
+            }
             // only add if date is in the future
             $timestamp = strtotime($date_time[0]);
             if (time() < $timestamp) {

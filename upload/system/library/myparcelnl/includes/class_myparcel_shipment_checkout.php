@@ -221,6 +221,9 @@ class MyParcel_Shipment_Checkout
             if ( empty($myparcel_delivery_options['price_comment']) && !empty($myparcel_delivery_options['time']) ) {
                 // check if we have a price_comment in the time option
                 $delivery_time = ($myparcel_delivery_options['time']);
+                if(count($delivery_time) == 1){
+                    $delivery_time = array_shift($myparcel_delivery_options['time']);
+                }
                 if (isset($delivery_time['price_comment'])) {
                     $delivery_type = $delivery_time['price_comment'];
                 }
@@ -257,6 +260,9 @@ class MyParcel_Shipment_Checkout
             $delivery_type = $this->getDeliveryTypeFromSavedData( $myparcel_delivery_options );
             if ( in_array($delivery_type, array(self::DELIVERY_TYPE_MORNING, self::DELIVERY_TYPE_NIGHT)) && !empty($myparcel_delivery_options['time']) ) {
                 $delivery_time_options = ($myparcel_delivery_options['time']);
+                if(count($delivery_time_options) == 1){
+                    $delivery_time_options = array_shift($myparcel_delivery_options['time']);
+                }
                 $delivery_time = $delivery_time_options['start'];
             } else {
                 $delivery_time = '00:00:00';
@@ -286,27 +292,27 @@ class MyParcel_Shipment_Checkout
         $checkout_settings          = $config->get('module_myparcelnl_fields_checkout');
         $price_options = array_merge( self::$delivery_extra_options, self::$delivery_types );
         $prices = array();
-		
-		// default settings
+
+        // default settings
         $price_type = 0;
-		$subtotal1_min = isset($checkout_settings['subtotal1_min']) ? $checkout_settings['subtotal1_min'] : 0;
-		$subtotal1_max = isset($checkout_settings['subtotal1_max']) ? $checkout_settings['subtotal1_max'] : 50;
-		$subtotal2_min = isset($checkout_settings['subtotal2_min']) ? $checkout_settings['subtotal2_min'] : 50.01;
-		$subtotal2_max = isset($checkout_settings['subtotal2_max']) ? $checkout_settings['subtotal2_max'] : 1000000;
+        $subtotal1_min = isset($checkout_settings['subtotal1_min']) ? $checkout_settings['subtotal1_min'] : 0;
+        $subtotal1_max = isset($checkout_settings['subtotal1_max']) ? $checkout_settings['subtotal1_max'] : 50;
+        $subtotal2_min = isset($checkout_settings['subtotal2_min']) ? $checkout_settings['subtotal2_min'] : 50.01;
+        $subtotal2_max = isset($checkout_settings['subtotal2_max']) ? $checkout_settings['subtotal2_max'] : 1000000;
 
         if($order_id > 0) {
             $loader = $registry->get('load');
-			$loader->model('checkout/order'); 
-			$model_order = $registry->get('model_checkout_order');
+            $loader->model('checkout/order');
+            $model_order = $registry->get('model_checkout_order');
             $order = $model_order->getOrder($order_id);
             $value = $order['total'];
-            
+
             if($subtotal2_min <= $value && $value < $subtotal2_max)
                 $price_type = 1;
         }else{
             if($subtotal2_min <= $value && $value < $subtotal2_max)
                 $price_type = 1;
-		}
+        }
 
         foreach ($price_options as $key => $option) {
             // JS API correction
@@ -317,10 +323,10 @@ class MyParcel_Shipment_Checkout
             $option_enabled = (!empty($checkout_settings[$option.'_enabled'])) ? true : false;
 
             if ($option_enabled) {
-                if ($price_type == 0 && !empty($checkout_settings[$option . '_fee'])) {
-                    $fee = $checkout_settings[$option . '_fee'];                    
+                if ($price_type == 0 && (float)$checkout_settings[$option . '_fee'] >= 0) {
+                    $fee = (float)$checkout_settings[$option . '_fee'];
 
-                    if($fee > 0) {
+                    if($fee >= 0) {
                         $fee = $this->convertPriceToFloat($fee);
 
                         //$fee += $this->getMyParcelShippingCost();
@@ -339,11 +345,11 @@ class MyParcel_Shipment_Checkout
                         $prices[$option] = $formatted_fee;
                     }
                 }
-                
-                if ($price_type == 1 && !empty($checkout_settings[$option . '_fee2'])) {
-                    $fee = $checkout_settings[$option . '_fee2'];                    
 
-                    if($fee > 0) {
+                if ($price_type == 1 && (float)($checkout_settings[$option . '_fee2']) >= 0 ) {
+                    $fee = (float)$checkout_settings[$option . '_fee2'];
+
+                    if($fee >= 0) {
                         $fee = $this->convertPriceToFloat($fee);
 
                         //$fee += $this->getMyParcelShippingCost();
@@ -384,8 +390,8 @@ class MyParcel_Shipment_Checkout
 
                 $formatted_fee = '';
 
-                if ($price_type == 0 && !empty($checkout_settings['belgium_' . $option . '_fee'])) {
-                    $fee = $checkout_settings['belgium_' . $option . '_fee'];
+                if ($price_type == 0 && (float)($checkout_settings['belgium_' . $option . '_fee']) >= 0) {
+                    $fee = (float)$checkout_settings['belgium_' . $option . '_fee'];
                     $fee = $this->convertPriceToFloat($fee);
                     $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
                     //$fee_including_tax = $fee;
@@ -396,8 +402,8 @@ class MyParcel_Shipment_Checkout
                     }
                 }
 
-                if ($price_type == 1 && !empty($checkout_settings['belgium_' . $option . '_fee2'])) {
-                    $fee = $checkout_settings['belgium_' . $option . '_fee2'];
+                if ($price_type == 1 && (float)($checkout_settings['belgium_' . $option . '_fee2']) >= 0) {
+                    $fee = (float)$checkout_settings['belgium_' . $option . '_fee2'];
                     $fee = $this->convertPriceToFloat($fee);
                     $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
                     //$fee_including_tax = $fee;
@@ -420,6 +426,26 @@ class MyParcel_Shipment_Checkout
         return array(
             'NL' => $prices,
         );
+    }
+
+    function getTaxFromCart(){
+        $registry = MyParcel::$registry;
+        /** @var \Cart\Cart $cart **/
+        $cart = $registry->get('cart');
+
+        /** @var Cart\Tax $tax **/
+        $tax = $cart->tax;
+        if (!$tax || !$cart) {
+            return '';
+        }
+
+        foreach ($cart->getProducts() as $product) {
+            if ($product['tax_class_id']) {
+                return $product['tax_class_id'];
+            }
+        }
+        return '';
+
     }
 
     /**

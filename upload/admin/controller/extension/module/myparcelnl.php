@@ -161,7 +161,7 @@ class ControllerExtensionModuleMyparcelnl extends Controller
         $data['order_status'] = $this->model_localisation_order_status->getOrderStatuses();
         $data['log_dir_is_file'] = is_file(MyParcel()->getLogsDir());
         $data['log_url'] = MyParcel()->getLogsUrl();
-
+        $data['custom_field_address'] = MyParcel()->helper->getAddressCustomFields();
         $this->response->setOutput($this->load->view(MyParcel()->getMyparcelModulePath(), $data));
     }
 

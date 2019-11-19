@@ -1,0 +1,28 @@
+<table class="table">
+    <thead>
+
+    </thead>
+    <tbody>
+    {% if pickup_detail %}
+        <tr>
+            <td class="text-left">
+                <label for="myparcel_option">
+                    {{ entry_date }} : {{ pickup_detail['date'] }}
+                </label>
+            </td>
+            <td class="text-right"><label class="text-strong"></label></td>
+        </tr>
+        {%  for key, value in  pickup_detail['time'] %}
+            <tr>
+                <td class="text-left">
+                    <label for="pickup_option{{  key }}">
+                        <input type="radio" class="input-radio" id="pickup_option{{  key }}" name="myparcel_option" action="{{  action }}" value="{{ [shipping_method_code, '-' ,pickup_detail['location'] , '-' ,value['start']]|join }}" {{ (pickup_time_start == value['start']) ? 'checked' : ''  }}/>
+                        {{ entry_pickup_from }} {{  value['start'] }}
+                    </label>
+                </td>
+                <td class="text-right"><label class="text-strong" for="myparcel_option{{  key }}">{{ value['price']['text_amount'] }}</label></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+</table>

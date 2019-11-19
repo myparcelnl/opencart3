@@ -195,7 +195,7 @@ class MyParcel_View extends MyParcel_View_Core
             $html .= '<h4><strong>' . MyParcel()->lang->get('entry_order') . ' #' . $order_id . '</strong></h4>';
             //TODO also render summary order table
             $html .= $this->ship_to_myparcel($order_id, true, $screen);
-            if (count($total) > 1) {
+            if (($total) > 1) {
                 $html .= '<br/><hr>';
             }
         }

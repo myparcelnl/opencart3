@@ -180,7 +180,15 @@
                                         </div>
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="module_myparcelnl_fields_general[use_addition_address_as_number_suffix]" value="2" {{ (module_myparcelnl_fields_general.use_addition_address_as_number_suffix and module_myparcelnl_fields_general.use_addition_address_as_number_suffix==2)?'checked="checked"':"" }}/>{{ entry_tab_1_checkbox_use_address3_as_number_suffix }}
+                                                <input type="radio" name="module_myparcelnl_fields_general[use_addition_address_as_number_suffix]" value="2" {{ (module_myparcelnl_fields_general.use_addition_address_as_number_suffix and module_myparcelnl_fields_general.use_addition_address_as_number_suffix==2)?'checked="checked"':"" }}/>
+                                                <span>{{ entry_tab_1_checkbox_use_address3_as_number_suffix_1 }}</span>
+                                                <select class="form-control" id="select_homenumber_suffix" name="module_myparcelnl_fields_general[general_custom_field_homenumber_suffix]"  >
+                                                    {% for custom_field in custom_field_address %}
+                                                        {% set selected = (module_myparcelnl_fields_general.general_custom_field_homenumber_suffix and custom_field.id == module_myparcelnl_fields_general.general_custom_field_homenumber_suffix) ? 'selected="selected"' : ''  %}
+                                                        <option {{ selected }} value="{{ custom_field.id }}">{{ custom_field.name }}</option>
+                                                    {%  endfor %}
+                                                </select>
+                                                <span>{{ entry_tab_1_checkbox_use_address3_as_number_suffix_2 }}</span>
                                             </label>
                                         </div>
                                     </div>
@@ -737,6 +745,41 @@
                                         <div class="col-sm-10 col-md-6 col-lg-3">
                                             <input type="" name="module_myparcelnl_fields_checkout[delivery_days_window]" value="{{ (module_myparcelnl_fields_checkout.delivery_days_window) ? module_myparcelnl_fields_checkout.delivery_days_window : '' }}" class="form-control"/>
                                             {{ entry_tab_3_textbox_delivery_days_window }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <h4><strong>{{  entry_tab_3_label_only_apply_for_xtension_checkout }} </strong></h4>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_distance }}</label>
+                                        <div class="col-sm-10 col-md-6 col-lg-3">
+                                            <select name="module_myparcelnl_fields_checkout[distance_format]" class="form-control" style="width:100%;">
+                                                {% for key,value in distance_format %}
+                                                    {% set selected = (module_myparcelnl_fields_checkout.distance_format and key == module_myparcelnl_fields_checkout.distance_format ) ? 'selected="selected"' : ''  %}
+                                                    <option {{ selected }} value="{{ key }}">{{ value }}</option>
+                                                {%  endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_rounding_distance }}</label>
+                                        <div class="col-sm-10 col-md-6 col-lg-3">
+                                            <input type="" name="module_myparcelnl_fields_checkout[rounding_distance]" value="{{ (module_myparcelnl_fields_checkout.rounding_distance is not empty) ? module_myparcelnl_fields_checkout.rounding_distance:'' }}" class="form-control"/>
+                                            {{ entry_tab_3_label_rounding_distance_description }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_default_price_0_text }}</label>
+                                        <div class="col-sm-10 col-md-6 col-lg-3">
+                                            <input type="" name="module_myparcelnl_fields_checkout[default_price_0_text]" value="{{ (module_myparcelnl_fields_checkout.default_price_0_text is not empty) ? module_myparcelnl_fields_checkout.default_price_0_text:'' }}" class="form-control"/>
+                                            {{ entry_tab_3_label_default_price_0_text_description }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_time_format }}</label>
+                                        <div class="col-sm-10 col-md-6 col-lg-3">
+                                            <input type="" name="module_myparcelnl_fields_checkout[time_format]" value="{{ (module_myparcelnl_fields_checkout.time_format is not empty) ? module_myparcelnl_fields_checkout.time_format:'H:i:s' }}" class="form-control"/>
+                                            {{ entry_tab_3_label_time_format_description }}
                                         </div>
                                     </div>
 

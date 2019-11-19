@@ -421,8 +421,10 @@
         if (response.data.message === 'No results') {
             $('#mypa-no-options').html('Geen bezorgopties gevonden voor het opgegeven adres.');
             $('.mypa-overlay').removeClass('mypa-hidden');
+            document.cookie = "myparcel_empty_results=1";
             return;
         }
+        document.cookie = "myparcel_empty_results=0";
         $('.mypa-overlay').addClass('mypa-hidden');
         if (window.mypa.settings.cc === NATIONAL) {
             $('#mypa-delivery-option-check').bind('click', function() {

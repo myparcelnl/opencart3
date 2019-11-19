@@ -1,6 +1,6 @@
 <?php
 // Heading
-$heading_title = 'Myparcel NL v1.0.5';
+$heading_title = 'Myparcel NL v1.1.0';
 $_['heading_title'] = $heading_title;
 // Text
 $_['text_module']         = 'Modules';
@@ -50,12 +50,13 @@ $_['entry_tab_1_keep_old_shipments'] = 'Keep old shipments';
 $_['entry_tab_1_checkbox_keep_old_shipments'] = 'With this option enabled, data from previous shipments (track & trace links) will be kept in the order when you export more than once.';
 $_['entry_tab_1_label_use_addition_address_as_number_suffix'] = 'Use addition address as number suffix';
 $_['entry_tab_1_checkbox_use_address1_and_address2'] = "'Address field 1' and  'address field 2' will both be used for the full address";
-$_['entry_tab_1_checkbox_use_address2_as_number_suffix'] = 'With this option enabled, value inputted in address 2 will be considered as number suffix in the customer address';
+$_['entry_tab_1_checkbox_use_address2_as_number_suffix'] = 'Use address field 1 for \'street\', address field 2 for \'house number\'';
+$_['entry_tab_1_checkbox_use_address3_as_number_suffix_1'] = 'Use address field 1 for \'street\', address field 2 for \'house number\' and ';
+$_['entry_tab_1_checkbox_use_address3_as_number_suffix_2'] = ' for \'housenumber suffix\'';
 $_['entry_tab_1_diagnostic_tools'] = 'Diagnostic tools';
 $_['entry_tab_1_log_api_communication'] = 'Log API communication';
 $_['entry_tab_1_checkbox_log_api_communication'] = 'Only enable this option when debugging!';
 $_['entry_tab_1_download_log_file'] = 'Download log file';
-$_['entry_tab_1_checkbox_use_address3_as_number_suffix'] = 'With this option enabled, value inputted in address 3 will be considered as number suffix in the customer address';
 
 
 $_['entry_tab_2_title_export_settings'] = 'Default export settings';
@@ -124,6 +125,18 @@ $_['entry_tab_3_label_belgium_settings']               = 'Belgium pickup';
 $_['entry_tab_3_label_belgium_default_fee']            = 'Belgium standard fee';
 $_['entry_tab_3_label_belgium_pickup_fee']             = 'Standard pickup fee';
 $_['entry_tab_3_label_cut_off_weekday']                = 'Weekdays';
+$_['entry_tab_3_label_only_apply_for_xtension_checkout']= 'Only apply for Xtension Best Checkout';
+$_['entry_tab_3_label_time_format']                    = 'Time format';
+$_['entry_tab_3_label_time_format_description']        = 'H: hour, i: minute, s: second';
+$_['entry_tab_3_label_distance']                       = 'Distance format';
+$_['entry_tab_3_label_rounding_distance']              = 'Rounding distance format';
+$_['entry_tab_3_label_rounding_distance_description']  = 'The optional number of decimal digits to round to if the distance format is kilometer';
+$_['entry_tab_3_distance_format_kilometer']            = 'Kilometer';
+$_['entry_tab_3_distance_format_meter']                = 'Meter';
+$_['entry_tab_3_label_default_price_0_text']           = 'Default Price Text';
+$_['entry_tab_3_label_default_price_0_text_description']= 'The text is shown when price is 0';
+
+
 
 $_['entry_unknown_error']                = 'Unknown error';
 $_['entry_api_error_with_order_id']      = 'Order #%s api error:';
@@ -224,6 +237,7 @@ $_['error_unknown'] = 'Unknown error';
 $_['error_cannot_save_order_shipment'] = 'Cannot save order #%s shipment #%s';
 $_['error_create_related_return_shipment_for_order'] = 'An error occurred while creating return shipment for order #%s';
 $_['error_return_options_is_empty'] = 'Options for related return shipment is empty';
+$_['error_cannot_export_order_shipment'] = 'Cannot export order #%s ';
 // Error mailbox settings
 $_['error_mailbox_title_empty'] = 'Mailbox title cannot be empty';
 $_['error_mailbox_fee_empty'] = 'Mailbox fee cannot be empty and must be numeric';

@@ -1,0 +1,41 @@
+<table class="table">
+    <thead>
+
+    </thead>
+    <tbody>
+    {% if  delivery_detail%}
+        {% for key, time in  delivery_detail['time']  %}
+            <tr>
+                <td class="text-left">
+                    <label for="delivery_option{{ key }}">
+                        <input type="radio"  class="input-radio" id="delivery_option{{ key }}" name="myparcel_option" value="{{ [ shipping_method_code , '-' ,time['start'] , '-' , time['end']]|join }}" action="{{  action }}" {{  (delivery_time_start == time['start'] and delivery_time_end == time['end']) ? 'checked' : ''  }} />
+                        {{  time['start'] }} - {{  time['end'] }}
+                        <div class="myparceltext">{{  time['price_comment_text']|capitalize  }}</div>
+                    </label>
+                </td>
+                <td class="text-right"><label class="text-strong" for="myparcel_option{{ key }}">{{ time['price']['text_amount'] }}</label></td>
+            </tr>
+        {% endfor %}
+        {% if additional_service %}
+            <tr>
+                <td>{{  additional_title }}</td>
+                <td></td>
+            </tr>
+            {% for key, value in  additional_service %}
+                {% if(value != 'disable')  %}
+                    <tr>
+                        <td class="text-left">
+                            <label  for="additional_{{  key }}">
+                                <input type="checkbox"  class="input-checkbox myparcel_additional" id="additional_{{ key }}" name="additional_{{ key }}" onclick="changeAdditionalService(this,'{{ key }}')" value="{{  value['amount'] }}" action="{{  action }}" {{  (myparcel_additional_checked[key] and myparcel_additional_checked[key] == true) ? 'checked' : ''}} />
+                                {{  value['title'] }}
+                                <!--- <div class="timeslottext">Test</div> -->
+                            </label>
+                        </td>
+                        <td class="text-right"><label class="text-strong" for="myparcel_additional_{{  key }}">{{ value['text_amount']}}</label></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+    </tbody>
+</table>

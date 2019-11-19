@@ -162,6 +162,7 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
             $(document).on('change', '#mypa-input', function() {
                if ($(this).val()) {
                    $('#button-shipping-method').prop('disabled', false);
+                   document.cookie = "myparcel_empty_results=0";
                }
             });
             /**

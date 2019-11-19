@@ -49,7 +49,9 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                                 }
                             }
                         }
-
+                        else{
+                            alert(res.errors.join('.'));
+                        }
                         MYPARCEL_SHIPMENT.helper.enableActionButtons(order_id);
                     },
                     complete: function() {

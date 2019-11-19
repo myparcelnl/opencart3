@@ -77,6 +77,14 @@ class MyParcel
         }
     }
 
+    function getMyparcelXtensionViewPath(){
+        return 'extension/myparcelnl/';
+    }
+
+    function getMyparcelXtensionControllerPath(){
+        return 'extension/myparcelnl/myparcel_xtension_delivery';
+    }
+
     function getModuleListPath()
     {
         if(version_compare(VERSION, '3.0.0.0', '>=')) {

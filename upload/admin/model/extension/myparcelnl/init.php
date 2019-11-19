@@ -15,6 +15,15 @@ class ModelExtensionMyparcelnlInit extends Model
             `prices` text,
             PRIMARY KEY (`order_id`)
         );");
+        //add  field to  *_myparcel_shipment table
+        $query = $this->db->query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name =  '". DB_PREFIX ."myparcel_shipment' AND table_schema = '". DB_DATABASE ."' AND column_name = 'external_id'");
+        if(count($query->row) == 0 ){
+            $this->db->query("ALTER TABLE `" .DB_PREFIX. "myparcel_shipment` ADD COLUMN `external_id` VARCHAR(50) NULL DEFAULT NULL;");
+        }
+        $query = $this->db->query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name =  '". DB_PREFIX ."myparcel_shipment' AND table_schema = '". DB_DATABASE ."' AND column_name = 'type'");
+        if(count($query->row) == 0 ){
+            $this->db->query("ALTER TABLE `" .DB_PREFIX. "myparcel_shipment` ADD COLUMN `type` VARCHAR(50) NULL DEFAULT NULL;");
+        }
     }
 
     function installMyParcelTotal()

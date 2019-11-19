@@ -117,7 +117,7 @@ class MyParcel_Shipment
                                         if (version_compare(VERSION, '2.0.0.0', '>=')) {
                                             /** @var MyParcel_Api $api * */
                                             $api = MyParcel()->api;
-                                            $response = $api->getLocalRequest('myparcelnl/myparcel_order/updateorderstatus', array('order_id' => $order_id));
+                                            $response = $api->getLocalRequest('extension/myparcelnl/myparcel_order/updateorderstatus', array('order_id' => $order_id));
                                             if (empty($response['body']['success'])) {
                                                 $this->errors[] = MyParcel()->lang->get('entry_update_order_status_error') . ' - Order #' . $order_id;
                                                 MyParcel()->log->add('Update status error - Order #' . $order_id);
@@ -244,6 +244,11 @@ class MyParcel_Shipment
         $return = array();
         /** @var MyParcel_Helper $helper **/
         $helper = MyParcel()->helper;
+        /** @var ModelMyparcelnlShipment $model_shipment **/
+        $registry = MyParcel::$registry;
+        $loader = $registry->get('load');
+        $loader->model(MyParcel()->getModelPath('shipment'));
+        $model_shipment = $registry->get('model_extension_myparcelnl_shipment');
 
         $shipment_ids = $shipment_helper->getShipmentIdsByOrderIds( $order_ids, array( 'only_last' => true ) );
 
@@ -280,7 +285,27 @@ class MyParcel_Shipment
                     $pdf_data = $response['body'];
                     $setting_download_display = MyParcel()->settings->general->pdf;
                     $output_mode = !empty($setting_download_display) ? 'download' : 'display';
+                    foreach ( $order_ids as $order_id) {
+                        $order_shipments = $model_shipment->getSavedMyParcelShipments($order_id);
+                        $is_update_external_id = false;
+                        $shipment_id = null;
+                        foreach ( $order_shipments as $key => $shipment) {
+                            if(isset($shipment['tracktrace']) && !empty($shipment['tracktrace'])) {
+                                $model_shipment->update($order_id, 'external_id', $shipment['tracktrace']);
+                                $is_update_external_id = true;
+                            }
+                            $shipment_id = $key;
+                        }
+                        if(!$is_update_external_id){
+                            $shipment_info = $api->getShipments($shipment_id);
+                            if(isset($shipment_info['code']) && $shipment_info['code'] == 200){
+                                if(isset($shipment_info['body']['data']['shipments'][0]['external_identifier'])){
+                                    $model_shipment->update($order_id,'external_id',$shipment_info['body']['data']['shipments'][0]['external_identifier']);
+                                }
+                            }
+                        }
 
+                    }
                     if ( $output_mode == 'display' ) {
                         $shipment_helper->streamPdf( $pdf_data, $order_ids );
                     } else {

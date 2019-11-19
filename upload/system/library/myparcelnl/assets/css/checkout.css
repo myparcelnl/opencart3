@@ -36,3 +36,50 @@
 .text-right {
     text-align: right;
 }
+.myparcel-delivery-table .myparcel_additional{
+    margin-right: 8px;
+}
+.myparceldatetime .group label {
+    background: transparent !important;
+    top: 0px !important;
+    font-size: 10px;
+}
+.group .myparceldate label {
+    left: 45px !important;
+}
+.group label {
+    color: #cecbe2;
+    font-size: 12px;
+    font-weight: 600;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 12px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+    z-index: 22;
+    padding: 0px 10px;
+}
+.bootstrap-datetimepicker-widget td.day{
+    font-weight: 600;
+    color: #333;
+}
+.bootstrap-datetimepicker-widget td.disabled, .bootstrap-datetimepicker-widget td.disabled:hover{
+    background: 0 0;
+    color: #777;
+    cursor: not-allowed;
+}
+.editmyparcel{
+    margin-left: 30px;
+    margin-top: 2px;
+    cursor: pointer;
+    color: orange;
+    font-size: 12px;
+}
+.myparceltext{
+    font-size: 11px;
+    font-weight: 600;
+    color: #777;
+    margin-left: 25px;
+}

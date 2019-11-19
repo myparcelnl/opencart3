@@ -5,7 +5,7 @@
 -->
 <modification>
     <name>MyParcel NL</name>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
     <code>MyParcelNL</code>
     <author>MyParcel NL</author>
     <link>https://www.myparcel.nl/</link>
@@ -464,6 +464,33 @@
         </operation>
     </file>
 
+    <!-- ________________ catalog/view/theme/journal2/template/journal2/checkout/checkout.twig ________________ -->
+    <!-- _______________________ All Address Form Info Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/view/theme/journal2/template/journal2/checkout/checkout.twig">
+        <operation>
+            <search><![CDATA[$('.checkout-cart').replaceWith(html);]]></search>
+            <add position="after"><![CDATA[
+            setInterval(function(){
+                  var cookieValue = document.cookie;
+                  cookieValue = cookieValue.split(';')
+                  $.each( cookieValue, function( key, value ) {
+                      value = value.split('=');
+                      if($.trim(value[0]) == 'myparcel_empty_results' && value[1] == 1){
+                          $('#journal-checkout-confirm-button').prop('disabled', true);
+                      }
+                  });
+              }, 2000);
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$(document).on('journal_checkout_shipping_changed', function (e, value) {]]></search>
+            <add position="after"><![CDATA[
+            document.cookie = "myparcel_empty_results=0";
+            ]]></add>
+        </operation>
+    </file>
+
     <!-- ________________ catalog/view/theme/*/template/checkout/guest.twig ________________ -->
     <!-- _______________________ Billing Info Guest Template _______________________ -->
     <!-- _________________________________________________________________________ -->
@@ -505,6 +532,663 @@
             ]]></add>
         </operation>
     </file>
+
+    <file path="catalog/controller/extension/module/xtensions/checkout/xpayment_address.php">
+        <operation>
+            <search><![CDATA[if (!$json['error'] && isset($this->request->get['showpayment'])) {]]></search>
+            <add position="before"><![CDATA[
+            //Myparcel plugin - start
+            if($this->cart->hasShipping()  && isset($this->session->data['shipping_method']['code']) && ($this->session->data['shipping_method']['code'] == 'myparcel_delivery.myparcel_delivery' || $this->session->data['shipping_method']['code'] == 'myparcel_pickup.myparcel_pickup')){
+                if (!class_exists('MyParcel')) {
+                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                }
+                $myparcel_error = $this->load->controller(MyParcel()->getMyparcelXtensionControllerPath().'/externalValidate');
+                if($myparcel_error){
+                    $json['error'] = $myparcel_error;
+                }
+            }
+            //Myparcel plugin - end
+                ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$this->template = $this->config->get('xtensions_view_path').'xpayment_address';]]></search>
+            <add position="before"><![CDATA[
+            if(isset($this->session->data['myparcel_api_errors'])){
+                $this->data['myparcel_api_errors'] = $this->session->data['myparcel_api_errors'];
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/extension/module/xtensions/checkout/xpayment_method.php">
+        <operation>
+            <search><![CDATA[if(isset($this->request->get['direct'])){]]></search>
+            <add position="before"><![CDATA[
+            //Myparcel plugin - start
+            if($this->cart->hasShipping()  && isset($this->session->data['shipping_method']['code']) && ($this->session->data['shipping_method']['code'] == 'myparcel_delivery.myparcel_delivery' || $this->session->data['shipping_method']['code'] == 'myparcel_pickup.myparcel_pickup')){
+                if (!class_exists('MyParcel')) {
+                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                }
+                $myparcel_error = $this->load->controller(MyParcel()->getMyparcelXtensionControllerPath().'/externalValidate');
+                if($myparcel_error){
+                    $json['error'] = $myparcel_error;
+                }
+            }
+            //Myparcel plugin - end
+                ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/extension/module/xtensions/checkout/xlogin.php">
+        <operation>
+            <search><![CDATA[$json['next'] = $child['matter'];]]></search>
+            <add position="before"><![CDATA[
+            if(isset($this->session->data['shipping_address'])){
+                $json['address_exit'] = 1;
+            }
+            ]]></add>
+        </operation>
+    </file>
+    <!-- ________________ catalog/controller/extension/module/xtensions/checkout/xshipping_method.php ________________ -->
+    <!-- _______________________ XShipping Method Module _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file path="catalog/controller/extension/module/xtensions/checkout/xshipping_method.php">
+        <operation>
+            <search><![CDATA[array_multisort($sort_order, SORT_ASC, $quote_data);]]></search>
+            <add position="after"><![CDATA[
+            if (!class_exists('MyParcel')) {
+                require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                MyParcel($this->registry);
+            }
+            if(isset($this->session->data['shipping_method'])){
+                if(isset($this->session->data['myparcel_shipping_choosed'])){
+                    $shipping_method = $this->session->data['shipping_method'];
+                    $myparcel_shipping_choosed = $this->session->data['myparcel_shipping_choosed'];
+                    if(explode('.',$shipping_method['code'])[0] != $myparcel_shipping_choosed['code']){
+                        unset($this->session->data['myparcel_shipping_choosed']);
+                    }
+                }
+            }
+            else{
+                if(isset($this->session->data['myparcel_shipping_choosed'])){
+                    unset($this->session->data['myparcel_shipping_choosed']);
+                }
+            }
+            if (!empty($shipping_address) && ($shipping_address['iso_code_2'] == 'NL' || $shipping_address['iso_code_2'] == 'BE')) {
+                $api = MyParcel()->api;
+                $registry = MyParcel::$registry;
+                /** @var \Cart\Currency $currency **/
+                $currency = $registry->get('currency');
+                $current_currency_code = $this->session->data['currency'];
+                $shipment_class = MyParcel()->shipment;
+                /** @var MyParcel_Shipment_Checkout $checkout_helper **/
+                $checkout_helper = $shipment_class->checkout;
+                $config = $registry->get('config');
+                $myparcelnl_checkout_settings = $config->get('module_myparcelnl_fields_checkout');
+                $default_price_0_text = isset($myparcelnl_checkout_settings['default_price_0_text']) ? $myparcelnl_checkout_settings['default_price_0_text'] : '';
+                if(isset($myparcelnl_checkout_settings['enable_delivery']) && $myparcelnl_checkout_settings['enable_delivery'] == 1){
+                    $delivery_params = MyParcel()->helper->getDeliveryParams($shipping_address);
+                    $myparcel_delivery = $api->getDeliveryOptions($delivery_params);
+
+                    if(isset($myparcel_delivery['code']) && $myparcel_delivery['code'] == 200 && !isset($myparcel_delivery['body']['errors'])){
+                        $myparcel_delivery = MyParcel()->helper->formatDeliveryPrice($myparcel_delivery, $shipping_address ,$this->cart->getSubTotal(),$this->language,$current_currency_code);
+
+
+                        $shipping_method_code = null;
+                        $myparcel_option_title = [];
+                        if (isset($this->session->data['shipping_method']['code'])){
+                            $shipping_method_code = $this->session->data['shipping_method']['code'];
+                            $shipping_method_code = explode('.',$shipping_method_code)[0];
+                        }
+                        $this->data['myparcel_option_title'] = array();
+                        foreach ($myparcel_delivery['body']['data'] as $key => $value){
+                            if(count($value)) {
+                                $sort_order = count($quote_data);
+                                $key_delivery = 'myparcel_' . $key;
+                                $cost = 0;
+                                $cost_with_tax = 0;
+                                $price_key = 'myparcel_price_' . $key;
+                                if (isset($this->session->data[$price_key])) {
+                                    $myparcel_price = $this->session->data[$price_key];
+                                    $text_price_detail = explode(' - ',$myparcel_price['text_myparcel_price_'.$key]);
+                                    //recalculate price choose
+                                    switch ($myparcel_price['shipping_method_code']){
+                                        case 'delivery':
+                                            foreach ($value as $k => $v){
+                                                if(date('Y-m-d',strtotime($v['date'])) == date('Y-m-d',strtotime($text_price_detail[0]))){
+                                                    foreach ($v['time'] as $time){
+                                                        if(date('H:i',strtotime($time['start'])) == date('H:i',strtotime($text_price_detail[1])) && date('H:i',strtotime($time['end'])) == date('H:i',strtotime($text_price_detail[2]))){
+                                                            $myparcel_price['amount'] = $time['price']['amount'];
+                                                            $myparcel_price['amount_with_tax'] = $time['price']['amount_with_tax'];
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                        case 'pickup':
+                                            foreach ($value as $k => $v){
+                                                if($v['location'] == trim($text_price_detail[0])){
+                                                    foreach ($v['time'] as $time){
+                                                        if(date('H:i',strtotime($time['start'])) == date('H:i',strtotime($text_price_detail[2])) ){
+                                                            $myparcel_price['amount'] = $time['price']['amount'];
+                                                            $myparcel_price['amount_with_tax'] = $time['price']['amount_with_tax'];
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                    } // end recalculate price choose
+
+                                    if ($myparcel_price['shipping_method_code'] == $key) {
+                                        $cost = $currency->convert($myparcel_price['amount'], $myparcel_price['currency'], $current_currency_code);
+                                        $cost_with_tax = $currency->convert($myparcel_price['amount_with_tax'], $myparcel_price['currency'], $current_currency_code);
+                                    };
+                                    if ($shipping_address['iso_code_2'] == 'NL' && isset($this->session->data['additional_service_checked'][$key])) {
+                                        if (isset($this->session->data['additional_service'])) {
+                                            $additional_service = $this->session->data['additional_service'];
+
+                                            $delivery_prices = $checkout_helper->getDeliveryPrices(false, true, '', false, 0,$this->cart->getSubTotal());
+                                            $delivery_prices_format = $checkout_helper->getDeliveryPrices(false, true, '', true, 0,$this->cart->getSubTotal());
+                                            foreach ($additional_service as $service_name => $service_value) {
+                                                if(isset($delivery_prices[$shipping_address['iso_code_2']][$service_name]) && $delivery_prices[$shipping_address['iso_code_2']][$service_name] !== 'disable'){
+                                                    $additional_service[$service_name]['amount'] = round($currency->convert($delivery_prices[$shipping_address['iso_code_2']][$service_name],'EUR',$current_currency_code),2);
+                                                    $additional_service[$service_name]['amount_with_tax'] = round($currency->convert($delivery_prices_format[$shipping_address['iso_code_2']][$service_name],'EUR',$current_currency_code),2);
+                                                    $additional_service[$service_name]['text_amount'] = $currency->format($delivery_prices_format[$shipping_address['iso_code_2']][$service_name],$current_currency_code);
+                                                }
+                                            }
+                                            $additional_service_checked = $this->session->data['additional_service_checked'][$key];
+                                            foreach ($additional_service_checked as $service_name => $service_value) {
+                                                if ($service_value) {
+                                                    $cost += $additional_service[$service_name]['amount'];
+                                                    $cost_with_tax += $additional_service[$service_name]['amount_with_tax'];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else{
+                                    //delivery default select standard for delivery or first location for  pickup  if not selected
+                                    switch ($key){
+                                        case 'delivery':
+                                            foreach ($value as $k => $v){
+                                                foreach ($v['time'] as $k => $time){
+                                                    if($time['price_comment'] == 'standard'){
+                                                        $cost = $time['price']['amount'];
+                                                        $cost_with_tax = $time['price']['amount_with_tax'];
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                        case 'pickup':
+                                            $pickup = $value[0];
+                                            $time = $pickup['time'][0];
+                                            $cost = $time['price']['amount'];
+                                            $cost_with_tax = $time['price']['amount_with_tax'];
+                                            break;
+                                    }
+
+                                }
+
+                                $arrQuote = array(
+                                    'code' => $key_delivery . '.' . $key_delivery,
+                                    'title' => $this->language->get('entry_myparcel_' . $key),
+                                    'cost' => $cost,
+                                    'tax_class_id' => $checkout_helper->getTaxFromCart(),
+                                    'text' => ($cost_with_tax == 0 && $default_price_0_text != '') ? $default_price_0_text :$currency->format($cost_with_tax, $current_currency_code),
+                                );
+                                $arrShipping = array(
+                                    'title' => $this->language->get('entry_myparcel_' . $key),
+                                    'sort_order' => $sort_order,
+                                    'error' => ''
+                                );
+                                if ($shipping_method_code == $key_delivery) {
+                                    $arrQuote['headingtitle'] = $this->language->get('entry_select_myparcel_' . $key);
+                                }
+                                $myparcel_option_title['title_heading_myparcel_' . $key] = $this->language->get('entry_select_myparcel_' . $key);
+                                $myparcel_option_title['text_edit_myparcel_' . $key] = (isset($myparcel_price['text_myparcel_price_'.$key])) ? $myparcel_price['text_myparcel_price_'.$key] : $this->language->get('entry_edit_myparcel_' . $key);
+                                $arrShipping['quote'][$key_delivery] = $arrQuote;
+                                $quote_data[$key_delivery] = $arrShipping;
+                            }
+                        }
+                        $this->session->data['myparcel_option_title'] = $myparcel_option_title;
+                        $this->session->data['myparcel_delivery'] = $myparcel_delivery['body']['data'];
+                        if(isset($this->session->data['myparcel_api_errors'])){
+                            unset($this->session->data['myparcel_api_errors']);
+                        }
+                    }
+                    else{
+                        $myparcel_errors = $myparcel_delivery['body']['errors'];
+                        $error_message = [];
+                        foreach($myparcel_errors as $error){
+                            $error_message[] = $error['message'];
+                        }
+                        $this->session->data['myparcel_api_errors'] = htmlspecialchars(implode('.',$error_message), ENT_QUOTES);
+                    }}
+                else{
+                    if(isset($this->session->data['myparcel_api_errors'])){
+                        unset($this->session->data['myparcel_api_errors']);
+                    }
+                }
+            }
+            else{
+                if(isset($this->session->data['myparcel_api_errors'])){
+                    unset($this->session->data['myparcel_api_errors']);
+                }
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$this->template = $this->config->get('xtensions_view_path').'xshipping_method';]]></search>
+            <add position="before"><![CDATA[
+            if (!class_exists('MyParcel')) {
+				require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+				MyParcel($this->registry);
+			}
+            if(isset($this->session->data['myparcel_api_errors'])){
+                $this->data['myparcel_api_errors'] = $this->session->data['myparcel_api_errors'];
+            }
+            if(isset($this->session->data['myparcel_option_title'])){
+                $this->data['myparcel_option_title'] = $this->session->data['myparcel_option_title'];
+            }
+            ($_SERVER['HTTPS'] && defined(HTTPS_SERVER)) ? $url_server = HTTPS_SERVER : $url_server = HTTP_SERVER;
+            $this->data['myparcel_action'] = $url_server . 'index.php?route=' . MyParcel()->getMyparcelXtensionControllerPath();
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/*/template/extension/module/xtensions/checkout/xcheckout.twig">
+        <operation>
+            <search><![CDATA[$(document).on("click", "#couponbtn1", function(event) {]]></search>
+            <add position="before"><![CDATA[
+                $(document).on("change", "input[name='myparcel_option']", function(event) {
+                var element = this;
+                showLoader();
+                $.ajax({
+                    url: 'index.php?route='+$(element).attr('action')+'/save',
+                    type: 'post',
+                    data: $('#xdeldateandtimeslots input[type=\'text\'], .xdeltimeslots-table input[type=\'radio\']:checked'),
+                    dataType: 'json',
+                    beforeSend: function() {
+
+                    },
+                    success: function(json) {
+                        if(json['success']){
+                            loadShippingMethods(true);
+                            $('#modal-shipping-dependancy').modal('hide');
+                        }
+                        hideLoader();
+                    }
+                });
+            });
+
+            $(document).on("change", "select[name='myparcel_pickup_location']", function(event) {
+                var element = this;
+                showLoader();
+                $.ajax({
+                    url: 'index.php?route='+$(element).attr('action')+'/change',
+                    type: 'post',
+                    data: {
+                        'myparcel_pickup_location': $('#myparcel_pickup_location :selected').val()
+                    },
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('.xdeldateandtimeslots .alert').remove();
+                        $('.xdelslotselected').removeClass('xdelslotselected');
+                        $(element).closest('tr').addClass('xdelslotselected');
+                    },
+                    success: function(json) {
+                        if(json['error']){
+                            if(json['error']['date']){
+                                $('#xdeltimeslots').before('<div class="alert alert-warning">'+json['error']['date']+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                            }
+                            if(json['error']['timeslot']){
+                                loadSlots();
+                                $('#xdeltimeslots').before('<div class="alert alert-warning">'+json['error']['timeslot']+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                            }
+                        }else if(json['success']){
+                            $('.myparcel-pickup-table').html(json['html']);
+                            loadShippingMethods(true);
+                        }
+                        hideLoader();
+                    }
+                });
+            });
+            function changeAdditionalService(obj,name) {
+                var element = obj;
+                var id = obj.id.toString();
+                console.log(id);
+                $.ajax({
+                    url: 'index.php?route='+$(obj).attr('action')+'/save',
+                    type: 'post',
+                    data: {
+                        'addition_name' : name,
+                        'addition_value': obj.checked
+                    },
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('.xdeldateandtimeslots .alert').remove();
+                        $('.xdelslotselected').removeClass('xdelslotselected');
+                        $(element).closest('tr').addClass('xdelslotselected');
+                    },
+                    success: function(json) {
+                        if(json['error']){
+                            if(json['error']['date']){
+                                $('#xdeltimeslots').before('<div class="alert alert-warning">'+json['error']['date']+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                            }
+                            if(json['error']['timeslot']){
+                                loadSlots();
+                                $('#xdeltimeslots').before('<div class="alert alert-warning">'+json['error']['timeslot']+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                            }
+                        }else if(json['success']){
+                            loadShippingMethods(true);
+                        }
+
+                    }
+                });
+            };
+            function loadMyparcelDelivery(action,headingtitle){
+                $('#modal-shipping-dependancy').remove();
+                $('.bootstrap-datetimepicker-widget').remove();
+                $.ajax({
+                    url: action,
+                    type: 'post',
+                    data: $('#shipping_method input[type=\'radio\']:checked'),
+                    dataType: 'html',
+                    beforeSend: function() {
+
+                    },
+                    success: function(data) {
+                        html  = '<div id="modal-shipping-dependancy" class="modal modal_dependancy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">';
+                        html += '  <div class="modal-dialog">';
+                        html += '    <div class="modal-content">';
+                        html += '      <div class="modal-header">';
+                        html += '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+                        html += '        <h4 class="modal-title">'+headingtitle+'</h4>';
+                        html += '      </div>';
+                        html += '      <div class="modal-body">'+ data +'</div>';
+                        html += '    </div';
+                        html += '  </div>';
+                        html += '</div>';
+                        $('body').append(html);
+                        $('#modal-shipping-dependancy').modal('show');
+                    }
+                });
+            }
+            ]]></add>
+        </operation>
+
+
+        <operation>
+            <search><![CDATA[function loadShippingMethods(){]]></search>
+            <add position="after"><![CDATA[
+            showLoader();
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[if(json.redirect){]]></search>
+            <add position="before"><![CDATA[
+            hideLoader();
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[}else if(json.xpayment_method){]]></search>
+            <add position="before"><![CDATA[
+            }else if(json.error){
+                hideLoader();
+                $('#button-payment').removeClass('progress-bar-striped active');
+                alert(json.error.warning);
+                if(json['error']['action']){
+                    loadMyparcelDelivery(json['error']['action'],json['error']['title']);
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$('#step_payment_panel').html(json.xpayment_method);]]></search>
+            <add position="before"><![CDATA[
+            if(json.error){
+                hideLoader();
+                $('#button-payment').removeClass('progress-bar-striped active');
+                alert(json.error.warning);
+                if(json['error']['action']){
+                    loadMyparcelDelivery(json['error']['action'],json['error']['title']);
+                }
+                return false;
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$('#step_address_panel').html(html);]]></search>
+            <add position="after"><![CDATA[
+            var eleError = $('#myparcel_api_errors');
+            if(eleError.length){
+                alert(eleError.val());
+                var radioValue = $("input[name='address_id']:checked").val();
+                var elementAddress = $('.editAddress');
+                var clickEl;
+                for(var i=0; i < elementAddress.length; i++){
+                    var link = ($(elementAddress[i]).attr('link'));
+                    if(link.indexOf('address_id=' + radioValue) > -1){
+                        clickEl = $(elementAddress[i]);
+                    }
+                }
+                clickEl.click();
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$('#addressModal_edit').modal('hide');]]></search>
+            <add position="after"><![CDATA[
+            var eleError = $('#myparcel_api_errors');
+            if(eleError.length){
+                alert(eleError.val());
+                var radioValue = $("input[name='address_id']:checked").val();
+                var elementAddress = $('.editAddress');
+                var clickEl;
+                for(var i=0; i < elementAddress.length; i++){
+                    var link = ($(elementAddress[i]).attr('link'));
+                    if(link.indexOf('address_id=' + radioValue) > -1){
+                        clickEl = $(elementAddress[i]);
+                    }
+                }
+                clickEl.click();
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$('#step_address_panel #shipping_method .shipping-table').html(json.shipping_method);]]></search>
+            <add position="after"><![CDATA[
+            var eleError = $('#myparcel_api_errors');
+            if(eleError.length){
+                alert(eleError.val());
+                var radioValue = $("input[name='address_id']:checked").val();
+                var elementAddress = $('.editAddress');
+                if(elementAddress.length){
+                    var clickEl;
+                    for(var i=0; i < elementAddress.length; i++){
+                        var link = ($(elementAddress[i]).attr('link'));
+                        if(link.indexOf('address_id=' + radioValue) > -1){
+                            clickEl = $(elementAddress[i]);
+                        }
+                    }
+                    clickEl.click();
+                }
+                else{
+                    toggleElement('#guestPanel, #guest_payment_panel');
+                    $('.col-md-3.lborder').addClass('xblur');
+                }
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$('#step_login_panel #totals').html(json.xtotals);]]></search>
+            <add position="after"><![CDATA[
+            loadShippingMethods();
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[} else if (json.xguest) {]]></search>
+            <add position="after"><![CDATA[
+            loadShippingMethods();
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[}else if (json.next) {]]></search>
+            <add position="after"><![CDATA[
+            if(json.address_exit){
+                loadShippingMethods();
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$('#step_address_panel #shipping_method').html(json.xshipping_method);]]></search>
+            <add position="after"><![CDATA[
+            $.ajax({
+                url : 'index.php?route=extension/myparcelnl/myparcel_xtension_delivery/forgetMyParcelChoosed',
+                type: 'get',
+                success:function (data) {
+                    loadShippingMethods();
+                }
+            });
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/*/template/extension/module/xtensions/checkout/xshipping_method.twig">
+        <operation>
+            <search><![CDATA[{% if shipping_methods  %}]]></search>
+            <add position="before"><![CDATA[
+            <script>
+                $(document).ready(function() {
+                    {%  if myparcel_api_errors %}
+                        var eleError = $('#myparcel_api_errors');
+                        if(eleError.length == 0){
+                            $('body').append('<input type="hidden" id="myparcel_api_errors" value="{{  myparcel_api_errors }}">');
+                        }
+                    {%  else  %}
+                        var eleError = $('#myparcel_api_errors');
+                        if(eleError.length){
+                            $(eleError).remove();
+                        }
+                    {% endif %}
+
+                    var elms = $("input[id^='myparcel_']");
+                    var myparcel_action = '{{ myparcel_action }}';
+                    for(var i=0; i < elms.length; i++){
+                        var id = elms[i].id;
+                        if(id != 'myparcel_shipping.myparcel_shipping' && id != 'myparcel_api_errors'){
+                            id = id.split('.');
+                            var title = $('#title_heading_' + id[0]).val();
+                            var textEdit = $('#text_edit_' + id[0]).val();
+                            $(elms[i]).attr('onClick',"loadMyparcelDelivery('"+ myparcel_action +"','"+ title + "' )");
+                            $(elms[i]).parent().parent().parent().addClass('myparcel');
+                            var divEle = '<div class="editmyparcel" id="text_'+ id[0] +'">'+ textEdit +'</div>';
+                            $(elms[i]).parent().append(divEle);
+                        }
+                    }
+                });
+            </script>
+            {% if myparcel_option_title %}
+                {% for  key , value in myparcel_option_title %}
+                    <input type="hidden" id="{{ key }}" value="{{ value }}">
+                {% endfor %}
+            {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/view/theme/*/template/extension/module/xtensions/checkout/xpayment_address.twig">
+        <operation>
+            <search><![CDATA[{% if force_redirect %}]]></search>
+            <add position="before"><![CDATA[
+                    <script>
+                        $(document).ready(function () {
+                            {%  if myparcel_api_errors %}
+                            var eleError = $('#myparcel_api_errors');
+                            if(eleError.length == 0){
+                                $('body').append('<input type="hidden" id="myparcel_api_errors" value="{{  myparcel_api_errors }}">');
+                            }
+                            {%  else  %}
+                            var eleError = $('#myparcel_api_errors');
+                            if(eleError.length){
+                                $(eleError).remove();
+                            }
+                            {% endif %}
+                        });
+                    </script>
+                ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/checkout/success.php">
+        <operation>
+            <search><![CDATA[unset($this->session->data['shipping_method']);]]></search>
+            <add position="before"><![CDATA[
+            if(isset($this->session->data['myparcel_shipping_choosed'])){
+                if (!class_exists('MyParcel')) {
+                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                }
+                $registry = MyParcel::$registry;
+                $loader = $registry->get('load');
+                $loader->model(MyParcel()->getModelPath('shipment'));
+                $model_shipment = $registry->get('model_extension_myparcelnl_shipment');
+                $myparcel_shipping_choosed = $this->session->data['myparcel_shipping_choosed'];
+                $additional_service = $myparcel_shipping_choosed['additional_service'];
+                $myparcel_shipping_code = $myparcel_shipping_choosed['code'];
+                unset($myparcel_shipping_choosed['code']);
+                unset($myparcel_shipping_choosed['additional_service']);
+                $signed = (isset($additional_service['signed']) && $additional_service['signed'] ) ? 1: 0;
+                $recipient_only = (isset($additional_service['only_recipient']) && $additional_service['only_recipient'] ) ? 1: 0;
+                $current_prices = null;
+                if(isset($this->session->data['additional_service'])){
+                    $current_prices = array(
+                        'NL' => $this->session->data['additional_service']
+                    );
+                }
+                $model_shipment->saveDeliveryOptions($this->session->data['order_id'], $myparcel_shipping_choosed, $signed, $recipient_only, $current_prices);
+                $model_shipment->update($this->session->data['order_id'],'type',$myparcel_shipping_code . '.' . $myparcel_shipping_code);
+                if(isset($this->session->data['myparcel_shipping_choosed'])){
+                    unset($this->session->data['myparcel_shipping_choosed']);
+                }
+                if(isset($this->session->data['additional_service'])){
+                    unset($this->session->data['additional_service']);
+                }
+                if(isset($this->session->data['pickup_time_start'])){
+                    unset($this->session->data['pickup_time_start']);
+                }
+                if(isset($this->session->data['additional_service_checked'])){
+                    unset($this->session->data['additional_service_checked']);
+                }
+                if(isset($this->session->data['pickup_time_start'])){
+                    unset($this->session->data['pickup_time_start']);
+                }
+                if(isset($this->session->data['myparcel_price_pickup'])){
+                    unset($this->session->data['myparcel_price_pickup']);
+                }
+                if(isset($this->session->data['myparcel_price_delivery'])){
+                    unset($this->session->data['myparcel_price_delivery']);
+                }
+                if(isset($this->session->data['delivery_time_start'])){
+                    unset($this->session->data['delivery_time_start']);
+                }
+                if(isset($this->session->data['delivery_time_end'])){
+                    unset($this->session->data['delivery_time_end']);
+                }
+                if(isset($this->session->data['delivery_date'])){
+                    unset($this->session->data['delivery_date']);
+                }
+                if(isset($this->session->data['pickup_location'])){
+                    unset($this->session->data['pickup_location']);
+                }
+
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+
 
     <!-- ________________ catalog/view/theme/*/template/checkout/guest_shipping.twig ________________ -->
     <!-- _______________________ Shipping Info Guest Template _______________________ -->
@@ -769,7 +1453,45 @@
         </operation>
     </file>
 
-    <!-- ________________ catalog/controller/api/cart.php ________________ -->
+    <!-- ________________ catalog/controller/api/order.php ________________ -->
+    <!-- _____________ Set order delivery options to session _____________ -->
+    <!-- _________________________________________________________________ -->
+    <file path="catalog/controller/api/order.php">
+        <operation>
+            <search><![CDATA[$this->session->data['shipping_method'] = $this->session->data['shipping_methods'][$shipping[0]]['quote'][$shipping[1]];]]></search>
+            <add position="after"><![CDATA[
+                $shipping_method = $this->session->data['shipping_method'];
+                if(isset($shipping_method['main_title'])){
+                    $shipping_method['title'] = $shipping_method['main_title'];
+                    $this->session->data['shipping_method'] = $shipping_method;
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$this->model_checkout_order->editOrder($order_id, $order_data);]]></search>
+            <add position="after"><![CDATA[
+                //myparcel update delivery option
+                if(isset($this->session->data['myparcel_delivery_option']) ){
+                    $myparcel_delivery_option = $this->session->data['myparcel_delivery_option'];
+                    if (!class_exists('MyParcel')) {
+                        require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                        MyParcel($this->registry);
+                    }
+                    $registry = MyParcel::$registry;
+                    $loader = $registry->get('load');
+                    $loader->model(MyParcel()->getModelPath('shipment'));
+                    $model_shipment = $registry->get('model_extension_myparcelnl_shipment');
+                    if($order_data['shipping_code'] == $myparcel_delivery_option){
+                        $model_shipment->update($order_id,'delivery_options',$myparcel_delivery_option);
+                    }
+                    $model_shipment->update($order_id,'type',$myparcel_delivery_option['shipping_code']);
+
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ catalog/controller/api/shipping.php ________________ -->
     <!-- _____________ Set order delivery options to session _____________ -->
     <!-- _________________________________________________________________ -->
     <file path="catalog/controller/api/shipping.php">
@@ -793,6 +1515,76 @@
                 }
             ]]></add>
         </operation>
+        <operation>
+            <search><![CDATA[$results = $this->model_setting_extension->getExtensions('shipping');]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('checkout/order');
+                $order_data = $this->model_checkout_order->getOrder($this->request->get['order_id']);
+                $myparcel_key = null;
+                if($this->request->get['order_id']){
+                    if (!class_exists('MyParcel')) {
+                        require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                        MyParcel($this->registry);
+                    }
+
+                    $api = MyParcel()->api;
+                    $registry = MyParcel::$registry;
+                    /** @var \Cart\Currency $currency **/
+                    $currency = $registry->get('currency');
+                    $current_currency_code = $this->session->data['currency'];
+                    $shipping_address = $this->session->data['shipping_address'];
+                    $delivery_params = MyParcel()->helper->getDeliveryParams($shipping_address);
+                    $delivery_params = MyParcel()->helper->formatDeliveryParamsEditOrder($delivery_params, $this->request->get['order_id']);
+                    $myparcel_delivery = $api->getDeliveryOptions($delivery_params);
+                    if(isset($myparcel_delivery['code']) && $myparcel_delivery['code'] == 200 && !isset($myparcel_delivery['body']['errors'])){
+                        $next_delivery_option = MyParcel()->helper->getDeliveryOptionChange($myparcel_delivery['body']['data'],$order_data);
+                        if(!empty($next_delivery_option) && $next_delivery_option['shipping_code'] != null){
+                            $shipping_code = $next_delivery_option['shipping_code'];
+                            $myparcel_key = 'myparcel_'. $next_delivery_option['shipping_code'];
+                            $next_delivery_option['shipping_code'] = $myparcel_key . '.' . $myparcel_key;
+                            $this->session->data['myparcel_delivery_option'] = $next_delivery_option;
+                            $myparcel_quote = array(
+                                'title' => 'MyParcel ' . ucfirst($shipping_code),
+                                'sort_order' => 1,
+                                'error' => ''
+                            );
+                            $time_delivery = $next_delivery_option['time'];
+                            if(count($time_delivery) == 1){
+                                $time_delivery = array_shift($next_delivery_option['time']);
+                            }
+                            $title = 'MyParcel ' . ucfirst($shipping_code). ' ' . date('Y-m-d',strtotime($next_delivery_option['date']));
+                            if(!isset($time_delivery['price'])){
+                                $time_delivery = $time_delivery[0];
+                            }
+                            switch ($shipping_code){
+                                case "delivery":
+                                    $title .= ' ( ' .ucfirst($time_delivery['price_comment']) . ' )';
+                                    break;
+                                case "pickup":
+                                    $title .= ' ( ' . $next_delivery_option['location'] . ')';
+                                    break;
+                            }
+                            $myparcel_quote['quote'][$myparcel_key] = array(
+                                'code' => $myparcel_key . '.' . $myparcel_key,
+                                'title' => $title,
+                                'cost' => $time_delivery['price']['amount'],
+                                'tax_class_id' => '',
+                                'text' => isset($time_delivery['price']['text_amount']) ? $time_delivery['price']['text_amount'] : $currency->format($currency->convert($time_delivery['price']['amount'], $time_delivery['price']['currency'], $current_currency_code), $current_currency_code),
+                                'main_title' => $myparcel_quote['title']
+                            );
+                        }
+                    }
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[array_multisort($sort_order, SORT_ASC, $json['shipping_methods']);]]></search>
+            <add position="after"><![CDATA[
+                if($myparcel_key != null){
+                    $json['shipping_methods'][$myparcel_key] = $myparcel_quote;
+                }
+            ]]></add>
+        </operation>
     </file>
 
     <!-- ________________ SHIPPING.PHP ________________ -->
@@ -812,6 +1604,78 @@
                     return $total;
                 }
                 /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function methods() {]]></search>
+            <add position="after"><![CDATA[
+                if (isset($this->request->get['order_id'])) {
+                    $this->session->data['myparcel_order_id'] = $this->request->get['order_id'];
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$results = $this->model_setting_extension->getExtensions('shipping');]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('checkout/order');
+                $order_data = $this->model_checkout_order->getOrder($this->request->get['order_id']);
+                if (!class_exists('MyParcel')) {
+                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                }
+                $myparcel_key = null;
+                $api = MyParcel()->api;
+                $shipping_address = $this->session->data['shipping_address'];
+                $delivery_params = MyParcel()->helper->getDeliveryParams($shipping_address);
+                $delivery_params = MyParcel()->helper->formatDeliveryParamsEditOrder($delivery_params, $this->request->get['order_id']);
+                $myparcel_delivery = $api->getDeliveryOptions($delivery_params);
+                if(isset($myparcel_delivery['code']) && $myparcel_delivery['code'] == 200 && !isset($myparcel_delivery['body']['errors'])){
+                    $next_delivery_option = MyParcel()->helper->getDeliveryOptionChange($myparcel_delivery['body']['data'],$order_data);
+                    if(!empty($next_delivery_option) && $next_delivery_option['shipping_code'] != null){
+                        $myparcel_key = 'myparcel_'. $next_delivery_option['shipping_code'];
+                        $myparcel_quote = array(
+                            'title' => 'MyParcel ' . ucfirst($next_delivery_option['shipping_code']),
+                            'sort_order' => 1,
+                            'error' => ''
+                        );
+                        $time_delivery = $next_delivery_option['time'];
+                        if(count($time_delivery) == 1){
+                            $time_delivery = array_shift($next_delivery_option['time']);
+                        }
+                        $title = 'MyParcel ' . ucfirst($next_delivery_option['shipping_code']). ' ' . date('Y-m-d',strtotime($next_delivery_option['date']));
+
+                        switch ($next_delivery_option['shipping_code']){
+                            case "delivery":
+                                $title .= ' ( ' .ucfirst($time_delivery['price_comment']) . ' )';
+                                break;
+                            case "pickup":
+                                $title .= ' ( ' . $next_delivery_option['location'] . ')';
+                                break;
+                        }
+
+                        if(!isset($time_delivery['price'])){
+                            $time_delivery = $time_delivery[0];
+                        }
+                        $myparcel_quote['quote'][$myparcel_key] = array(
+                            'code' => $myparcel_key . '.' . $myparcel_key,
+                            'title' => $title,
+                            'cost' => $time_delivery['price']['amount'],
+                            'tax_class_id' => '',
+                            'text' => $time_delivery['price']['text_amount'],
+                            'main_title' => $myparcel_quote['title']
+                        );
+                        $next_delivery_option['shipping_code'] = $myparcel_key . '.' . $myparcel_key;
+                        $this->session->data['myparcel_delivery_option'] = $next_delivery_option;
+                    }
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[array_multisort($sort_order, SORT_ASC, $json['shipping_methods']);]]></search>
+            <add position="after"><![CDATA[
+                if($myparcel_key != null){
+                    $json['shipping_methods'][$myparcel_key] = $myparcel_quote;
+                }
             ]]></add>
         </operation>
     </file>

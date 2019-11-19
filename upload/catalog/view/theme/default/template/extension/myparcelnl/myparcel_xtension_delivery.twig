@@ -1,0 +1,132 @@
+{% if shipping_method_code  %}
+    {% if(shipping_method_code == 'delivery') %}
+        <div id="xdeldateandtimeslots" class="xdeldateandtimeslots myparceldatetime">
+            <div class="group nomarginbottom" id="regular-field-dateselector">
+                <div class="input-group xdelslotdate myparceldate">
+                    <span class="input-group-btn"><button onclick="(this).closest('.group').addClass('filled');" type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button></span>
+                    <input  type="text" name="delivery_date" readonly="readonly" value="{{ date_pick | date('d-m-Y') }}" data-date-format="{{  date_format }}" id="xdelslot_deliverydate" class="inputMaterial" />
+                    <label for="xdelslot_deliverydate">{{  entry_delivery_date }}<span class="fieldlabel required"></span></label>
+                </div>
+            </div>
+            <div id="xdeltimeslots" class="xdeltimeslots"></div>
+        </div>
+
+        <script type="text/javascript">
+            $('.xdelslotdate input').click(function(event){
+                $('.xdelslotdate ').data("DateTimePicker").show();
+            });
+            $('.xdelslotdate').datetimepicker({
+                pickTime: false,
+                useCurrent: false,
+                minDate: moment("{{ min_date|date('Y-m-d') }}"),
+                maxDate: moment("{{ max_date|date('Y-m-d') }}"),
+                daysOfWeekDisabled: [ {{ dropoff_days }} ]
+            }).on('dp.change', function (e) {
+                showLoader();
+                $.ajax({
+                    url: 'index.php?route={{ action }}/change',
+                    type: 'post',
+                    data: $('#regular-field-dateselector input'),
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('.xdeldateandtimeslots .alert').remove();
+                    },
+                    success: function(json) {
+                        if(json['error']){
+                            if(json['error']['date']){
+                                $('#xdeltimeslots').before('<div class="alert alert-warning">'+json['error']['date']+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                            }
+                        }else if(json['success']){
+                            $('.myparcel-delivery-table').html(json['html']);
+                            loadShippingMethods(true);
+                        }
+                        hideLoader();
+                    }
+                });
+            });
+        </script>
+        {%  for value in myparcel_delivery_option  %}
+            {%  if(value['date']| date('Y-m-d') == date_pick|date('Y-m-d')) %}
+                <div class="xdeltimeslots-table myparcel-delivery-table">
+                    <table class="table">
+                        <thead>
+
+                        </thead>
+                        <tbody>
+                        {% for key, time in  value['time']  %}
+                            <tr>
+                                <td class="text-left">
+                                    <label for="delivery_option{{ key }}">
+                                        <input type="radio"  class="input-radio" id="delivery_option{{ key }}" name="myparcel_option" value="{{ [ shipping_method_code , '-' ,time['start'] , '-' , time['end']]|join }}" action="{{  action }}" {{  (delivery_time_start == time['start'] and delivery_time_end == time['end']) ? 'checked' : ''  }} />
+                                        {{  time['start'] }} - {{  time['end'] }}
+                                        <div class="myparceltext">{{  time['price_comment_text']|capitalize  }}</div>
+                                    </label>
+                                </td>
+                                <td class="text-right"><label class="text-strong" for="myparcel_option{{ key }}">{{ time['price']['text_amount'] }}</label></td>
+                            </tr>
+                        {% endfor %}
+                        {% if additional_service %}
+                            <tr>
+                                <td>{{  additional_title }}</td>
+                                <td></td>
+                            </tr>
+                            {% for key, value in  additional_service %}
+                                {% if(value != 'disable')  %}
+                                    <tr>
+                                        <td class="text-left">
+                                            <label  for="additional_{{  key }}">
+                                                <input type="checkbox"  class="input-checkbox myparcel_additional" id="additional_{{ key }}" name="additional_{{ key }}" onclick="changeAdditionalService(this,'{{ key }}')" value="{{  value['amount'] }}" action="{{  action }}" {{  (myparcel_additional_checked[key] and myparcel_additional_checked[key] == true) ? 'checked' : ''}} />
+                                                {{  value['title'] }}
+
+                                            </label>
+                                        </td>
+                                        <td class="text-right"><label class="text-strong" for="myparcel_additional_{{  key }}">{{ value['text_amount']}}</label></td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="form-group" id="myparcel_pickup_location_select">
+            <select class="form-control" name="myparcel_pickup_location" id="myparcel_pickup_location" action="{{ action }}" style="font-size: 14px">
+                {%  for value in myparcel_delivery_option  %}
+                    <option value="{{ value['location'] }}" {{ ((value['location'] == pickup_detail['location']) ? 'selected' : '') }} >
+                        {{ [value['location'] , ', ' ,value['street'] , ' ' , value['number'] , ', ' , value['city'] , '( ' , value['distance'] , value['distance_format'] ,'  )'] |join }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="xdeltimeslots-table myparcel-pickup-table">
+            <table class="table">
+                <thead>
+
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="text-left">
+                        <label for="myparcel_option">
+                            {{ entry_date }} : {{ pickup_detail['date'] }}
+                        </label>
+                    </td>
+                    <td class="text-right"><label class="text-strong"></label></td>
+                </tr>
+                {%  for key, value in  pickup_detail['time'] %}
+                    <tr>
+                        <td class="text-left">
+                            <label for="pickup_option{{  key }}">
+                                <input type="radio" class="input-radio" id="pickup_option{{  key }}" name="myparcel_option" action="{{  action }}" value="{{ [shipping_method_code, '-' ,pickup_detail['location'] , '-' ,value['start']]|join }}" {{ (pickup_time_start == value['start']) ? 'checked' : ''  }}/>
+                                {{ entry_pickup_from }} {{  value['start'] }}
+                            </label>
+                        </td>
+                        <td class="text-right"><label class="text-strong" for="myparcel_option{{  key }}">{{ value['price']['text_amount'] }}</label></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endif %}
