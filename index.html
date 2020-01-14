@@ -1,327 +1,227 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en-us">
 <head>
-    <meta charset="UTF-8" />
-    <title>MyParcel OpenCart3 Handleiding</title>
-    <meta name="description" content="The documentation to make a connection with MyParcel">
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta charset="UTF-8"/>
+    <title>OpenCart 3.0 MyParcel Gebruikershandleiding</title>
+    <meta name="description" content="Installatie- gebruikershandleiding voor de OpenCart MyParcel plug-in">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link rel="shortcut icon" href="https://backoffice.myparcel.nl/images/favicon/favicon.ico">
-    <link href="css/normalize.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css" />
-    <link href="css/stylesheet.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="css/github-light.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="css/normalize.css" media="screen" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css"/>
+    <link href="css/stylesheet.css" media="screen" rel="stylesheet" type="text/css"/>
+    <link href="css/github-light.css" media="screen" rel="stylesheet" type="text/css"/>
     <script src="js/jquery-3.0.0.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
     <script src="js/auto_menu.js"></script>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <div class="menu col-xs-4 col-lg-3">
-            <nav class="navbar nav nav-pills nav-stacked">
-                <div class="menu-items">
-                </div>
-            </nav>
-        </div>
-        <section class="page-header col-xs-8 col-xs-offset-4 col-lg-9 col-lg-offset-3">
-            <img height="185" alt="" src="media/logo_myparcel.png">
-            <h1 class="project-name">
-                OpenCart3 Handleiding
-            </h1>
-            <br />
-            <a target="_blank" class="btn" href="https://github.com/myparcelnl/opencart3/releases">Nieuwste releases</a>
-            <a target="_blank" class="btn" href="https://google.nl">Link 2</a>
-        </section>
-        <section class="main-content col-xs-8 col-xs-offset-4 col-lg-7 col-lg-offset-4">
-            <h1>Inleiding</h1>
-            <p>
-                De installatie en het gebruik van de koppeling wordt je kosteloos aangeboden door MyParcel. Wij helpen je graag met vragen over het gebruik van de plug-in. Omdat OpenCart een opensource platform is kan het zijn dat de MyParcel plug-in conflicteert met reeds geïnstalleerde plug-ins. Mocht je problemen ondervinden met de installatie, raden wij je aan contact op te nemen met jouw webbouwer.
-            </p>
-            <div class="box">
-                <p>
-                    Plugins van derden die we ondersteunen
-                </p>
-                <ul>
-                    <li><a href="https://google.nl" target="_blank">Voorbeeld 1</a></li>
-                    <li><a href="https://google.nl" target="_blank">Voorbeeld 2</a></li>
-                    <li><a href="https://google.nl" target="_blank">Voorbeeld 3</a></li>
-                </ul>
-            </div>
-            <div style="margin-top:10px">
-                <h1 id="1">1. Installatie</h1>
-                <p>
-                    Dit hoofdstuk omschrijft de installatie van de MyParcel OpenCart plug-in met gebruik van de “Extension installer”. 
-                    Wij adviseren de installatie altijd eerst op een testomgeving uit te voeren en een back-up te maken van jouw webshop voor je begint.
-                    Download het MyParcel <a href='https://github.com/myparcelnl/opencart3/releases'>OpenCart Plug-in.zip</a> bestand, zie link bovenaan de pagina.
-                </p>
-                <h2 id="1_A">1.1 Nieuwe installatie Via het CMS</h2>
-                <p>
-                    Ga naar Extensions > Installer en installeer “myparcel.zip” d.m.v. de OpenCart “Extension installer”.
-                </p>
-                <img src='media/OC_3_INSTALL.jpg'> 
-                <p>
-                    Wanneer je de MyParcel plugin hebt geüpload ga je naar ‘Modifications’ > Klik hier op de checkbox voor ‘MyParcel NL’ en ‘MyParcel NL - Default Checkout’, Wanneer je de selectie hebt gemaakt klik dan op de refresh knop rechtsboven (zie screenshot hier beneden bij nummer 4).
-                </p>
-                <img src='media/OC3_INSTALL2.png'>
-                <h2 id="1_B">1.2 Updaten bestaande installatie</h2>
-                <p>
-                    Beschrijf hier hoe een plugin kan worden geüpdatet.
-                </p>
-                <h2 id="1_C">1.3 Veelgestelde vragen over de installatie</h2>
-                <p>
-                    Zet hier de veel gestelde vragen omtrent de installatie
-                </p>
-                <h1 id="2">2. Configuratie</h1>
-                <p>
-                    Ga in het OpenCart menu naar Extensions → Extensions →Shipping >  MyParcel Shipping → Edit en Enable de plugin.
-                </p>
-                <img src='media/OC3_ENABLE.jpg'>
-                <h2 id="2_A">2.1 Algemeen/General</h2>
-                <p>
-                    Ga links in het menu naar System > MyParcel > General om de plugin te bewerken.
-                </p>
-                <img src='media/OC3_PLUG.jpg'>
-                <h3>API instellingen</h3>
-                <p>
-                    Om verbinding te kunnen maken met jouw MyParcel account is het noodzakelijk om hier jouw API-key in te vullen.
-                    Als je ingelogd bent in jouw MyParcel account dan is deze te vinden in menu <img src='media/OC3_ADMIN.jpg' width='35' height='35'> Shopinstellingen → Algemeen.
-                </p>
-                <img src='media/OC3_API.jpg'>
-                <h3>Label weergave</h3>
-                <p>
-                    Geef hier aan of je het label direct wilt downloaden of wilt openen in een nieuw scherm.
-                </p>
-                <img src='media/OC3_LABEL.jpg'>
-                <h3>Track&amp;Trace instellingen</h3>
-                <p>
-                    Stel ’Email track&amp;trace code’ in zodat het emailadres van de klant wordt meegestuurd naar MyParcel. Het emailadres kan door MyParcel worden gebruikt om de Track&amp;Trace mail te versturen naar de klant vanuit het MyParcel account.
-                </p>
-                <img src='media/OC3_T&T.jpg'>
-                <h3>Track &amp; Trace in mijn account</h3>
-                <p>
-                    Toon track&amp;trace trace code &amp; link in het account van de klant als deze aangemaakt kan worden in de webshop.
-                </p>
-                <img src='media/OC3_TOON.jpg'>
-                <h3>Verwerk zendingen direct</h3>
-                <p>
-                    Wanneer je deze optie inschakelt, zullen zendingen direct worden verwerkt wanneer deze verzonden zijn naar MyParcel. 
-                </p>
-                <img src='media/OC3_VERWERK.jpg'>
-                <h3>Orderstatus automatisering</h3>
-                <p>
-                    Wijzig automatisch de order status na het succesvol exporteren van een order naar MyParcel. Ons advies is om deze op afgerond te zetten aangezien de order dan ook klaar is voor verzending.
-                </p>
-                <img src='media/OC3_AUTO.jpg'>
-                <h3>Bewaar informatie van oude zendingen</h3>
-                <p>
-                    Wanneer deze optie is ingeschakeld, zullen de gegevens van de vorige zendingen (track&amp;trace links) in de order worden bewaard wanneer je meer dan één keer exporteert.
-                </p>
-                <img src='media/OC3_KEEP.jpg'>
-                <h3>Use addition address</h3>
-                <p>
-                    Bij ‘Use addition address as number suffix’ kan je instellen wat er gebeurt met de adresvelden bij de checkout. Bij optie één zullen de adresvelden samengevoegd worden in één lijn. Met optie twee zal adres veld 2 als toevoeging worden gezien en bij optie drie zal adres veld 3 als toevoeging worden gezien.    
-                </p>
-                <img src='media/OC3_ADD.jpg'>
-                <h3>Diagnostische hulpmiddelen</h3>
-                <p>
-                    Je kunt de diagnostische hulpmiddelen inschakelen op het moment dat er problemen zijn met het exporteren van de zendingen. In dit bestand wordt de communicatie tussen OpenCart en MyParcel beschreven.
-                </p>
-                <img src='media/OC3_DIA.jpg'>
-                <h2 id="2_B">2.2 Standaard exportinstellingen</h2>
-                <img src='media/OC3_DEFAULT.jpg'>
-                <h3>Pakkettype koppelen aan verzendkosten</h3>
-                <p>
-                    Je kunt verzendmethoden koppelen aan een pakkettype, zodat het juiste label wordt aangemaakt in jouw MyParcel account. 
-                </p>
-                <img src='media/OC3_PACK.jpg'>
-                <p>
-                    In het voorbeeld is er te zien dat de verzendmethode MyParcel Shipping is gekoppeld aan Parcel. Daarnaast is het mogelijk om jouw overige verzendmethoden te koppelen aan andere pakkettypes.
-                </p>
-                <h3>Koppel emailadres klant</h3>
-                <p>
-                    Je kunt de keuze maken om wel of niet het e-mailadres vanuit jouw orders mee te sturen naar MyParcel. Wanneer je het emailadres van de klant koppelt, kan je instellen dat MyParcel jouw Track&amp;Trace emails verstuurd naar dit adres. In jouw MyParcel account kun je zelf deze email in of uitschakelen en opmaken in jouw eigen stijl.
-                </p>
-                <img src='media/OC3_CONNECTCUSTOMEREMAIL.png'>
-                <h3>Koppel telefoonnummer klant</h3>
-                <p>
-                    Is hetzelfde als met het email adres alleen dan met het telefoonnummer. Deze komt niet op het label maar de bezorger zou dit nummer wel kunnen gebruiken om de ontvanger op de hoogte te houden, vooral bij zendingen buiten Nederland.
-                </p>
-                <img src='media/OC3_TEL.jpg'>
-                <h3>Extra verzendopties</h3>
-                <p>
-                    Geef direct aan wat jouw standaard verzendopties zijn voor jouw Nederlandse pakketzendingen. Je kunt hier kiezen voor extra groot formaat, alleen huisadres, handtekening voor ontvangst, leeftijdscheck, retour bij geen gehoor en verzekerd verzenden. Jouw zendingen krijgen hiermee standaard de verzendoptie mee wanneer je deze exporteert. De opties die je hier aangeeft kan bij het exporteren altijd nog per zending aangepast worden.
-                </p>
-                <img src='media/OC3_OPTIONS.jpg'>
-                <h3>Label omschrijving</h3>
-                <p>
-                    Met deze optie kun je een beschrijving toevoegen aan de zending. Dit zal worden afgedrukt op de linkerbovenhoek van het label en kun je gebruiken om de zending in het MyParcel zendingenoverzicht op te zoeken. Gebruik [ORDER_NR] om het ordernummer te vermelden.
-                </p>
-                <img src='media/OC3_LABELDISC.jpg'>
-                <h2 id="2_C">2.3 Checkout instellingen</h2>
-                <img src='media/OC3_BBP.jpg'>
-                <img src='media/OC3_CHECK.jpg'>
-                <img src='media/OC3_BEPICK.jpg'>
-                <p>
-                    Via het tabblad ‘Checkout’ heb je de mogelijkheid om meer verzendopties toe te voegen in jouw checkout.
-                    Deze opties zullen alleen getoond worden in de checkout bij de verzendmethoden gekoppeld aan een pakket.   
-                    Hier kun jij jouw klanten de mogelijkheid geven om zelf te kiezen voor:
-                </p>
-                <ol>
-                    <li>Alleen huisadres</li>
-                    <li>Handtekening voor ontvangst</li>
-                    <li>Avondlevering</li>
-                    <li>Ochtendlevering</li>
-                    <li>Ophalen op een PostNL locatie</li>
-                    <li>Extra vroeg ophalen op een PostNL locatie</li>
-                </ol>
-                <p>
-                    Ook activeer je hier de instellingen/ verzendmethodes voor het Brievenbuspakje en zendingen naar België.
-                </p>
-                <h3>Bezorgopties</h3>
-                <img src='media/OC3_BEDRAGEN.jpg'>
-                <p>
-                    Bij standard delivery geef je het standaard verzendbedrag aan wat jij wil berekenen aan jouw klant.
-                </p>
-                <img src='media/OC3_STANDAARD.jpg'>
-                <p>
-                    Bij subtotaal geef je aan tussen welk bedrag er een betaalde verzending of gratis verzending moet plaatsvinden.
-                </p>
-                <img src='media/OC3_STANDAARD%20VERZENDING.jpg'>
-                <p>
-                    In de linkerkolom geef je het standaard verzendbedrag aan plus de extra kosten voor de bezorgopties.
-                    <br>
-                    <br>
-                    In de rechterkolom geef je gratis verzending aan, dit is exclusief het standaard verzendbedrag en alleen de kosten voor de bezorgopties.
-                    <br>
-                    <br>
-                    Bij de verschillende bezorgopties is het mogelijk een toeslag in te stellen die voor de desbetreffende bezorgoptie doorberekend wordt aan jouw klant via de checkout. Het is dus een toeslag op de standaardtarieven die je al hebt ingevoerd. In onderstaand voorbeeld zie je hoe deze toeslagen in de check-out terugkomen.
-                </p>
-                
-                <p><b>!!!! Hier nog een screenshot van checkout met toeslagen frontend !!!</b></p>
-                
-                <div class=nice> 
-                    <b>Let op!</b> De bedragen die je in het voorbeeld ziet zijn fictief, zie jouw MyParcel account voor de juiste bedragen.
-                </div>
-                <p>
-                    Je ziet bij de checkout instellingen nog 4 andere instellingen. Dit zijn Dropoff days, Cut-off time, Dropoff delay en Delivery days window. Op basis van deze instelling worden de juiste levertijden en –dagen getoond aan jouw klanten via de checkout, gebaseerd op jouw manier van orderverwerking.
-                </p>
-                <img src='media/OC3_OPTIONS.jpg'>
-                <h3>Verwerking van zendingen</h3>
-                <p>
-                    <b>Dropoff Days</b>
-                    <br>
-                    Hiermee kun je aangeven op welke dagen jij het pakket afgeeft bij een PostNL locatie. Jouw klanten krijgen hiermee de juiste beschikbare bezorgdagen aangeboden.
-                    <br>
-                    <br>
-                    <b>Cutoff time</b>
-                    <br>
-                    Met de sluitingstijd kun je aangeven tot welk moment van de dag de orders nog verwerkt kunnen worden. Als je elke dag rond 17:00 de bestellingen naar een PostNL locatie brengt is het handig om de laatste order rond 16:00 te verwerken. Wanneer jouw klanten na dit tijdstip een bestelling plaatsen zien zij een latere levermogelijkheid. Bijvoorbeeld: Sluitingstijd is om 16:00 en je kunt dezelfde dag de orders verwerken en op tijd inleveren. Dan zal jouw klant als eerste levermogelijkheid voor 16:00 de volgende dag zien. Wanneer jouw klant na 16:00 besteld zal het de dag erna zijn.
-                    <br>
-                    <br>
-                    <b>Dropoff delay</b>
-                    <br>
-                    Je kunt hier instellen hoeveel dagen jij nodig hebt om een order, die vóór jouw laatste besteltijd binnenkomt, te verwerken. Als je bijvoorbeeld 1 dag invult, zal er in de weergave in de check-out altijd rekening gehouden worden met het feit dat jij de pakketten dus niet morgen geleverd worden. Bijvoorbeeld: De bestelling wordt geplaatst op 16 september voordat jij naar het PostNL punt gaat. Je hebt echter een verwerkingstijd van 1 dag ingesteld, dus de eerste mogelijkheid voor jou om het pakket in te leveren is dan 17 september. Jouw klant krijgt dan dus pas 18 september als eerst mogelijke leverdag te zien.
-                    <br>
-                    <br>
-                    <b>Delivery days window</b>
-                    <br>
-                    Met deze optie kun je aangeven tot hoever in de toekomst jouw klanten een leverdag kunnen kiezen. In dit geval staat het op 10 dagen, maar dit kan natuurlijk ook 2 of 5 dagen zijn. Het maximum is 14 dagen. Wanneer het lever dagen venster op '0' wordt gezet, zullen de dagen niet meer worden getoond, waardoor de consument geen dag meer kan kiezen.
-                    <br>
-                    <br>
-                    <span class=nice>Let op: PostNL houdt geen rekening met de gekozen leverdag van jouw klant. Je dient zelf zorg te dragen voor het op de juiste dag inleveren van het pakket.</span>
-                </p>
-                <h3>Checkout styling aanpassen</h3>
-                <img src='media/OC3_STYLING.jpg'>
-                <p>
-                    Met de optie checkout styling aanpassen kun je de MyParcel checkout nog naar wens aanpassen.
-                    <br>
-                    <br>
-                    Verander de basis en highlight kleur, pas hier eventueel ook nog wat eigen CSS toe.
-                </p>
-                <h2 id="2_D">2.4 Veelgestelde vragen over de configuratie</h2>
-                <p>
-                    Zet hier de veel gestelde vragen omtrent de configuratie.
-                </p>
-                <h1 id="3">3. Gebruik plugin</h1>
-                <p>
-                    In het orderoverzicht kun je eenvoudig zien wat voor zending de nieuwe bestelling betreft. Ook kun je makkelijk het pakkettype wijzigen indien dit gewenst is. 
-                </p>
-                <h2 id="3_A">3.1 Aanmaken van één verzendlabel</h2>
-                <p>
-                    Beschrijf hier hoe je een verzendlabel aanmaakt.
-                </p>
-                <img src='media/OC3_EXPORT.jpg'>
-                <h2 id="3_B">3.2 Aanmaken meerdere verzendlabels</h2>
-                <p>
-                    Beschrijf hier hoe je meerdere verzendlabels aanmaakt.
-                </p>
-                <h2 id="3_C">3.3 Aanpassen van een enkele zending</h2>
-                <p>
-                    Wanneer je op Parcel klikt verschijnt het venster eronder. Hierin is het mogelijk om verzendopties uit te schakelen of juist toe te voegen of het soort zending aan te passen.
-                    <br><br>
-                    Na het kiezen van jouw gewenste opties of het wijzigen van het Soort zending klik je op Opslaan en daarna kun je deze keuze exporteren naar MyParcel en het gewenste label aanmaken. 
-                </p>
-                <img src='media/OC3_AANP.jpg'>
-                <h2 id="3_D">3.4 Checkout</h2>
-                <p>
-                    <b>!!!LEEG!!!</b>
-                </p>
-                <h2 id="3_E">3.5  Retourlabel aanmaken/mailen</h2>
-                <p>
-                    Vanuit het orderoverzicht kun je een retourlink naar jouw klant sturen. Jouw klant ontvangt een e-mail met een link erin om eenvoudig een retourlabel te printen. In onderstaande afbeelding kun je zien welk icoontje hiervoor gebruikt kan worden.
-                </p>
-                <img src='media/OC3_RETOUR.jpg'>
-                <h2 id="3_F">3.6 Orderdetails</h2>
-                <p>
-                    Uiteraard is het ook mogelijk om zendingen vanuit de order detailpagina zendingen aan te maken. Door op een view te klikken kom je op een pagina waar meer details over deze bestelling te vinden is.
-                </p>
-                <img src='media/OC3_VIEW1.jpg'>
-                <img src='media/OC3_VIEW.jpg'>
-                <h2 id="3_G">3.7 Veelgestelde vragen over het gebruik van de plugin</h2>
-                <p>
-                    Zet hier de veel gestelde vragen omtrent het gebruik van de plugin.
-                </p>
-                <footer class="site-footer">
-                    <p>
-                        <span class="site-footer-owner">MyParcel</span>
-                    </p>
-                    <p>
-                        <span class="site-footer-credits">
-                            <strong>Adres </strong>Siriusdreef 66-68, 2132 WT Hoofddorp<br />
-                            <strong>Telefoon </strong>023 30 30 315&nbsp;
-                            <strong>E-mail</strong> &nbsp;info@myparcel.nl<br />
-                            <strong>Website </strong><a href="https://www.myparcel.nl">www.myparcel.nl</a>&nbsp;
-                            <strong>IBAN </strong>NL48ABNA0447850539&nbsp;
-                            <strong>KvK </strong>Amsterdam 34 09 97 58 <br />
-                            <strong>BTW-nr. </strong>NL8045.33.258.B01
-                        </span>
-                        <br />
-                        &nbsp;
-                    </p>
-                </footer>
-            </div>
-        </section>
+<section class="page-header">
+    <p>
+        <img alt="Logo MyParcel" src="media/logo_myparcel.png"/>
+        <img height="180" alt="logo OpenCart" src="media/opencart-logo.png"/></p>
+    <h1 class="project-name">
+        OpenCart 3.0 MyParcel plug-in
+    </h1>
+    <h2 class="project-tagline">
+        MyParcel OpenCart 3.0 plug-in
+    </h2>
+    <a target="_blank" class="btn" href="https://github.com/myparcelnl/opencart3">GitHub</a>
+    <a target="_blank" class="btn" href="https://github.com/myparcelnl/opencart3/releases">Alle updates</a>
+    <a target="_blank" class="btn" href="https://github.com/myparcelnl/opencart3/archive/master.zip">Laatste stabiele versie</a>
+</section>
+<section class="main-content">
+    <h1>Inleiding</h1>
+    <p>
+        In deze handleiding laten we zien hoe je de MyParcel plug-in kunt installeren in jouw OpenCart winkel. Vervolgens geven wij een instructie van het gebruik van de plug-in.<br><br>
+
+        De installatie en het gebruik van de koppeling wordt je kosteloos aangeboden door MyParcel. Wij helpen je graag met vragen over het gebruik van de plug-in. Omdat OpenCart een opensource platform is kan het zijn dat de MyParcel plug-in conflicteert met reeds geïnstalleerde plug-ins. Mocht je problemen ondervinden met de installatie, raden wij je aan contact op te nemen met jouw webbouwer.
+    </p>
+
+    <h1>Inhoud</h1>
+    <div class="menu"></div>
+    <div>
+
+        <!--Hoofdstuk 1-->
+        <h1 id="1">1 Installatie</h1>
+        <p>
+            Dit hoofdstuk omschrijft de installatie van de MyParcel OpenCart Plug-in met gebruik van de “Extension installer”. Vanaf Opencart 2 is het mogelijk om de extensie te installeren via de “Extension installer”.<br><br>
+            Wij adviseren de installatie altijd eerst op een testomgeving uit te voeren en een back-up te maken van jouw webshop voor je begint.
+        </p>
+        <ol>
+            <li>Download het MyParcel <a href="...." target="_blank">OpenCart Plug-in.zip </a>bestand</li>
+            <li>Pak het gedownloade bestand uit.</li>
+        </ol>
+
+
+        <h2 id="1_1">1.1 Via FTP</h2>
+        <ol>
+            <li>Upload de bestanden die in het mapje ‘upload’ staan naar de rootdirectory van de OpenCart website</li>
+        </ol>
+
+        <h2 id="1_2">1.2 Via het CMS</h2>
+        <ol>
+
+            <li>Ga naar Extensions en installeer “myparcel.zip” d.m.v. de OpenCart “Extension installer”.</li>
+            <img src="media/Extension_Installer.png"/>
+            <li>Ga naar Extensions > Modifications selecteer “Modification MyParcel” en druk rechtsboven op “Refresh”.</li>
+            <img src="media/Modifications.png"/>
+        </ol>
+
+        <!--hoofdstuk 2-->
+        <h1 id="2">2 Configuratie</h1>
+        <p>
+            <ol>
+                <li>Ga in OpenCart naar <span class="nice"> Extensions → Modules → Myparcel NL → Edit </span></li>
+                <img src="media/myparcel_module.png"/>
+            </ol>
+        </p>
+        <h2 id="2_1">2.1 Algemeen</h2>
+        <h3 id="2_1">2.1.1 API instellingen</h3>
+        <p>
+            Om verbinding te kunnen maken met jouw MyParcel account is het noodzakelijk om hier jouw API-key in te vullen.<br><br>
+            Als je ingelogd bent in jouw MyParcel account op <a href="https://backoffice.myparcel.nl/">backoffice.myparcel.nl</a> dan is deze te vinden in menu <span class="nice">Instellingen → Algemeen.</span>
+        </p>
+
+        <h3 id="2_1_2">2.1.2 Label weergave</h3>
+        <p>
+            Geef hier aan of je het label direct wilt downloaden of wilt openen in een nieuw scherm.
+        </p>
+        <h3 id="2_1_3">2.1.3 Track&Trace instellingen</h3>
+        <p>
+            Stel jouw <span class="nice">Email track&trace code</span> in zodat het emailadres van de klant wordt meegestuurd naar MyParcel. Het emailadres kan door MyParcel worden gebruikt om de Track&Trace mail te versturen naar de klant.
+        </p>
+        <h3 id="2_1_4">2.1.4 Diagnostische hulpmiddelen</h3>
+        <p>
+            Je kunt de diagnostische hulpmiddelen inschakelen op het moment dat er problemen zijn met het exporteren van de zendingen.
+        </p>
+        <img src="media/algemene_instellingen.png"/>
+
+        <h2 id="2_2">2.2 Standaard exportinstellingen </h2>
+        <h3 id="2_2_1">2.2.1 Pakkettype koppelen aan verzendkosten</h3>
+        <p>
+            Je kunt verzendmethoden koppelen aan een pakkettype, zodat het juiste label wordt aangemaakt in jouw MyParcel account. Met onderstaand voorbeeld lichten we dit verder toe.
+        </p>
+        <img src="media/Package_types.png"/>
+
+        <!--///Moet nog naar gekeken worden///-->
+        <p>
+            In het voorbeeld is er te zien dat de verzendmethode <span class="nice">MyParcel Shipping</span> is gekoppeld aan Parcel. Daarnaast is het mogelijk om jouw overige verzendmethoden te koppelen aan andere pakkettypes.
+
+        </p>
+
+
+        <h3 id="2_2_2">2.2.2 Koppel emailadres klant</h3>
+        <img src="media/connect_customer_email.png"/>
+        <p>
+            Je kunt de keuze maken om wel of niet het e-mailadres vanuit jouw orders mee te sturen naar MyParcel. Wanneer je het emailadres van de klant koppelt, kan je instellen dat MyParcel jouw Track&Trace emails verstuurd naar dit adres. Op de pagina <span class="nice">Instellingen → Track & Trace</span> in jouw MyParcel backend kun je zelf deze email in of uitschakelen en opmaken in jouw eigen stijl.
+        </p>
+
+        <h3 id="2_2_3">2.2.3 Extra verzendopties</h3>
+        <p>
+            Geef direct aan wat jouw standaard verzendopties zijn voor jouw Nederlandse pakketzendingen. Je kunt hier kiezen voor extra groot formaat, alleen huisadres, handtekening voor ontvangst, retour bij geen gehoor en verzekerd verzenden. Jouw zendingen krijgen hiermee standaard de verzendoptie mee wanneer je deze exporteerd. De opties die je hier aangeeft kan bij het exporteren altijd nog per zending aangepast worden.
+        </p>
+        <h3 id="2_2_4">2.2.4 Label omschrijving</h3>
+        <p>
+            Met deze optie kun je een beschrijving toevoegen aan de zending. Dit zal worden afgedrukt op de linkerbovenhoek van de het label en kun je gebruiken om de zending in het MyParcel zendingenoverzicht op te zoeken. Gebruik [ORDER_NR] om het ordernummer te vermelden.
+        </p>
+
+        <h2 id="2_3">2.3 Checkout instellingen</h2>
+        <p>
+            Via het tabblad ‘Checkout’ heb je de mogelijkheid om meer verzendopties toe te voegen in jouw checkout. Ook is het mogelijk om ervoor te kiezen de checkout niet enkel bij pakketten te tonen maar ook voor alle verzendmethoden.
+        </p>
+        <img src="media/Checkout_delivery_options.png"/>
+
+
+        <h3 id="2_3_1">2.3.1 Bezorgopties</h3>
+        <p>
+            Bij de verschillende bezorgopties is het mogelijk een toeslag in te stellen die voor de desbetreffende bezorgoptie doorberekend wordt aan jouw klant via de checkout. Het is dus een toeslag op de standaardtarieven die je al hebt ingevoerd. In onderstaand voorbeeld zie je hoe deze toeslagen in de check-out terugkomen.
+        </p>
+        <img src="media/Checkout_front.png"/>
+        <p>
+            Je ziet bij de checkout instellingen nog 4 andere instellingen. Dit zijn <span class="nice">Dropoff days</span>, <span class="nice">Cut-off time</span>, <span class="nice">Dropoff delay</span> en <span class="nice">Delivery days window</span>. Op basis van deze instelling worden de juiste levertijden en –dagen getoond aan jouw klanten via de checkout, gebaseerd op jouw manier van orderverwerking.
+        </p>
+        <img src="media/Shipment_processing.png"/>
+
+        <h3 id="2_3_2">2.3.2 Vewerking van zendingen</h3>
+
+        <p>
+            <b>Dropoff days</b><br>
+            Hiermee kun je aangeven op welke dagen jij het pakket afgeeft bij een PostNL locatie. Jouw klanten krijgen hiermee de juiste beschikbare bezorgdagen aangeboden.
+        </p>
+
+        <p>
+            <b>Cut-off time</b><br>
+            Met de sluitingstijd kun je aangeven tot welk moment van de dag de orders nog verwerkt kunnen worden. Als je elke dag rond 17:00 de bestellingen naar een PostNL locatie brengt is het handig om de laatste order rond 16:00 te verwerken. Wanneer jouw klanten na dit tijdstip een bestelling plaatsen zien zij een latere levermogelijkheid. Bijvoorbeeld: Sluitingstijd is om 16:00 en je kunt dezelfde dag de orders verwerken en op tijd inleveren. Dan zal jouw klant als eerste levermogelijkheid voor 16:00 de volgende dag zien. Wanneer jouw klant na 16:00 besteld zal het de dag erna zijn.
+        </p>
+
+        <p>
+            <b>Dropoff delay</b><br>
+            Je kunt hier instellen hoeveel dagen jij nodig hebt om een order, die vóór jouw laatste besteltijd binnenkomt, te verwerken. Als je bijvoorbeeld 1 dag invult, zal er in de weergave in de check-out altijd rekening gehouden worden met het feit dat jij de pakketten dus niet morgen geleverd worden. Bijvoorbeeld: De bestelling wordt geplaatst op 16 september voordat jij naar het PostNL punt gaat. Je hebt echter een verwerkingstijd van 1 dag ingesteld, dus de eerste mogelijkheid voor jou om het pakket in te leveren is dan 17 september. Jouw klant krijgt dan dus pas 18 september als eerst mogelijke leverdag te zien.
+        </p>
+
+        <p>
+            <b>Delivery days window</b><br>
+            Met deze optie kun je aangeven tot hoever in de toekomst jouw klanten een leverdag kunnen kiezen. In dit geval staat het op 10 dagen, maar dit kan natuurlijk ook 2 of 5 dagen zijn. Het maximum is 14 dagen. Wanneer het leverdagenvenster op '0' wordt gezet, zullen de dagen niet meer worden getoond, waardoor de consument geen dag meer kan kiezen.<br><br>
+
+            <i>Let op: PostNL houdt geen rekening met de gekozen leverdag van jouw klant. Je dient zelf zorg te dragen voor het op de juiste dag inleveren van jouw pakket.</i>
+        </p>
+
+        <!--///hoofdstuk 3: Orderoverzicht ///-->
+        <h1 id="3">3 Orderoverzicht</h1>
+        <p>
+            In het orderoverzicht kun je eenvoudig zien wat voor zending de nieuwe bestelling betreft. Ook kun je makkelijk het pakkettype wijzigen indien dit gewenst is. Wanneer je op <span class="nice">Parcel</span> klikt verschijnt het venster eronder. Hierin is het mogelijk om verzendopties uit te schakelen of juist toe te voegen of het soort zending aan te passen.<br><br>
+            Na het kiezen van jouw gewenste opties of het wijzigen van het Soort zending klik je op Opslaan en daarna kun je deze keuze exporteren naar MyParcel en het gewenste label aanmaken.
+            <img src="media/Order_list.png"/><br>
+
+
+            Je kunt op 2 manieren jouw orders doorzetten naar MyParcel en hier vervolgens een label voor uitprinten. Namelijk door een order
+            (of meerdere orders) te selecteren en vervolgens naar Acties te gaan. Daar kun je jouw keuze maken <span class="nice">Print Batch</span>, <span class="nice">Export Batch</span> en <span class="nice">Export Print Batch</span><br><br>
+
+            Zowel bij bulk als bij een enkele export wordt er een laadicoontje zichtbaar. Vervolgens wordt de pagina ook direct ververst.
+            (zie voorbeeld hieronder)
+            <img src="media/Export_order.png"/>
+
+        <h2 id="3_1">3.1 Retourlabel email</h2>
+        <p>Vanuit het orderoverzicht kun je een retourlink naar jouw klant sturen. Jouw klant ontvangt een e-mail met een link er in om eenvoudig een retourlabel te printen. In onderstaande afbeelding kun je zien welk icoontje hiervoor gebruikt kan worden.</p>
+            <img src="media/Return_shipment_button.png"/><br><br>
+            <img src="media/Return_shipment.png"/>
+        </p>
+        <!--/// hoofdstuk 4: Orderdetails ///-->
+        <h1 id="4">4 Orderdetails</h1>
+        <p>
+            Uiteraard is het ook mogelijk om zendingen vanuit de order detailpagina zendingen aan te maken. Door op een view te klikken kom je op een pagina waar meer details over deze bestelling te vinden is.
+        </p>
+        <img src="media/Order_details.png"/>
+
+        <!--/// hoofdstuk 5:Zending informatie///-->
+        <h1 id="5">5 Zending informatie</h1>
+        <p>
+            Als je informatie over jouw zending wilt zien is het niet nodig om dit te bekijken in jouw MyParcel account. Je kunt deze informatie bekijken in jouw order overzicht in Opencart.<br><br>
+            Bij iedere order is een knop te zien van <span class="nice">Parcel</span>, <span class="nice">Unpaid letter</span> of <span class="nice">Mailbox package</span> als je hier op klikt wordt er meer informatie getoond over de status van de zending.
+        </p>
+        <img src="media/Ship_to_detail.png"/>
+
+        <!--/// hoofdstuk 6:Hulp nodig///-->
+        <h1 id="6">6 Hulp nodig?</h1>
+        <p>
+            Indien je vragen hebt over de installatie of het gebruik van de plug-in, helpen wij je graag. Ook tips & suggesties voor verbetering van de (werking) van de plug-in, horen wij graag. Mail <a href="mailto:support@myparcel.nl">support@myparcel.nl</a> of bel: 023 30 30 315.
     </div>
-</div>
-<script>
-    // Set postman button attributes in one place
-    postman_buttons = document.getElementsByClassName('postman-run-button');
 
-    for (i = 0; i < postman_buttons.length; i++) {
-        postman_buttons[i].setAttribute('data-postman-action', 'collection/import');
-        postman_buttons[i].setAttribute('data-postman-var-1', '065786285c2e5ed75509');
-        postman_buttons[i].setAttribute('data-postman-param', 'env%5BMyParcel%20public%5D=W3siZW5hYmxlZCI6dHJ1ZSwia2V5IjoiYXBpX2tleSIsInZhbHVlIjoiIn0seyJrZXkiOiJVc2VyLUFnZW50IiwidmFsdWUiOiJ7e1VzZXItQWdlbnR9fSIsImRlc2NyaXB0aW9uIjoiIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJhdXRoX3Rva2VuIiwidmFsdWUiOiIiLCJkZXNjcmlwdGlvbiI6IiIsImVuYWJsZWQiOnRydWV9XQ==');
-    }
-
-    (function (p,o,s,t,m,a,n) {
-        !p[s] && (p[s] = function () { (p[t] || (p[t] = [])).push(arguments); });
-        !o.getElementById(s+t) && o.getElementsByTagName("head")[0].appendChild((
-            (n = o.createElement("script")),
-                (n.id = s+t), (n.async = 1), (n.src = m), n
-        ));
-    }(window, document, "_pm", "PostmanRunObject", "https://run.pstmn.io/button.js"));
-</script>
-
+        <footer class="site-footer">
+            <p>
+                <span class="site-footer-owner"><a href="https://www.myparcel.nl">MyParcel</a></span>
+            </p>
+            <p>
+                <span class="site-footer-credits">
+                    <strong>Adres </strong>Siriusdreef 66-68, 2132 WT Hoofddorp
+                    <strong>Telefoon </strong>023 30 30 315&nbsp;
+                    <strong>E-mail</strong><a href="mailto:info@myparcel.nl">&nbsp;info@myparcel.nl</a><br>
+                    <strong>Website </strong><a target="_blank" href="https://www.myparcel.nl">www.myparcel.nl</a>&nbsp;
+                    <strong>IBAN </strong>NL48ABNA0447850539&nbsp;
+                    <strong>KvK </strong>Amsterdam 34 09 97 58 <br>
+                    <strong>BTW-nr. </strong>NL8045.33.258.B01
+                </span>
+            </p>
+        </footer>
+</section>
 </body>
 </html>

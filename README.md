@@ -1,3 +1,2 @@
-# Opencart 3
-Voor de handleiding en meer informatie ga naar:
-https://myparcelnl.github.io/opencart3/
+# OpenCart 3
+Voor de handleiding en meer informatie ga naar: https://myparcelnl.github.io/opencart3/
