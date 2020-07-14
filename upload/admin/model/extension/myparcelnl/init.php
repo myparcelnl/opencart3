@@ -71,21 +71,21 @@ class ModelExtensionMyparcelnlInit extends Model
         /** Backward compatibility for Opencart 2.0.0.0 **/
         if(version_compare(VERSION, '2.3.0.0', '>=')) {
             $this->load->model('setting/extension');
-            $this->model_setting_extension->install('shipping', $shipping_name);
+            //$this->model_setting_extension->install('shipping', $shipping_name);
 
             $this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/shipping/' . $shipping_name);
             $this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/shipping/' . $shipping_name);
             $this->load->controller('extension/shipping/' . $shipping_name . '/install');
         } else if(version_compare(VERSION, '2.3.0.0', '>=')) {
             $this->load->model('extension/extension');
-            $this->model_extension_extension->install('shipping', $shipping_name);
+            //$this->model_extension_extension->install('shipping', $shipping_name);
 
             $this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/shipping/' . $shipping_name);
             $this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/shipping/' . $shipping_name);
             $this->load->controller('extension/shipping/' . $shipping_name . '/install');
         } elseif (version_compare(VERSION, '2.0.0.0', '>=')) {
             $this->load->model('extension/extension');
-            $this->model_extension_extension->install('shipping', $shipping_name);
+            //$this->model_extension_extension->install('shipping', $shipping_name);
 
             $this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'shipping/' . $shipping_name);
             $this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'shipping/' . $shipping_name);
@@ -93,7 +93,7 @@ class ModelExtensionMyparcelnlInit extends Model
         } else {
             // Opencart 1x
             $this->load->model('setting/extension');
-            $this->model_setting_extension->install('shipping', $shipping_name);
+            //$this->model_setting_extension->install('shipping', $shipping_name);
 
             $this->model_user_user_group->addPermission($this->user->getId(), 'access', 'shipping/' . $shipping_name);
             $this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'shipping/' . $shipping_name);

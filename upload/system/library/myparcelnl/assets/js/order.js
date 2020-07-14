@@ -24,10 +24,10 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                 var button_id = '#btn-myparcel-' + action + '-' + order_id;
 
                 var data = {
-                        order_ids: [order_id],
-                        action: action,
-                        screen: screen
-                    };
+                    order_ids: [order_id],
+                    action: action,
+                    screen: screen
+                };
 
                 $.ajax({
                     url: $(this).attr('href'),
@@ -50,7 +50,7 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                             }
                         }
                         else{
-                            alert(res.errors.join('.'));
+                            swal(res.errors.join('.'));
                         }
                         MYPARCEL_SHIPMENT.helper.enableActionButtons(order_id);
                     },
@@ -87,7 +87,8 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                     }
                 }
                 if(position_label.length > 1){
-                    alert('You only choose 1 position.')
+                    $('#position_label_modal_' + order_id).modal('hide');
+                    swal('You only choose 1 position.');
                     return false;
                 }
 
@@ -291,9 +292,9 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
 
                                 $('input[name="selected[]"]').prop('checked', false)
                             }
-                            
+
                         } else{
-                            alert(error_text);
+                            swal(error_text);
                             console.log(res.errors);
                             location.reload();
                         }
@@ -312,17 +313,52 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                 if ($('input[name="selected[]"]:checked').length <= 0) {
                     return false;
                 }
-                unCheckAllPaper();
-                var elePosition = $('#position_label_modal .a6-label');
+
                 var eleInputSeleted = $('input[name="selected[]"]:checked');
-                var count = elePosition.length;
-                if(count > eleInputSeleted.length){
-                    count = eleInputSeleted.length
+                //order have not been exported yet
+                var orderNotExported = new Array();
+                var errorMessage = '';
+                for (i = 0; i < eleInputSeleted.length; i++){
+                    if($('#btn-myparcel-get_labels-' + $(eleInputSeleted[i]).val()).length == 0){
+                        orderNotExported.push('#'+ $(eleInputSeleted[i]).val());
+                        $(eleInputSeleted[i]).prop('checked',false);
+                    }
                 }
-                for (var i = 0; i < count; i++){
-                    $(elePosition[i]).click();
+                if(orderNotExported.length > 0){
+                    if(orderNotExported.length > 1){
+                        var lastOrderId = orderNotExported.pop();
+                        errorMessage = 'You are trying to download labels but Orders ' + orderNotExported.join(',') + ' and ' + lastOrderId + ' have not been exported yet.'
+                    }
+                    else{
+                        errorMessage = 'You are trying to download labels but Order ' + orderNotExported.pop() + ' has not been exported yet.'
+                    }
+
+                    if ($('input[name="selected[]"]:checked').length <= 0) {
+                        // alert(errorMessage  + ' Please choose other orders!');
+                        swal(errorMessage  + ' Please choose other orders!');
+                        return false;
+                    }
+                    extensionMessage = 'Do you want to download the labels of the orders which have been exported?';
+                    swal({
+                            title: "",
+                            text: errorMessage + extensionMessage,
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-primary",
+                            confirmButtonText: "OK",
+                            cancelButtonText: "Cancel",
+                            closeOnConfirm: true,
+                            closeOnCancel: true
+                        },
+                        function(isConfirm) {
+                            if (isConfirm) {
+                                showPositionModal();
+                            }
+                        });
+                    return false;
                 }
-                $('#position_label_modal').modal('show');
+
+                showPositionModal();
                 return false;
 
             });
@@ -341,7 +377,8 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                     }
                 }
                 if(position_label.length > eleInputSeleted.length){
-                    alert('You can only select up to '+ eleInputSeleted.length +' position.')
+                    $('#position_label_modal').modal('hide');
+                    swal('You can only select up to '+ eleInputSeleted.length +' position.');
                     return false;
                 }
                 //position_label.sort();
@@ -355,18 +392,33 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
             $(document).on('click','.a6-label',function () {
                 var element = this;
 
-               if($(element).hasClass('active')){
-                   $(element).removeClass('active');
-                   $(element).find('.fa-check').addClass('hidden');
-                   $(element).find('.fa-times').removeClass('hidden');
-               }
-               else{
-                   $(element).addClass('active');
-                   $(element).find('.fa-check').removeClass('hidden');
-                   $(element).find('.fa-times').addClass('hidden');
-               }
+                if($(element).hasClass('active')){
+                    $(element).removeClass('active');
+                    $(element).find('.fa-check').addClass('hidden');
+                    $(element).find('.fa-times').removeClass('hidden');
+                }
+                else{
+                    $(element).addClass('active');
+                    $(element).find('.fa-check').removeClass('hidden');
+                    $(element).find('.fa-times').addClass('hidden');
+                }
 
             });
+
+            function showPositionModal() {
+                unCheckAllPaper();
+                var elePosition = $('#position_label_modal .a6-label');
+                var eleInputSeleted = $('input[name="selected[]"]:checked');
+                var count = elePosition.length;
+                if(count > eleInputSeleted.length){
+                    count = eleInputSeleted.length
+                }
+                for (var i = 0; i < count; i++){
+                    $(elePosition[i]).click();
+                }
+                $('#position_label_modal').modal('show');
+                return false;
+            }
 
             function unCheckAllPaper(){
                 var element = $('#position_label_modal .a6-label');
@@ -453,14 +505,14 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                     order_id:   order_id,
                     form_data:  form_data,
                 };
-                
+
                 $.ajax({
                     url: url,
                     data: data,
                     type: 'POST',
                     dataType: 'json',
                     beforeSend: function() {
-                       $form.find('.oc_save_shipment_settings .waiting').show();
+                        $form.find('.oc_save_shipment_settings .waiting').show();
                     },
                     success: function(res) {
                         if (res.status == 'error') {
@@ -471,7 +523,7 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                         }else{
                             // set main text to selection
                             $package_type_text_element.text(package_type);
-                        
+
                             // hide spinner
                             $form.find('.oc_save_shipment_settings .waiting').hide();
                             //remove div errors
@@ -479,7 +531,7 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
 
                             // hide the form
                             $form.slideUp();
-                            
+
                         }
                     },
 
@@ -490,15 +542,30 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
             // hide all options if not a parcel
             $(document).on('change', 'select.package_type', function () {
                 var parcel_options  = $( this ).closest('table').parent().find('.parcel_options');
+                var digital_stamp_options  = $( this ).closest('table').parent().find('.digital_stamp_options');
                 if ( $( this ).val() == '1') {
                     // parcel
                     $( parcel_options ).find('input, textarea, button, select').prop('disabled', false);
                     $( parcel_options ).show();
                     $( parcel_options ).find('.insured').change();
+                    $( digital_stamp_options ).find(' select').prop('disabled', true);
+                    $( digital_stamp_options ).hide();
+                } else if($( this ).val() == '4'){
+                    //digital stamp type
+                    $( digital_stamp_options ).find(' select').prop('disabled', false);
+                    $( digital_stamp_options ).show();
+
+                    $( parcel_options ).find('input, textarea, button, select').prop('disabled', true);
+                    $( parcel_options ).hide();
+
                 } else {
                     // not a parcel
                     $( parcel_options ).find('input, textarea, button, select').prop('disabled', true);
                     $( parcel_options ).hide();
+
+                    //disable digital stamp options
+                    $( digital_stamp_options ).find(' select').prop('disabled', true);
+                    $( digital_stamp_options ).hide();
                     // No need the 2 lines below because "not a parcel" packages have no addition options and "insured" will be filtered in backend code
                     //$( parcel_options ).find('.insured').prop('checked', false);
                     //$( parcel_options ).find('.insured').change();
@@ -566,7 +633,7 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                         $( insured_input ).prop('disabled', true);
                         $( insured_input ).closest('tr').hide();
                     }
-                    
+
                 }
             }).change(); //ensure visible state matches initially
             $('.ocmyparcel_settings_table select.insured_amount').change();

@@ -474,7 +474,7 @@
         // End custom code
         // Custom code for journal2 theme
         $("#mypa-delivery-options-container").on("click", "input[name='mypa-delivery-time'], input[name='mypa-delivery-type'], .mypa-onoffswitch-checkbox,  input[name='mypa-pickup-option']", function(){
-            window.parent.window.MYPARCEL_CHECKOUT.journalThemeEventActivated();
+            window.parent.window.MYPARCEL_CHECKOUT.journalThemeEventActivated(false,true);
         });
         return updateInputField();
     };

@@ -17,7 +17,6 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
 
     MYPARCEL_CHECKOUT.event = {
         addEventListener: function() {
-
             /**
              * [Event Ajax Complete]
              * Executed when an ajax after checkout is fired
@@ -40,6 +39,19 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
                     var a = MYPARCEL_CHECKOUT.activateIframe();
                     return true;
                 }
+
+                if(settings.url.indexOf('route=journal3/checkout/payment') > 0){
+
+                    var height = '450px';
+                    if($('#myparcel_delivery_iframe_height').length > 0){
+                        height = $('#myparcel_delivery_iframe_height').val();
+                    }
+
+                    $("#myparcel-iframe").css({'height': height});
+                    var a = MYPARCEL_CHECKOUT.activateIframe();
+                    return true;
+                }
+
 
                 if (
                     settings.url.indexOf('checkout/shipping_address') >= 0
@@ -160,10 +172,10 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
             });
 
             $(document).on('change', '#mypa-input', function() {
-               if ($(this).val()) {
-                   $('#button-shipping-method').prop('disabled', false);
-                   document.cookie = "myparcel_empty_results=0";
-               }
+                if ($(this).val()) {
+                    $('#button-shipping-method').prop('disabled', false);
+                    document.cookie = "myparcel_empty_results=0";
+                }
             });
             /**
              * [Event Click]
@@ -295,7 +307,6 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
     };
 
     MYPARCEL_CHECKOUT.isActive = function() {
-
         return window.enable_delivery;
     };
 
@@ -346,14 +357,12 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
     MYPARCEL_CHECKOUT.activateIframe = function() {
 
         $('#button-shipping-method').prop('disabled', true);
-
         // If delivery iFrame is not enabled then ignore this function
         if (!MYPARCEL_CHECKOUT.isActive()) {
             return true;
         }
 
         el = document.getElementById('myparcel-iframe');
-
         if (typeof el === 'undefined' || !el) {
             return false;
         }
@@ -419,7 +428,7 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
         });
     };
 
-    MYPARCEL_CHECKOUT.journalThemeEventActivated = function () {
+    MYPARCEL_CHECKOUT.journalThemeEventActivated = function (upload_page = false, option_change = false) {
         var currentTheme = window.myparcel_current_theme;//$(".journal-checkout").length;
         if (currentTheme == 'journal2') {
             $.ajax({
@@ -450,11 +459,65 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
                 }
             });
         }
+        else if(currentTheme == 'journal3'){
+            option_change = (option_change) ? 1 : 0;
+            $('#is_change_option').val(option_change);
+            $.ajax({
+                cache: false,
+                url: 'index.php?route=extension/myparcelnl/myparcel_delivery/set_session',
+                type: 'post',
+                data: $('.parcel-shipping-method, #mypa-input, #mypa-signed:checked, #mypa-recipient-only:checked, #is_change_option'),
+                dataType: 'json',
+                success: function (response) {
+                    if(response.status == 'success'){
+                        if((typeof response.update_page != 'undefined' && response.update_page) || upload_page){
+                            window['_QuickCheckout'].save();
+                        }
+                        if(response.html != ''){
+                            var element = $('.cart-section').find('.table-bordered');
+                            element = element[element.length-1];
+                            $(element).find('tfoot').remove();
+                            $(element).html(response.html);
+                        }
+
+                        if(typeof response.shipping_method_code !='undefined'){
+                            if(typeof response.myparcel_shipping_code != 'undefined' && response.myparcel_shipping_code == response.shipping_method_code ){
+                                window['_QuickCheckout'].order_data.shipping_code = response.shipping_method_code;
+                            }
+                            var shipping_method_elements = $("input[name=shipping_method]");
+                            for (var i = 0; i< shipping_method_elements.length ; i++ ){
+                                if($(shipping_method_elements[i]).val() == response.shipping_method_code){
+                                    $(shipping_method_elements[i]).prop('checked', true);
+                                }
+                                else{
+                                    $(shipping_method_elements[i]).prop('checked', false);
+                                }
+                            }
+                        }
+                        if(typeof response.is_close_delivery_options != 'undefined' && response.is_close_delivery_options){
+
+                            var shipping_method_quote = $('input[name="shipping_method"]:checked').val();
+
+                            var parts = shipping_method_quote.split(".");
+                            if (parts && parts.length == 2) {
+                                var shipping_method = parts[0];
+                                // If current shipping method does not belong to Parcel, hide iframe or saved delivery options
+                                if ($.inArray(shipping_method, window.myparcel_delivery_options_shipping_methods) === -1) {
+                                    window.parent.window.MYPARCEL_CHECKOUT.eventDeactivated()
+                                }
+                            }
+                        }
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.error && console.error(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        }
     }
-    
+
     $(document).ready(function ($) {
         MYPARCEL_CHECKOUT.initialize.onReady();
-
         $(document).delegate('input[name*="address_1"], input[name*="address_2"]', 'change', function () {
             var $this = $('input[name="shipping_address"]');
 

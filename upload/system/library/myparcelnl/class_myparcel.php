@@ -18,6 +18,7 @@ class MyParcel
     const PACKAGE_TYPE_STANDARD = 1;
     const PACKAGE_TYPE_MAILBOX = 2;
     const PACKAGE_TYPE_LETTER = 3;
+    const PACKAGE_TYPE_DIGITAL_STAMP = 4;
     /**
      * MyParcel constructor.
      * @param null $registry

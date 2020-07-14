@@ -5,7 +5,7 @@
 -->
 <modification>
     <name>MyParcel NL</name>
-    <version>1.1.0</version>
+    <version>1.1.2</version>
     <code>MyParcelNL</code>
     <author>MyParcel NL</author>
     <link>https://www.myparcel.nl/</link>
@@ -154,7 +154,9 @@
             <add position="after"><![CDATA[
                 $this->load->model('extension/myparcelnl/helper');
                 $this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'order.css');
+                $this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'sweetalert.min.css');
                 $this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'order.js');
+                $this->document->addScript($this->model_extension_myparcelnl_helper->getJsUrl() . 'sweetalert.min.js');
             ]]></add>
         </operation>
 
@@ -300,6 +302,21 @@
                         $data['pickup_location'] = implode("<br>", array($myparcel_delivery_options['location'],$myparcel_delivery_options['street'] . ' ' . $myparcel_delivery_options['number'], $myparcel_delivery_options['city'] . ' (' . $myparcel_delivery_options['distance'] . 'm)'));
                     }
                 }
+                if(!isset($data['pickup_location'])){
+                    if(isset($this->session->data['myparcel_shipping_choosed'])){
+                        $myparcel_delivery_options = $this->session->data['myparcel_shipping_choosed'];
+                        if(isset($myparcel_delivery_options['location'])){
+                            $data['text_pickup_location'] = 'Pickup Location';
+                            $data['pickup_location'] = implode("<br>", array($myparcel_delivery_options['location'],$myparcel_delivery_options['street'] . ' ' . $myparcel_delivery_options['number'], $myparcel_delivery_options['city'] . ' (' . $myparcel_delivery_options['distance'] . 'm)'));
+                        }
+                    }
+                }
+            ]]></add>
+        </operation>
+        <operation><!-- no -->
+            <search><![CDATA['title' => $order_total['title'],]]></search>
+            <add position="replace"><![CDATA[
+                'title' => strip_tags($order_total['title']),
             ]]></add>
         </operation>
     </file>
@@ -342,8 +359,21 @@
     <!-- ______________________________________________________________________ -->
     <file path="catalog/view/theme/*/template/account/order_list.twig"><!-- checked -->
         <operation><!-- no -->
-            <search><![CDATA[<td class="text-right"><a href="{{ order.view }}" data-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>]]></search>
-            <add position="replace"><![CDATA[<td class="text-right"><a href="{{ order.view }}" data-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa fa-eye"></i></a>{{ order.tracktrace_myaccount }}</td>]]></add>
+            <search><![CDATA[<td class="text-left">{{ column_date_added }}</td>]]></search>
+            <add position="after"><![CDATA[
+                {% if is_show_track_trace %}
+                    <td class="text-left">{{ entry_track_trace }}</td>
+                {% endif %}
+            ]]></add>
+        </operation>
+        <operation><!-- no -->
+            <search><![CDATA[<td class="text-left">{{ order.date_added }}</td>]]></search>
+            <add position="after"><![CDATA[
+                {% if is_show_track_trace %}
+                    <td class="text-left">{{ order.tracktrace_myaccount }}</td>
+                {% endif %}
+              <?php } ?>
+            ]]></add>
         </operation>
     </file>
 
@@ -374,7 +404,16 @@
                 $order_total = $this->model_account_order->getTotalOrders();
             ]]></search>
             <add position="after"><![CDATA[
+                if (!class_exists('MyParcel')) {
+                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                }
                 $this->load->model('extension/myparcelnl/helper');
+                $this->load->language('extension/module/myparcelnl');
+                if(MyParcel()->settings->general->trackandtrace_myaccount){
+                    $data['is_show_track_trace'] = MyParcel()->settings->general->trackandtrace_myaccount;
+                    $data['entry_track_trace'] = $this->language->get('entry_track_trace');
+                }
             ]]></add>
         </operation>
         <operation>
@@ -590,10 +629,38 @@
             ]]></add>
         </operation>
     </file>
+
+    <file path="catalog/controller/extension/module/xtensions/checkout/xcvc.php">
+        <operation>
+            <search><![CDATA[$sort_order[$key] = $value['sort_order'];]]></search>
+            <add position="after"><![CDATA[
+            //Myparcel plugin - start
+            //get pickup location
+            if($value['code'] == 'shipping' && isset($this->session->data['myparcel_price_pickup'])
+				&& isset($this->session->data['shipping_method']['code']) && strpos($this->session->data['shipping_method']['code'],$this->session->data['myparcel_price_pickup']['shipping_method_code']) !== false){
+                $myparcel_delivery_options = $this->session->data['myparcel_price_pickup']['myparcel_shipping_choosed'];
+                if(isset($myparcel_delivery_options['location'])){
+                    $this->language->load('extension/module/myparcelnl');
+                    $this->data['myparcel_pickup_price_summary']['title'] = $this->language->get('entry_title_location');
+                    $this->data['myparcel_pickup_price_summary']['location'] = $myparcel_delivery_options['location']. ', ' .$myparcel_delivery_options['street'] . ' ' . $myparcel_delivery_options['number'] .', ' . $myparcel_delivery_options['city'];
+                    $this->data['myparcel_pickup_price_summary']['shipping_title'] = $value['title'];
+                }
+            }
+            //Myparcel plugin - end
+                ]]></add>
+        </operation>
+    </file>
     <!-- ________________ catalog/controller/extension/module/xtensions/checkout/xshipping_method.php ________________ -->
     <!-- _______________________ XShipping Method Module _______________________ -->
     <!-- _________________________________________________________________________ -->
     <file path="catalog/controller/extension/module/xtensions/checkout/xshipping_method.php">
+        <operation>
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+            $this->load->model('extension/myparcelnl/helper');
+            $this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'checkout.css');
+            ]]></add>
+        </operation>
         <operation>
             <search><![CDATA[array_multisort($sort_order, SORT_ASC, $quote_data);]]></search>
             <add position="after"><![CDATA[
@@ -642,6 +709,7 @@
                             $shipping_method_code = explode('.',$shipping_method_code)[0];
                         }
                         $this->data['myparcel_option_title'] = array();
+                        $arrMyparcelShippingKey = [];
                         foreach ($myparcel_delivery['body']['data'] as $key => $value){
                             if(count($value)) {
                                 $sort_order = count($quote_data);
@@ -649,6 +717,9 @@
                                 $cost = 0;
                                 $cost_with_tax = 0;
                                 $price_key = 'myparcel_price_' . $key;
+                                if (!isset($this->session->data[$price_key])) {
+                                    MyParcel()->helper->saveDefaultMyparcelMethodXtension($value,$key);
+                                }
                                 if (isset($this->session->data[$price_key])) {
                                     $myparcel_price = $this->session->data[$price_key];
                                     $text_price_detail = explode(' - ',$myparcel_price['text_myparcel_price_'.$key]);
@@ -752,6 +823,7 @@
                                 $myparcel_option_title['text_edit_myparcel_' . $key] = (isset($myparcel_price['text_myparcel_price_'.$key])) ? $myparcel_price['text_myparcel_price_'.$key] : $this->language->get('entry_edit_myparcel_' . $key);
                                 $arrShipping['quote'][$key_delivery] = $arrQuote;
                                 $quote_data[$key_delivery] = $arrShipping;
+                                $arrMyparcelShippingKey[] = $key_delivery;
                             }
                         }
                         $this->session->data['myparcel_option_title'] = $myparcel_option_title;
@@ -759,14 +831,31 @@
                         if(isset($this->session->data['myparcel_api_errors'])){
                             unset($this->session->data['myparcel_api_errors']);
                         }
+
+                        //make myparcel shipping method to first.
+                        if(count($arrMyparcelShippingKey)){
+                            $arrMyparcelShippingKey = array_reverse($arrMyparcelShippingKey);
+                            foreach ($arrMyparcelShippingKey as $key){
+                                if(isset($quote_data[$key])) {
+                                    $value = $quote_data[$key];
+                                    unset($quote_data[$key]);
+                                    $quote_data = array($key => $value) + $quote_data;
+                                }
+                            }
+                        }
                     }
                     else{
-                        $myparcel_errors = $myparcel_delivery['body']['errors'];
-                        $error_message = [];
-                        foreach($myparcel_errors as $error){
-                            $error_message[] = $error['message'];
+                        if(isset($myparcel_delivery['body']['errors'])){
+                            $myparcel_errors = $myparcel_delivery['body']['errors'];
+                            $error_message = [];
+                            if(is_array($myparcel_errors) && count($myparcel_errors)){
+                                 foreach($myparcel_errors as $error){
+                                    $error_language_key = 'entry_myparcel_api_error_code_' . $error['code'];
+                                    $error_message[] = ($this->language->get($error_language_key) != $error_language_key) ? $this->language->get($error_language_key) : $error['message'];
+                                }
+                                $this->session->data['myparcel_api_errors'] = htmlspecialchars(implode('.',$error_message), ENT_QUOTES);
+                            }
                         }
-                        $this->session->data['myparcel_api_errors'] = htmlspecialchars(implode('.',$error_message), ENT_QUOTES);
                     }}
                 else{
                     if(isset($this->session->data['myparcel_api_errors'])){
@@ -884,7 +973,7 @@
                                 $('#xdeltimeslots').before('<div class="alert alert-warning">'+json['error']['timeslot']+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                             }
                         }else if(json['success']){
-                            loadShippingMethods(true);
+                            loadShippingMethods();
                         }
 
                     }
@@ -918,6 +1007,9 @@
                     }
                 });
             }
+            $(document).on("hidden.bs.modal", "#modal-shipping-dependancy", function(event) {
+                loadShippingMethods();
+            });
             ]]></add>
         </operation>
 
@@ -1032,7 +1124,13 @@
         <operation>
             <search><![CDATA[} else if (json.xguest) {]]></search>
             <add position="after"><![CDATA[
-            loadShippingMethods();
+            $.ajax({
+                url : 'index.php?route=extension/myparcelnl/myparcel_xtension_delivery/forgetMyParcelChoosed',
+                type: 'get',
+                success:function (data) {
+                    loadShippingMethods();
+                }
+            });
             ]]></add>
         </operation>
         <operation>
@@ -1099,6 +1197,18 @@
             ]]></add>
         </operation>
     </file>
+
+    <file path="catalog/view/theme/*/template/extension/module/xtensions/checkout/xtotals.twig">
+        <operation>
+            <search><![CDATA[<tr><td>{{ total.title }}:</td><td class="text-right">{{ total.text }}</td></tr>]]></search>
+            <add position="after"><![CDATA[
+            {% if  myparcel_pickup_price_summary and total.title == myparcel_pickup_price_summary.shipping_title %}
+                <tr><td>{{ myparcel_pickup_price_summary.title }}:</td><td class="text-right">{{ myparcel_pickup_price_summary.location }} </td> </tr>
+            {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
     <file path="catalog/view/theme/*/template/extension/module/xtensions/checkout/xpayment_address.twig">
         <operation>
             <search><![CDATA[{% if force_redirect %}]]></search>
@@ -1125,7 +1235,8 @@
         <operation>
             <search><![CDATA[unset($this->session->data['shipping_method']);]]></search>
             <add position="before"><![CDATA[
-            if(isset($this->session->data['myparcel_shipping_choosed'])){
+            if(isset($this->session->data['myparcel_shipping_choosed']) && isset($this->session->data['shipping_method']['code'])
+                        && ($this->session->data['shipping_method']['code'] == ($this->session->data['myparcel_shipping_choosed']['code'] . '.' . $this->session->data['myparcel_shipping_choosed']['code']))){
                 if (!class_exists('MyParcel')) {
                     require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
                     MyParcel($this->registry);
@@ -1149,40 +1260,39 @@
                 }
                 $model_shipment->saveDeliveryOptions($this->session->data['order_id'], $myparcel_shipping_choosed, $signed, $recipient_only, $current_prices);
                 $model_shipment->update($this->session->data['order_id'],'type',$myparcel_shipping_code . '.' . $myparcel_shipping_code);
-                if(isset($this->session->data['myparcel_shipping_choosed'])){
-                    unset($this->session->data['myparcel_shipping_choosed']);
-                }
-                if(isset($this->session->data['additional_service'])){
-                    unset($this->session->data['additional_service']);
-                }
-                if(isset($this->session->data['pickup_time_start'])){
-                    unset($this->session->data['pickup_time_start']);
-                }
-                if(isset($this->session->data['additional_service_checked'])){
-                    unset($this->session->data['additional_service_checked']);
-                }
-                if(isset($this->session->data['pickup_time_start'])){
-                    unset($this->session->data['pickup_time_start']);
-                }
-                if(isset($this->session->data['myparcel_price_pickup'])){
-                    unset($this->session->data['myparcel_price_pickup']);
-                }
-                if(isset($this->session->data['myparcel_price_delivery'])){
-                    unset($this->session->data['myparcel_price_delivery']);
-                }
-                if(isset($this->session->data['delivery_time_start'])){
-                    unset($this->session->data['delivery_time_start']);
-                }
-                if(isset($this->session->data['delivery_time_end'])){
-                    unset($this->session->data['delivery_time_end']);
-                }
-                if(isset($this->session->data['delivery_date'])){
-                    unset($this->session->data['delivery_date']);
-                }
-                if(isset($this->session->data['pickup_location'])){
-                    unset($this->session->data['pickup_location']);
-                }
-
+            }
+            if(isset($this->session->data['myparcel_shipping_choosed'])){
+                unset($this->session->data['myparcel_shipping_choosed']);
+            }
+            if(isset($this->session->data['additional_service'])){
+                unset($this->session->data['additional_service']);
+            }
+            if(isset($this->session->data['pickup_time_start'])){
+                unset($this->session->data['pickup_time_start']);
+            }
+            if(isset($this->session->data['additional_service_checked'])){
+                unset($this->session->data['additional_service_checked']);
+            }
+            if(isset($this->session->data['pickup_time_start'])){
+                unset($this->session->data['pickup_time_start']);
+            }
+            if(isset($this->session->data['myparcel_price_pickup'])){
+                unset($this->session->data['myparcel_price_pickup']);
+            }
+            if(isset($this->session->data['myparcel_price_delivery'])){
+                unset($this->session->data['myparcel_price_delivery']);
+            }
+            if(isset($this->session->data['delivery_time_start'])){
+                unset($this->session->data['delivery_time_start']);
+            }
+            if(isset($this->session->data['delivery_time_end'])){
+                unset($this->session->data['delivery_time_end']);
+            }
+            if(isset($this->session->data['delivery_date'])){
+                unset($this->session->data['delivery_date']);
+            }
+            if(isset($this->session->data['pickup_location'])){
+                unset($this->session->data['pickup_location']);
             }
             ]]></add>
         </operation>

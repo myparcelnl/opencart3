@@ -5,6 +5,7 @@ $_['heading_title']       = 'Postnl NL';
 $_['mssg_order_status_changed_by_myparcel'] = 'Postnl Order Status Automation';
 $_['email_track_trace'] = 'Volg uw bestelling via de volgende PostNL track&trace code:';
 
+$_['entry_track_trace'] = 'Track & Trace';
 $_['entry_delivery_date'] = 'Bezorgdatum';
 $_['date_format'] = 'Y-m-d';
 $_['entry_delivery_time'] = 'Bezorgtijd';
@@ -53,10 +54,14 @@ $_['entry_myparcel_delivery'] = 'Postnl bezorging';
 $_['entry_myparcel_pickup'] = 'Postnl Afhalen';
 $_['entry_select'] = 'Selecteer';
 $_['entry_date'] = 'Datum';
-$_['entry_pickup_from'] = 'Ophalen bij';
+$_['entry_pickup_from'] = 'Ophalen om';
 $_['entry_edit_myparcel_delivery'] = 'Bezorgdatum bewerken';
 $_['entry_edit_myparcel_pickup'] = 'Bewerk ophaaloptie';
 
 $_['entry_delivery_morning'] = 'Ochtend';
 $_['entry_delivery_standard'] = 'Standaard';
 $_['entry_delivery_avond'] = 'Avond';
+
+$_['entry_title_location'] = 'Plaats';
+
+$_['entry_myparcel_api_error_code_3505'] = 'De ingevoerde postcode is incorrect';

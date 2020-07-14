@@ -58,6 +58,8 @@ class ControllerExtensionMyparcelnlMyparcelXtensionDelivery extends Controller
         if(isset($myparcel_delivery[$shipping_method_code])){
             $this->data['myparcel_delivery_option'] = $myparcel_delivery[$shipping_method_code];
             $this->data['shipping_method_code'] = $shipping_method_code;
+
+
             if($shipping_method_code == 'delivery'){
                 $this->data['min_date'] = date('Y-m-d',strtotime($this->data['myparcel_delivery_option'][0]['date']));
                 $this->data['max_date'] = date('Y-m-d',strtotime($this->data['myparcel_delivery_option'][count($this->data['myparcel_delivery_option']) - 1]['date']));
@@ -67,6 +69,24 @@ class ControllerExtensionMyparcelnlMyparcelXtensionDelivery extends Controller
                 $this->data['delivery_time_start'] = isset($this->session->data['delivery_time_start']) ? $this->session->data['delivery_time_start'] : '';
                 $this->data['delivery_time_end'] = isset($this->session->data['delivery_time_end']) ? $this->session->data['delivery_time_end'] : '';
                 $this->data['dropoff_days']= implode(',' , MyParcel()->helper->getDisableDropoffDays($myparcel_delivery));
+
+                if(isset($this->session->data['myparcel_price_delivery']['myparcel_shipping_choosed'])){
+                    $this->session->data['myparcel_shipping_choosed'] = $this->session->data['myparcel_price_delivery']['myparcel_shipping_choosed'];
+                }
+                //select default option
+                if(empty($this->data['delivery_time_start']) && empty($this->data['delivery_time_end'])){
+                    foreach ($this->data['myparcel_delivery_option'] as $value){
+                        if($value['date'] == $this->data['date_pick']){
+                            foreach ($value['time'] as $time){
+                                if($time['price_comment'] == 'standard'){
+                                    $this->saveMyparcelPriceDelivery($value, $shipping_method_code, $time);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
             else{
                 if(isset($this->session->data['pickup_location'])){
@@ -80,9 +100,18 @@ class ControllerExtensionMyparcelnlMyparcelXtensionDelivery extends Controller
                 if(!isset($this->data['pickup_detail'])){
                     $this->data['pickup_detail'] = $this->data['myparcel_delivery_option'][0];
                 }
+
                 $this->data['entry_date'] = $this->language->get('entry_date');
                 $this->data['entry_pickup_from'] = $this->language->get('entry_pickup_from');
                 $this->data['pickup_time_start'] = isset($this->session->data['pickup_time_start']) ? $this->session->data['pickup_time_start'] : '';
+
+                if(empty($this->data['pickup_time_start'])){
+                    $this->saveMyparcelPricePickup($this->data['pickup_detail'],$shipping_method_code, $this->data['pickup_detail']['time'][0]);
+                }
+
+                if(isset($this->session->data['myparcel_price_pickup']['myparcel_shipping_choosed'])){
+                    $this->session->data['myparcel_shipping_choosed'] = $this->session->data['myparcel_price_pickup']['myparcel_shipping_choosed'];
+                }
             }
         }
 
@@ -146,13 +175,14 @@ class ControllerExtensionMyparcelnlMyparcelXtensionDelivery extends Controller
                     $this->session->data['pickup_location'] = $value['location'];
 //                    $this->session->data['pickup_time_start'] = $value['time'][0]['start'];
                     $this->data['pickup_detail'] = $value;
-                    $this->data['pickup_time_start'] = '';
-                    if(isset($this->session->data['pickup_time_start'])){
-                        unset($this->session->data['pickup_time_start']);
-                    }
-                    if(isset($this->session->data['myparcel_price_pickup'])){
-                        unset($this->session->data['myparcel_price_pickup']);
-                    }
+                    $this->saveMyparcelPricePickup($value, $shipping_method_code, $value['time'][0]);
+//                    $this->data['pickup_time_start'] = '';
+//                    if(isset($this->session->data['pickup_time_start'])){
+//                        unset($this->session->data['pickup_time_start']);
+//                    }
+//                    if(isset($this->session->data['myparcel_price_pickup'])){
+//                        unset($this->session->data['myparcel_price_pickup']);
+//                    }
                     break;
                 }
             }
@@ -164,15 +194,22 @@ class ControllerExtensionMyparcelnlMyparcelXtensionDelivery extends Controller
             $delivery_date = date('Y-m-d',strtotime($this->request->post['delivery_date']));
             foreach ($myparcel_delivery[$shipping_method_code] as $value){
                 if(date('m-d-Y',strtotime($value['date'])) == date('m-d-Y',strtotime($delivery_date)) ) {
-                    $this->data['delivery_time_start'] = '';
-                    $this->data['delivery_time_end'] = '';
+//                    $this->data['delivery_time_start'] = '';
+//                    $this->data['delivery_time_end'] = '';
                     $this->data['delivery_detail'] = $value;
-
-                    $this->session->data['delivery_time_start'] = '';
-                    $this->session->data['delivery_time_end'] = '';
+//
+//                    $this->session->data['delivery_time_start'] = '';
+//                    $this->session->data['delivery_time_end'] = '';
                     $this->session->data['delivery_date'] = $delivery_date;
-                    if(isset($this->session->data['myparcel_price_delivery'])){
-                        unset($this->session->data['myparcel_price_delivery']);
+//                    if(isset($this->session->data['myparcel_price_delivery'])){
+//                        unset($this->session->data['myparcel_price_delivery']);
+//                    }
+
+                    foreach ($value['time'] as $time){
+                        if($time['price_comment'] == 'standard'){
+                            $this->saveMyparcelPriceDelivery($value, $shipping_method_code, $time);
+                            break;
+                        }
                     }
                     break;
                 }
@@ -251,15 +288,17 @@ class ControllerExtensionMyparcelnlMyparcelXtensionDelivery extends Controller
                             if($time['start'] == $this->session->data['delivery_time_start'] && $time['end'] == $this->session->data['delivery_time_end']){
                                 $shipping_methods[$key_shipping]['quote'][$key_shipping]['cost'] = $time['price']['current_currency_amount'];
                                 $shipping_methods[$key_shipping]['quote'][$key_shipping]['text'] = $time['price']['current_currency_amount'];
-                                $this->session->data['myparcel_shipping_choosed']['date'] = date('Y-m-d',strtotime($value['date']));
-                                $this->session->data['myparcel_shipping_choosed']['time'][] = $time;
-                                $this->session->data['myparcel_shipping_choosed']['code'] = 'myparcel_'. $shipping_method_code;
-                                $this->session->data['myparcel_shipping_choosed']['additional_service'] = (isset($this->session->data['additional_service_checked']['delivery'])) ? $this->session->data['additional_service_checked']['delivery'] : [];
-                                $time['price']['shipping_method_code'] = $shipping_method_code;
-                                $time['price']['text_myparcel_price_delivery'] = date('d-m-Y',strtotime($value['date'])) . ' - ' . date('H:i',strtotime($time['start'])) . ' - ' .date('H:i',strtotime($time['end']));
-                                $this->session->data['myparcel_price_delivery'] = $time['price'];
                                 $this->session->data['shipping_methods'] = $shipping_methods;
 
+//                                $this->session->data['myparcel_shipping_choosed']['date'] = date('Y-m-d',strtotime($value['date']));
+//                                $this->session->data['myparcel_shipping_choosed']['time'][] = $time;
+//                                $this->session->data['myparcel_shipping_choosed']['code'] = 'myparcel_'. $shipping_method_code;
+//                                $this->session->data['myparcel_shipping_choosed']['additional_service'] = (isset($this->session->data['additional_service_checked']['delivery'])) ? $this->session->data['additional_service_checked']['delivery'] : [];
+//                                $time['price']['shipping_method_code'] = $shipping_method_code;
+//                                $time['price']['text_myparcel_price_delivery'] = date('d-m-Y',strtotime($value['date'])) . ' - ' . date('H:i',strtotime($time['start'])) . ' - ' .date('H:i',strtotime($time['end']));
+//                                $this->session->data['myparcel_price_delivery'] = $time['price'];
+//                                $this->session->data['myparcel_price_delivery']['myparcel_shipping_choosed'] = $this->session->data['myparcel_shipping_choosed'];
+                                $this->saveMyparcelPriceDelivery($value, $shipping_method_code, $time);
                                 break;
                             }
                         }
@@ -278,16 +317,18 @@ class ControllerExtensionMyparcelnlMyparcelXtensionDelivery extends Controller
                             if($time['start'] == $pickup_option_time[1]){
                                 $shipping_methods[$key_shipping]['quote'][$key_shipping]['cost'] = $time['price']['current_currency_amount'];
                                 $shipping_methods[$key_shipping]['quote'][$key_shipping]['text'] = $time['price']['current_currency_amount'];
-                                $time['price']['shipping_method_code'] = $shipping_method_code;
-                                $time['price']['text_myparcel_price_pickup'] =  $value['location'] . ' - ' .date('d-m-Y',strtotime($value['date'])) . ' - ' . date('H:i',strtotime($time['start']));
-                                $this->session->data['myparcel_price_pickup'] = $time['price'];
                                 $this->session->data['shipping_methods'] = $shipping_methods;
-                                $value['code'] = 'myparcel_'. $shipping_method_code;
-                                $value['additional_service'] = [];
-                                $value['time'] = [];
-                                $value['time'][] = $time;
-                                $this->session->data['myparcel_shipping_choosed'] = $value;
-                                $this->session->data['pickup_time_start'] = $time['start'];
+//                                $time['price']['shipping_method_code'] = $shipping_method_code;
+//                                $time['price']['text_myparcel_price_pickup'] =  $value['location'] . ' - ' .date('d-m-Y',strtotime($value['date'])) . ' - ' . date('H:i',strtotime($time['start']));
+//                                $this->session->data['myparcel_price_pickup'] = $time['price'];
+//                                $value['code'] = 'myparcel_'. $shipping_method_code;
+//                                $value['additional_service'] = [];
+//                                $value['time'] = [];
+//                                $value['time'][] = $time;
+//                                $this->session->data['myparcel_shipping_choosed'] = $value;
+//                                $this->session->data['myparcel_price_pickup']['myparcel_shipping_choosed'] = $this->session->data['myparcel_shipping_choosed'];
+//                                $this->session->data['pickup_time_start'] = $time['start'];
+                                $this->saveMyparcelPricePickup($value,$shipping_method_code,$time);
                                 break;
                             }
                         }
@@ -313,6 +354,13 @@ class ControllerExtensionMyparcelnlMyparcelXtensionDelivery extends Controller
     }
 
     function externalValidate(){
+        $myparcel_shipping_key = explode('.',$this->session->data['shipping_method']['code'])[0];
+        $myparcel_shipping_key = explode('_',$myparcel_shipping_key)[1];
+
+        if(isset($this->session->data['myparcel_price_' . $myparcel_shipping_key]['myparcel_shipping_choosed'])){
+            $this->session->data['myparcel_shipping_choosed'] = $this->session->data['myparcel_price_' . $myparcel_shipping_key]['myparcel_shipping_choosed'];
+        }
+
         if(!isset($this->session->data['myparcel_shipping_choosed'])){
             $json['warning'] = $this->language->get('error_external_validate');
             $json['action'] = 'index.php?route=' .MyParcel()->getMyparcelXtensionControllerPath();
@@ -363,4 +411,37 @@ class ControllerExtensionMyparcelnlMyparcelXtensionDelivery extends Controller
         echo json_encode(array('status' => true));
         die();
     }
+
+    function saveMyparcelPriceDelivery($delivery_option , $shipping_method_code, $time){
+
+        $this->data['delivery_time_start'] = $time['start'];
+        $this->data['delivery_time_end'] = $time['end'];
+        if(isset($this->session->data['myparcel_shipping_choosed'])){
+            unset($this->session->data['myparcel_shipping_choosed']);
+        }
+        $this->session->data['myparcel_shipping_choosed']['date'] = date('Y-m-d',strtotime($delivery_option['date']));
+        $this->session->data['myparcel_shipping_choosed']['time'][] = $time;
+        $this->session->data['myparcel_shipping_choosed']['code'] = 'myparcel_'. $shipping_method_code;
+        $this->session->data['myparcel_shipping_choosed']['additional_service'] = (isset($this->session->data['additional_service_checked']['delivery'])) ? $this->session->data['additional_service_checked']['delivery'] : [];
+        $time['price']['shipping_method_code'] = $shipping_method_code;
+        $time['price']['text_myparcel_price_delivery'] = date('d-m-Y',strtotime($delivery_option['date'])) . ' - ' . date('H:i',strtotime($time['start'])) . ' - ' .date('H:i',strtotime($time['end']));
+        $this->session->data['myparcel_price_delivery'] = $time['price'];
+        $this->session->data['myparcel_price_delivery']['myparcel_shipping_choosed'] = $this->session->data['myparcel_shipping_choosed'];
+    }
+
+    function saveMyparcelPricePickup($pickup_detail , $shipping_method_code, $time){
+        //select default option
+        $time['price']['shipping_method_code'] = $shipping_method_code;
+        $time['price']['text_myparcel_price_pickup'] =  $pickup_detail['location'] . ' - ' .date('d-m-Y',strtotime($pickup_detail['date'])) . ' - ' . date('H:i',strtotime($time['start']));
+        $this->session->data['myparcel_price_pickup'] = $time['price'];
+        $pickup_detail['code'] = 'myparcel_'. $shipping_method_code;
+        $pickup_detail['additional_service'] = [];
+        $pickup_detail['time'] = [];
+        $pickup_detail['time'][] = $time;
+        $this->session->data['myparcel_shipping_choosed'] = $pickup_detail;
+        $this->session->data['myparcel_price_pickup']['myparcel_shipping_choosed'] = $this->session->data['myparcel_shipping_choosed'];
+        $this->session->data['pickup_time_start'] = $time['start'];
+        $this->data['pickup_time_start'] = $time['start'];
+    }
+
 }

@@ -32,9 +32,9 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
                 $address_data['street'] = isset($address_data['address_1']) ? $address_data['address_1'] : '';
                 $address_data['number'] = isset($address_data['address_2']) ? $address_data['address_2'] : '';
             } else {
-            $address_parts = MyParcel($this->registry)->helper->getAddressComponents($address_data['address_1']);
-            $address_data['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
-            $address_data['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
+                $address_parts = MyParcel($this->registry)->helper->getAddressComponents($address_data['address_1']);
+                $address_data['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
+                $address_data['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
             }
 
             if (!empty($address_data)) {
@@ -112,9 +112,9 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
                 $address_data['street'] = isset($address_data['address_1']) ? $address_data['address_1'] : '';
                 $address_data['number'] = isset($address_data['address_2']) ? $address_data['address_2'] : '';
             } else {
-            $address_parts = MyParcel($this->registry)->helper->getAddressComponents($address_data['address_1']);
-            $address_data['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
-            $address_data['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
+                $address_parts = MyParcel($this->registry)->helper->getAddressComponents($address_data['address_1']);
+                $address_data['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
+                $address_data['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
             }
 
             // If Opencart 1x
@@ -149,7 +149,7 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
     /**
      * Ajax function
      * @return array containing Street and House number
-    **/
+     **/
     function address_components()
     {
         require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
@@ -163,10 +163,10 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
                 $address_data['number'] = isset($_REQUEST['address_2']) ? $_REQUEST['address_2'] : '';
                 $address_data['number_addition'] = isset($_REQUEST['custom_field']['address']['address_3']) ? $_REQUEST['custom_field']['address']['address_3'] : '';
             } else {
-            $address_parts = MyParcel($this->registry)->helper->getAddressComponents($address_1);
-            $address_data['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
-            $address_data['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
-            $address_data['number_addition'] = isset($address_parts['number_addition']) ? $address_parts['number_addition'] : '';
+                $address_parts = MyParcel($this->registry)->helper->getAddressComponents($address_1);
+                $address_data['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
+                $address_data['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
+                $address_data['number_addition'] = isset($address_parts['number_addition']) ? $address_parts['number_addition'] : '';
             }
 
             if (!empty($address_data)) {
@@ -226,7 +226,7 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
         MyParcel($this->registry);
         $registry = MyParcel::$registry;
         $session = $registry->get('session');
-
+        $config = $registry->get('config');
         /** @var MyParcel_Shipment_Checkout $checkout_helper **/
         $checkout_helper = MyParcel()->shipment->checkout;
         if (isset($_POST['delivery_options'])) {
@@ -239,40 +239,49 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
 
         $order_id = isset($_POST['myparcel_order_id']) ? $_POST['myparcel_order_id'] : null;
 
+        $theme = !empty($config->get('config_template')) ? $config->get('config_template') : $config->get('config_theme');
+
         $total_array = $checkout_helper->getTotalArray($data, true, $order_id, 'excl ', false); // Get total with prices saved in myparcel_shipment
 
         ob_start();
         foreach ($total_array as $total_code => $total_item) {
-?>
-            <?php if (isset($_POST['aqc'])) { ?>
-                <div class="row myparcel-total">
-                    <label class="<?php echo $_POST['label_class'] ?>">
-                        <?php echo $total_item['title'] ?>
-                    </label>
-                    <div class="<?php echo $_POST['price_class'] ?>"><?php echo $total_item['price'] ?></div>
-                </div>
+            ?>
+            <?php if($theme == 'journal3' && ((!isset($_POST['admin'])) || ((isset($_POST['admin'])) && !$_POST['admin'])) ){ ?>
+                <tr class="myparcel-total">
+                    <td colspan="7" class="text-right"><?php echo $total_item['title'] ?>:</td>
+                    <td class="text-right"><?php echo $total_item['price'] ?></td>
+                </tr>
             <?php } else { ?>
-                <?php if (version_compare(VERSION, '2.1.0.0', '>=')) { ?>
-                    <tr class="myparcel-total">
-                        <td colspan="4" class="text-right"><?php echo $total_item['title'] ?>:</td>
-                        <td class="text-right"><?php echo $total_item['price'] ?></td>
-                    </tr>
+                <?php if (isset($_POST['aqc'])) { ?>
+                    <div class="row myparcel-total">
+                        <label class="<?php echo $_POST['label_class'] ?>">
+                            <?php echo $total_item['title'] ?>
+                        </label>
+                        <div class="<?php echo $_POST['price_class'] ?>"><?php echo $total_item['price'] ?></div>
+                    </div>
                 <?php } else { ?>
-                    <?php if (version_compare(VERSION, '2.0.3.1', '>=')) { ?>
+                    <?php if (version_compare(VERSION, '2.1.0.0', '>=')) { ?>
                         <tr class="myparcel-total">
-                            <td colspan="3"></td>
-                            <td class="<?php echo (isset($_POST['admin']) ? 'right' : 'text-right') ?>"><?php echo $total_item['title'] ?>:</td>
-                            <td class="<?php echo (isset($_POST['admin']) ? 'right' : 'text-right') ?>"><?php echo $total_item['price'] ?></td>
+                            <td colspan="4" class="text-right"><?php echo $total_item['title'] ?>:</td>
+                            <td class="text-right"><?php echo $total_item['price'] ?></td>
                         </tr>
                     <?php } else { ?>
-                        <tr class="myparcel-total">
-                            <td colspan="4" class="<?php echo (isset($_POST['admin']) ? 'right' : 'text-right') ?>"><?php echo $total_item['title'] ?>:</td>
-                            <td class="<?php echo (isset($_POST['admin']) ? 'right' : 'text-right') ?>"><?php echo $total_item['price'] ?></td>
-                        </tr>
+                        <?php if (version_compare(VERSION, '2.0.3.1', '>=')) { ?>
+                            <tr class="myparcel-total">
+                                <td colspan="3"></td>
+                                <td class="<?php echo (isset($_POST['admin']) ? 'right' : 'text-right') ?>"><?php echo $total_item['title'] ?>:</td>
+                                <td class="<?php echo (isset($_POST['admin']) ? 'right' : 'text-right') ?>"><?php echo $total_item['price'] ?></td>
+                            </tr>
+                        <?php } else { ?>
+                            <tr class="myparcel-total">
+                                <td colspan="4" class="<?php echo (isset($_POST['admin']) ? 'right' : 'text-right') ?>"><?php echo $total_item['title'] ?>:</td>
+                                <td class="<?php echo (isset($_POST['admin']) ? 'right' : 'text-right') ?>"><?php echo $total_item['price'] ?></td>
+                            </tr>
+                        <?php } ?>
                     <?php } ?>
                 <?php } ?>
             <?php } ?>
-<?php
+            <?php
         }
 
         $html = ob_get_clean();
@@ -332,6 +341,7 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
      **/
     function iframe_content()
     {
+
         $this->load->model('extension/myparcelnl/helper');
         $this->model_extension_myparcelnl_helper->initMyParcel();
         $html = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_options');
@@ -351,15 +361,65 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
      **/
     function set_session()
     {
+        $update_page = false;
+        $html = '';
+        //hardcode myparcel shipping method
+        $myparcel_code = 'myparcel_shipping.myparcel_shipping';
         if (!empty($_POST['mypa_data'])) {
-            $this->session->data['myparcel']['data'] = $_POST['mypa_data'];
-            $this->session->data['myparcel']['signed'] = $_POST['mypa_signed'];
-            $this->session->data['myparcel']['recipient_only'] = $_POST['mypa_recipient_only'];
+            if(!isset($_POST['is_change_option']) || (isset($_POST['is_change_option']) && !$_POST['is_change_option'])){
+                if(isset($this->session->data['shipping_method']) && ($this->session->data['shipping_method']['code'] != $myparcel_code )){
+                    if(isset($this->session->data['myparcel'])){
+                        unset($this->session->data['myparcel']);
+                    }
+                    echo json_encode(
+                        array(
+                            'status' => 'success',
+                            'session' => [],
+                            'update_page' => $update_page,
+                            'html'      => $html,
+                            'shipping_method_code' =>  $this->session->data['shipping_method']['code'],
+                            'is_close_delivery_options' => true,
+                            'myparcel_shipping_code' => $myparcel_code
+                        )
+                    );die;
+                }
+                if(!isset($this->session->data['myparcel'])){
+                    $update_page = true;
+                    $this->session->data['myparcel']['data'] = $_POST['mypa_data'];
+                    $this->session->data['myparcel']['signed'] = isset( $_POST['mypa_signed']) ? $_POST['mypa_signed'] : 'off';
+                    $this->session->data['myparcel']['recipient_only'] = isset( $_POST['mypa_recipient_only']) ? $_POST['mypa_recipient_only'] : 'off';
+                }
+            }
+            else{
+                if(!isset($this->session->data['shipping_method']) || ($this->session->data['shipping_method']['code'] != $myparcel_code )){
+                    if(isset($this->session->data['shipping_methods'])){
+                        foreach ($this->session->data['shipping_methods'] as $method) {
+                            foreach ($method['quote'] as $quote){
+                                if($quote['code'] == $myparcel_code){
+                                    $this->session->data['shipping_method'] = $quote;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                $this->session->data['myparcel']['data'] = $_POST['mypa_data'];
+                $this->session->data['myparcel']['signed'] = isset( $_POST['mypa_signed']) ? $_POST['mypa_signed'] : 'off';
+                $this->session->data['myparcel']['recipient_only'] = isset( $_POST['mypa_recipient_only']) ? $_POST['mypa_recipient_only'] : 'off';
+            }
+
+            if(isset($_POST['is_change_option']) && $_POST['is_change_option']){
+                $html = $this->totals();
+            }
 
             echo json_encode(
                 array(
                     'status' => 'success',
-                    'session' => $this->session->data['myparcel']
+                    'session' => $this->session->data['myparcel'],
+                    'update_page' => $update_page,
+                    'html'      => $html,
+                    'shipping_method_code' =>  $this->session->data['shipping_method']['code'],
+                    'myparcel_shipping_code' => $myparcel_code
                 )
             );die;
         }
@@ -371,4 +431,68 @@ class ControllerExtensionMyparcelnlMyparcelDelivery extends Controller
         );
         die;
     }
+
+    private function totals() {
+
+        require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+        MyParcel($this->registry);
+        $registry = MyParcel::$registry;
+        $currency = $registry->get('currency');
+        $current_currency_code = $this->session->data['currency'];
+
+        $totals = array();
+        $taxes = $this->cart->getTaxes();
+        $total = 0;
+
+        // Because __call can not keep var references so we put them into an array.
+        $total_data = array(
+            'totals' => &$totals,
+            'taxes'  => &$taxes,
+            'total'  => &$total,
+        );
+
+        $sort_order = array();
+
+        $this->load->model('setting/extension');
+
+        $results = $this->model_setting_extension->getExtensions('total');
+
+        foreach ($results as $key => $value) {
+            $sort_order[$key] = $this->config->get('total_' . $value['code'] . '_sort_order');
+        }
+
+        array_multisort($sort_order, SORT_ASC, $results);
+
+        foreach ($results as $result) {
+            if ($this->config->get('total_' . $result['code'] . '_status')) {
+                $this->load->model('extension/total/' . $result['code']);
+
+                // We have to put the totals in an array so that they pass by reference.
+                $this->{'model_extension_total_' . $result['code']}->getTotal($total_data);
+            }
+        }
+
+        $sort_order = array();
+
+        foreach ($totals as $key => $value) {
+            $sort_order[$key] = $value['sort_order'];
+        }
+
+        array_multisort($sort_order, SORT_ASC, $totals);
+        ob_start();
+        ?>
+        <tfoot>
+        <?php foreach ($totals as $item){ ?>
+            <tr>
+                <td colspan="7" class="text-right"><strong> <?php echo $item['title']; ?>: </strong></td>
+                <td class="text-right"><?php echo $currency->format($item['value'], $current_currency_code); ?></td>
+            </tr>
+        <?php } ?>
+        </tfoot>
+
+        <?php
+        return ob_get_clean();
+    }
+
+
 }

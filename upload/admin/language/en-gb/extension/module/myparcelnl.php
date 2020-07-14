@@ -1,6 +1,6 @@
 <?php
 // Heading
-$heading_title = 'Myparcel NL v1.1.0';
+$heading_title = 'Myparcel NL v1.1.2';
 $_['heading_title'] = $heading_title;
 // Text
 $_['text_module']         = 'Modules';
@@ -89,9 +89,11 @@ $_['entry_tab_2_select_insured_up_to_500'] = 'Insured up to &euro; 500 (+ &euro;
 $_['entry_tab_2_select_insured_500']       = '> &euro; 500 insured (+ &euro; 1.65 / &euro; 500)';
 $_['entry_tab_2_title_age_check']       = 'Age check';
 $_['entry_tab_2_title_age_check_desrition']       = 'The recipient must sign for the package and must be at least 18 years old.';
+$_['entry_tab_2_default_weight'] = 'Default Weight';
 
 
 $_['entry_subtotal']                                   = 'Subtotal';
+$_['entry_tab_3_enable_myparcel_shipping_message']     = 'Enable \'Myparcel Shipping\' to show the Myparcel delivery option in your checkout.(If don\'t use the Xtensions Best Checkout extension)';
 $_['entry_tab_3_title_delivery_option']                = 'Delivery options';
 $_['entry_tab_3_label_enable_delivery']                = 'Enable MyParcel delivery options';
 $_['entry_tab_3_label_home_address_only']              = 'Home address only';
@@ -171,6 +173,7 @@ $_['entry_order_details_address'] = 'Shipping Address';
 $_['entry_order_details_delivery_options'] = 'Delivery options';
 $_['entry_pickup_title'] = 'Pick up at PostNL';
 $_['entry_pickup_express_title'] = 'Extra early pick at TNT';
+$_['entry_weight'] = 'Weight';
 
 $_['Sunday']    = 'Sunday';
 $_['Monday']    = 'Monday';
@@ -207,6 +210,7 @@ $_['shipment_status_inactive_unknown'] = 'inactive - unknown';
 $_['package_type_parcel']          = 'Parcel';
 $_['package_type_mailbox']         = 'Mailbox package';
 $_['package_type_unpaid_letter']   = 'Unpaid letter';
+$_['package_type_digital_stamp']   = 'Digital Stamp';
 
 //order->myparcel
 $_['entry_order_myparcel_shipment_type'] = 'Shipment type';

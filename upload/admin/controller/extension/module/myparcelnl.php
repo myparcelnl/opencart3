@@ -357,6 +357,7 @@ class ControllerExtensionModuleMyparcelnl extends Controller
             1 => $this->language->get('package_type_parcel'),
             2 => $this->language->get('package_type_mailbox'),
             3 => $this->language->get('package_type_unpaid_letter'),
+            4 => $this->language->get('package_type_digital_stamp'),
         );
     }
 

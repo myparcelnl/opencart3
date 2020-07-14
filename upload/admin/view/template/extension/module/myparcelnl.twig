@@ -243,6 +243,22 @@
                                                             </select>
                                                         {%  endif %}
                                                     </td>
+                                                    {%  if( package_code == digital_stamp_code)  %}
+                                                        <td>
+                                                            {{  entry_tab_2_default_weight  }}
+                                                        </td>
+                                                        <td style="min-width: 200px;">
+                                                            <select name="module_myparcelnl_fields_export[digital_stamp_default_weight]" class="form-control" style="width:100%;">
+                                                                {%  for key , weight in digital_stamp_default_weight  %}
+                                                                    {% set selected = (module_myparcelnl_fields_export.digital_stamp_default_weight and key ==  module_myparcelnl_fields_export.digital_stamp_default_weight) ? 'selected="selected"' : ''  %}
+                                                                    <option {{ selected }} value="{{ key }}">{{  weight }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    {% else %}
+                                                        <td></td>
+                                                        <td></td>
+                                                    {% endif %}
                                                 </tr>
                                             {% endfor %}
 
@@ -400,7 +416,7 @@
                             <!-- ___________________________________________________________________ -->
                             <div class="tab-pane" id="tab-checkout">
                                 <h2>{{ entry_tab_3_title_delivery_option }}</h2>
-
+                                <h4>{{  entry_tab_3_enable_myparcel_shipping_message }}</h4>
                                 <div class="form-group">
                                     <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_3_label_enable_delivery }}</label>
                                     <div class="col-sm-10 col-md-6 col-lg-6">

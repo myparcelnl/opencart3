@@ -667,6 +667,11 @@
                 <?php $settings_decoded = html_entity_decode(urldecode($_GET['mypa_settings'])) ?>
                 <?php if (!empty($settings_decoded)) : ?>
                     window.mypa.settings = <?php echo $settings_decoded ?>;
+                    var shipping_address = <?php echo $shipping_address; ?>;
+                    window.mypa.settings.postal_code = shipping_address.postal_code;
+                    window.mypa.settings.number = shipping_address.number;
+                    window.mypa.settings.street = shipping_address.street;
+                    window.mypa.settings.cc = shipping_address.cc;
                 <?php endif; ?>
             <?php endif; ?>
         }

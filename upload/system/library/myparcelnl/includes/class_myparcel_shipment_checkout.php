@@ -130,7 +130,7 @@ class MyParcel_Shipment_Checkout
         if (!$delivery_type_text) {
             $delivery_type_text = 'default';
         }
-		
+
 		$registry = MyParcel::$registry;
 		$cart = $registry->get('cart');
 
@@ -393,7 +393,12 @@ class MyParcel_Shipment_Checkout
                 if ($price_type == 0 && (float)($checkout_settings['belgium_' . $option . '_fee']) >= 0) {
                     $fee = (float)$checkout_settings['belgium_' . $option . '_fee'];
                     $fee = $this->convertPriceToFloat($fee);
-                    $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
+//                    $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
+                    if ($taxIncluded) {
+                        $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
+                    } else {
+                        $fee_including_tax = $fee;
+                    }
                     //$fee_including_tax = $fee;
                     if ($price_format) {
                         $formatted_fee = $this->formatDeliveryPrice($fee_including_tax, $currency, $color_format, $prefix);
@@ -405,7 +410,12 @@ class MyParcel_Shipment_Checkout
                 if ($price_type == 1 && (float)($checkout_settings['belgium_' . $option . '_fee2']) >= 0) {
                     $fee = (float)$checkout_settings['belgium_' . $option . '_fee2'];
                     $fee = $this->convertPriceToFloat($fee);
-                    $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
+//                    $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
+                    if ($taxIncluded) {
+                        $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
+                    } else {
+                        $fee_including_tax = $fee;
+                    }
                     //$fee_including_tax = $fee;
                     if ($price_format) {
                         $formatted_fee = $this->formatDeliveryPrice($fee_including_tax, $currency, $color_format, $prefix);

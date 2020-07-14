@@ -320,7 +320,7 @@ class MyParcel_Helper
     /** START @Since the fix for negative house number (64-69)
      * 64 is house number and 69 is additional number
      **/
-    function _splitMultipleHouseNumberStreet($address, $force=true)
+    function _splitMultipleHouseNumberStreet($address, $number_addition = '', $force=true)
     {
         $ret = array();
         $ret['house_number']    = '';
@@ -336,6 +336,10 @@ class MyParcel_Helper
             $ret['street']          = trim($matches[1] . $matches[2]);
             $ret['house_number']    = trim($matches[3]);
             $ret['number_addition'] = trim($matches[4]);
+            if($number_addition != ''){
+                $ret['number_addition'] = str_replace('-','',$ret['number_addition']);
+                $ret['number_addition'].= ' ' . $number_addition;
+            }
         }
         else // no street part
         {
@@ -356,6 +360,15 @@ class MyParcel_Helper
 
         $address = trim($address);
         $is_single_word = (strpos($address, ' ') === false) ? true : false;
+
+
+        $arrExclude = [' bus ', '/bus ', '/ bus ', ' bte ', '/bte ', '/ bte ', ' box ', '/box ', '/ box ', ' boîte ','/boîte ', '/ boîte '];
+        foreach ($arrExclude as $value){
+            if(strpos($address,$value) !== false){
+                $address = explode($value,$address)[0];
+                break;
+            }
+        }
 
         if ($is_single_word) {
             $ret['street']          = $address;
@@ -398,7 +411,7 @@ class MyParcel_Helper
             $ret['street'] = str_replace('-', '', $ret['street']);
             $ret['street'] .= ' -' . $ret['house_number'];
             $ret['force_addition_number'] = true;
-            return $this->_splitMultipleHouseNumberStreet( $ret['street'] );
+            return $this->_splitMultipleHouseNumberStreet( $ret['street'] ,$ret['number_addition']);
         }
         /** END @Since the fix for negative house number (64-69) **/
 
@@ -694,6 +707,7 @@ class MyParcel_Helper
         $data['entry_tab_2_title_empty_parcel_weight']       = $language->get('entry_tab_2_title_empty_parcel_weight');
         $data['entry_tab_2_textbox_empty_parcel_weight']     = $language->get('entry_tab_2_textbox_empty_parcel_weight');
         $data['entry_tab_2_select_package_types']            = $language->get('entry_tab_2_select_package_types');
+        $data['entry_tab_2_default_weight']            = $language->get('entry_tab_2_default_weight');
 
         $data['entry_tab_2_select_insured_up_to_50']  = $language->get('entry_tab_2_select_insured_up_to_50');
         $data['entry_tab_2_select_insured_up_to_250'] = $language->get('entry_tab_2_select_insured_up_to_250');
@@ -701,6 +715,7 @@ class MyParcel_Helper
         $data['entry_tab_2_select_insured_500']       = $language->get('entry_tab_2_select_insured_500');
 
         $data['entry_subtotal'] = $language->get('entry_subtotal');
+        $data['entry_tab_3_enable_myparcel_shipping_message'] = $language->get('entry_tab_3_enable_myparcel_shipping_message');
         $data['entry_tab_3_title_delivery_option'] = $language->get('entry_tab_3_title_delivery_option');
         $data['entry_tab_3_label_enable_delivery'] = $language->get('entry_tab_3_label_enable_delivery');
         $data['entry_tab_3_label_home_address_only'] = $language->get('entry_tab_3_label_home_address_only');
@@ -772,7 +787,35 @@ class MyParcel_Helper
         $data['button_save'] = $language->get('button_save');
         $data['button_cancel'] = $language->get('button_cancel');
 
+        // add digital_stamp default weight
+        $data['digital_stamp_default_weight'] = $this->_getDigitalStampDefaultWeight();
+        $data['digital_stamp_code'] = $this->_getDigitalStampCode();
+
         return $data;
+    }
+
+    /**
+     * Retrieve Digital Stamp Default Weight
+     * @return array of weight key - value pairs
+     **/
+    public function _getDigitalStampDefaultWeight()
+    {
+        return array(
+            20 => '0 - 20 gram',
+            50 => '20 - 50 gram',
+            100 => '50 - 100 gram',
+            350 => '100 - 350 gram',
+            2000 => '350 - 2000 gram',
+        );
+    }
+
+    /**
+     * Retrieve Digital Stamp code
+     * @return int Digital Stamp code
+     **/
+    public function _getDigitalStampCode()
+    {
+        return 4;
     }
 
     /**
@@ -832,9 +875,9 @@ class MyParcel_Helper
         }
         if($field){
             if(in_array($field, array('address_2','company'))){
-                return $shipping_address[$prefix . $field];
+                return (isset($shipping_address[$prefix . $field])) ? $shipping_address[$prefix . $field] : '';
             }else{
-                return $shipping_address[$prefix . 'custom_field'][$field];
+                return (isset($shipping_address[$prefix . 'custom_field'][$field])) ? $shipping_address[$prefix . 'custom_field'][$field] : '';
             }
         }
         return $shipping_address[$prefix . 'address_2'];
@@ -896,8 +939,8 @@ class MyParcel_Helper
 
         $delivery_params = array(
             'cc' => $shipping_address[$prefix.'iso_code_2'],
-            'postal_code'   => $shipping_address[$prefix.'postcode'],
-            'street'        => isset($address_parts['street']) ? $address_parts['street'] :"",
+            'postal_code'   => str_replace(' ', '',$shipping_address[$prefix.'postcode']),
+            'street'        => isset($address_parts['street']) ? strtolower($address_parts['street']) :"",
             'number'        => $house_number,
             'carrier'       => 1,
             'cutoff_time'   => $cut_off_time,
@@ -1118,6 +1161,55 @@ class MyParcel_Helper
         return array_diff(range(0,6),$enable_days);
     }
 
+    public function saveDefaultMyparcelMethodXtension($options, $code){
+        if(!count($options)){
+            return;
+        }
+
+        $registry = MyParcel::$registry;
+        $session = $registry->get('session');
+        // set the first option to the default option
+        $delivery_option = $options[0];
+
+        switch ($code){
+            case "delivery":
+                foreach ($delivery_option['time'] as $time){
+                    if($time['price_comment'] == 'standard'){
+                        $time['price']['shipping_method_code'] = $code;
+                        $time['price']['text_myparcel_price_delivery'] = date('d-m-Y',strtotime($delivery_option['date'])) . ' - ' . date('H:i',strtotime($time['start'])) . ' - ' .date('H:i',strtotime($time['end']));
+                        $session->data['myparcel_price_delivery'] = $time['price'];
+
+                        $myparcel_shipping_choosed['date'] = date('Y-m-d',strtotime($delivery_option['date']));
+                        $myparcel_shipping_choosed['time'][] = $time;
+                        $myparcel_shipping_choosed['code'] = 'myparcel_'. $code;
+                        $myparcel_shipping_choosed['additional_service'] = (isset($session->data['additional_service_checked'][$code])) ? $session->data['additional_service_checked'][$code] : [];
+                        $session->data['myparcel_price_delivery']['myparcel_shipping_choosed'] = $myparcel_shipping_choosed;
+                        if(!isset($session->data['myparcel_shipping_choosed'])){
+                            $session->data['myparcel_shipping_choosed'] = $myparcel_shipping_choosed;
+                        }
+                        break;
+                    }
+                }
+                break;
+            case "pickup":
+                $pickup_detail = $delivery_option;
+                $time = $pickup_detail['time'][0];
+                $time['price']['shipping_method_code'] = $code;
+                $time['price']['text_myparcel_price_pickup'] =  $pickup_detail['location'] . ' - ' .date('d-m-Y',strtotime($pickup_detail['date'])) . ' - ' . date('H:i',strtotime($time['start']));
+                $session->data['myparcel_price_pickup'] = $time['price'];
+
+                $pickup_detail['code'] = 'myparcel_'. $code;
+                $pickup_detail['additional_service'] = [];
+                $pickup_detail['time'] = [];
+                $pickup_detail['time'][] = $time;
+                $session->data['myparcel_price_pickup']['myparcel_shipping_choosed'] = $pickup_detail;
+                if(!isset($session->data['myparcel_shipping_choosed'])){
+                    $session->data['myparcel_shipping_choosed'] = $pickup_detail;
+                }
+                break;
+        }
+    }
+
     public function getDeliveryNextWorkingDate($delivery_type = MyParcel_Shipment_Checkout::DELIVERY_TYPE_STANDARD,$order_data , $is_pickup = false){
         $disable_days = [0];
         //if delivery option is not standard, explude Saturday when choose the next day working
@@ -1195,7 +1287,7 @@ class MyParcel_Helper
     }
 
     public function getHeightMyparcelIframe($sub_total,$iso_code_2){
-        $height = 250; //default height
+        $height = 315; //default height
 
         $shipment_class = MyParcel()->shipment;
         /** @var MyParcel_Shipment_Checkout $checkout_helper **/
@@ -1209,6 +1301,63 @@ class MyParcel_Helper
             }
         }
         return $height.'px';
+    }
+
+    public function getUpdateIframeAddressFromSession(){
+        $registry = MyParcel::$registry;
+        $session = $registry->get('session');
+        $result = [];
+        if (version_compare(VERSION, '2.0.0.0', '>=')) {
+            // Get shipping address from session data if possible
+            if (!empty($session->data['shipping_address'])) {
+                $shipping_address = $session->data['shipping_address'];
+                $country_code = $shipping_address['iso_code_2'];
+                $result['postal_code'] = $shipping_address['postcode'];
+                $result['cc'] = $country_code;
+
+                $use_addition_address_as_number_suffix = MyParcel()->settings->general->use_addition_address_as_number_suffix;
+                if ($use_addition_address_as_number_suffix == 2) {
+                    $result['street'] = isset($shipping_address['address_1']) ? $shipping_address['address_1'] : '';
+                    $result['number'] = isset($shipping_address['address_2']) ? $shipping_address['address_2'] : '';
+                } else {
+
+                    //'Address field 1' and 'address field 2' will both be used for the full address
+                    if($use_addition_address_as_number_suffix == 0){
+                        $shipping_address['address_1'] .=  ' ' .$shipping_address['address_2'];
+                    }
+
+                    $address_parts = MyParcel()->helper->getAddressComponents($shipping_address['address_1']);
+                    $result['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
+                    $result['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
+                }
+            }
+        } else {
+            if (!empty($session->data['shipping_country_id'])) {
+                $registry = MyParcel::$registry;
+                $loader = $registry->get('load');
+                $address_1 = '';
+
+                if (!empty($session->data['shipping_address_id'])) {
+                    $address_id = $session->data['shipping_address_id'];
+                    $loader->model('account/address');
+                    $model_address = $registry->get('model_account_address');
+                    $address_data = $model_address->getAddress($address_id);
+                    $address_1 = $address_data['address_1'];
+                    $country_code = $address_data['iso_code_2'];
+                } else {
+                    if (!empty($session->data['guest']['shipping']['address_1'])) {
+                        $address_1 = $session->data['guest']['shipping']['address_1'];
+                        $country_code = $session->data['guest']['shipping']['iso_code_2'];
+                    }
+                }
+
+                $address_parts = MyParcel()->helper->getAddressComponents($address_1);
+                $result['number'] = isset($address_parts['house_number']) ? $address_parts['house_number'] : '';
+                $result['street'] = isset($address_parts['street']) ? $address_parts['street'] : '';
+                $result['postal_code'] = $session->data['shipping_postcode'];
+            }
+        }
+        return $result;
     }
 }
 

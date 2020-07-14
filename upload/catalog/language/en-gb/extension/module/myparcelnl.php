@@ -5,6 +5,7 @@ $_['heading_title']       = 'Myparcel NL';
 $_['mssg_order_status_changed_by_myparcel'] = 'MyParcel Order Status Automation';
 $_['email_track_trace'] = 'You can track your order with the following PostNL track&trace code:';
 
+$_['entry_track_trace'] = 'Track & Trace';
 $_['entry_delivery_date'] = 'Delivery date';
 $_['date_format'] = 'Y-m-d';
 $_['entry_delivery_time'] = 'Delivery time';
@@ -60,3 +61,7 @@ $_['entry_edit_myparcel_pickup'] = 'Edit Pickup Option';
 $_['entry_delivery_morning'] = 'Morning';
 $_['entry_delivery_standard'] = 'Standard';
 $_['entry_delivery_avond'] = 'Avond';
+
+$_['entry_title_location'] = 'Location';
+
+$_['entry_myparcel_api_error_code_3505'] = 'The zip code entered is incorrect';
