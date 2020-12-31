@@ -103,6 +103,7 @@
                 $this->load->model('extension/myparcelnl/helper');
 		        $this->model_extension_myparcelnl_helper->initMyParcel();
 				$data['myparcel_delivery_iframe'] = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_options');
+                $data['myparcel_delivery_checkout_header'] = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_checkout_header');
                 /* MyParcel Ocmod End */
             ]]></add>
         </operation>
@@ -310,6 +311,12 @@
     <!-- ____________ SHIPPING_METHOD.TWIG _____________ -->
     <!-- ______________________________________________ -->
     <file path="catalog/view/theme/*/template/checkout/shipping_method.twig">
+        <operation>
+            <search><![CDATA[{% if shipping_methods %}]]></search>
+            <add position="after"><![CDATA[
+                {{ myparcel_delivery_checkout_header }}
+            ]]></add>
+        </operation>
         <operation>
             <search><![CDATA[{% for shipping_method in shipping_methods %}]]></search>
             <add position="before"><![CDATA[

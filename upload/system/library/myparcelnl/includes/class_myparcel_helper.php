@@ -217,8 +217,13 @@ class MyParcel_Helper
 
     function mp_parse_str( $string, &$array ) {
         parse_str( $string, $array );
-        if ( get_magic_quotes_gpc() )
+        if(version_compare (phpversion(), '7.4.0', '<') && version_compare (phpversion(), '5.4', '!=')){
+            if ( get_magic_quotes_gpc() )
+                $array = $this->stripslashes_deep( $array );
+        }
+        else{
             $array = $this->stripslashes_deep( $array );
+        }
     }
 
     function stripslashes_deep( $value ) {
@@ -411,7 +416,8 @@ class MyParcel_Helper
             $ret['street'] = str_replace('-', '', $ret['street']);
             $ret['street'] .= ' -' . $ret['house_number'];
             $ret['force_addition_number'] = true;
-            return $this->_splitMultipleHouseNumberStreet( $ret['street'] ,$ret['number_addition']);
+            $number_addition = (isset($ret['number_addition'])) ? $ret['number_addition'] : '';
+            return $this->_splitMultipleHouseNumberStreet( $ret['street'] ,$number_addition);
         }
         /** END @Since the fix for negative house number (64-69) **/
 

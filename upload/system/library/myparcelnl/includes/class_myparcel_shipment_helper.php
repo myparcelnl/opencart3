@@ -886,7 +886,7 @@ class MyParcel_Shipment_Helper
 
                 // PREVENT ILLEGAL SETTINGS
                 // convert numeric strings to int
-                $int_options = array('package_type', 'delivery_type', 'only_recipient', 'signature', 'return', 'large_format');
+                $int_options = array('package_type', 'delivery_type', 'only_recipient', 'signature', 'return', 'large_format','age_check');
                 foreach ($options as $key => &$value) {
                     if (in_array($key, $int_options)) {
                         $value = (int)$value;

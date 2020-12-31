@@ -356,7 +356,6 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
 
     MYPARCEL_CHECKOUT.activateIframe = function() {
 
-        $('#button-shipping-method').prop('disabled', true);
         // If delivery iFrame is not enabled then ignore this function
         if (!MYPARCEL_CHECKOUT.isActive()) {
             return true;
@@ -366,7 +365,7 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
         if (typeof el === 'undefined' || !el) {
             return false;
         }
-
+        $('#button-shipping-method').prop('disabled', true);
         iframeWindow = el.contentWindow;
 
         $(el).on('load', function() {
