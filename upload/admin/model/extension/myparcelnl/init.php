@@ -24,6 +24,18 @@ class ModelExtensionMyparcelnlInit extends Model
         if(count($query->row) == 0 ){
             $this->db->query("ALTER TABLE `" .DB_PREFIX. "myparcel_shipment` ADD COLUMN `type` VARCHAR(50) NULL DEFAULT NULL;");
         }
+
+        //add custom field myparcel_hs_code
+        $query = $this->db->query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name =  '". DB_PREFIX ."product' AND table_schema = '". DB_DATABASE ."' AND column_name = 'myparcel_hs_code'");
+        if(count($query->row) == 0 ){
+            $this->db->query("ALTER TABLE `" .DB_PREFIX. "product` ADD COLUMN `myparcel_hs_code` VARCHAR(50) NULL DEFAULT NULL;");
+        }
+
+        //add custom field myparcel_country
+        $query = $this->db->query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name =  '". DB_PREFIX ."product' AND table_schema = '". DB_DATABASE ."' AND column_name = 'myparcel_country'");
+        if(count($query->row) == 0 ){
+            $this->db->query("ALTER TABLE `" .DB_PREFIX. "product` ADD COLUMN `myparcel_country` VARCHAR(50) NULL DEFAULT NULL;");
+        }
     }
 
     function installMyParcelTotal()

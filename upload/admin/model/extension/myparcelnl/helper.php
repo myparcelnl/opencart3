@@ -23,4 +23,9 @@ class ModelExtensionMyparcelnlHelper extends Model
     {
         return MyParcel($this->registry)->getJsUrl();
     }
+
+    function addDeliveryDataIntoOrder($order_info)
+    {
+        return MyParcel($this->registry)->shipment->checkout->addDeliveryDataIntoOrder($order_info);
+    }
 }

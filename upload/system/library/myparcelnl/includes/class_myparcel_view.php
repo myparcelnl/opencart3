@@ -107,9 +107,9 @@ class MyParcel_View extends MyParcel_View_Core
         }
 
         $shipping_country_code = isset($order_data['shipping_iso_code_2']) ? $order_data['shipping_iso_code_2'] : '';
-        if (!$helper->isEUCountry($shipping_country_code)) {
-            return;
-        }
+//        if (!$helper->isEUCountry($shipping_country_code)) {
+//            return;
+//        }
 
         $token = $session->data['user_token'];
         $setting_download_display = MyParcel()->settings->general->pdf;
@@ -290,7 +290,7 @@ class MyParcel_View extends MyParcel_View_Core
         }
 
         ob_start();
-        $this->render('view_ship_to_myparcel', array('data' => $data, 'order_id' => $order_id, 'url' => $url_myparcel_ship_to, 'number_of_copies' => $extra_options['number_of_copies'], 'export_settings' => $export_settings, 'recipient' => $recipient, 'is_pickup' => $is_pickup, 'return' => $return, 'screen' => $screen) );
+        $this->render('view_ship_to_myparcel', array('data' => $data, 'order_id' => $order_id, 'url' => $url_myparcel_ship_to, 'number_of_copies' => (isset($extra_options['number_of_copies']) ? $extra_options['number_of_copies'] : 1), 'export_settings' => $export_settings, 'recipient' => $recipient, 'is_pickup' => $is_pickup, 'return' => $return, 'screen' => $screen) );
         $html = ob_get_clean();
 
         return $html;
@@ -686,6 +686,37 @@ class MyParcel_View extends MyParcel_View_Core
         ob_start();
         $this->render('view_myparcel_order_header', array());
         return ob_get_clean();
+    }
+
+    function edit_product_myparcel_fields($product_id){
+        /**
+         * @var MyParcel_Helper $helper
+         */
+
+        $registry = MyParcel::$registry;
+        $loader = $registry->get('load');
+        $loader->model('catalog/product');
+
+        // Load language package of MyParcel module
+        $lang = $registry->get('language');
+        //prevent overriding heading_title
+        MyParcel()->loadMyparcelLang($lang);
+
+        // Load models
+        $model_product = $registry->get('model_catalog_product');
+        // Get product data
+        $product_info = $model_product->getProduct($product_id);
+
+        $label_hs_code = $lang->get('label_hs_code');
+        $hs_code = (isset($product_info['myparcel_hs_code']) && $product_info['myparcel_hs_code'] != null) ? $product_info['myparcel_hs_code'] :'';
+        $label_country = $lang->get('label_country');
+        $country = (isset($product_info['myparcel_country']) && $product_info['myparcel_country'] != null ) ? $product_info['myparcel_country'] :'';
+
+        ob_start();
+        $this->render('view_edit_product_fields', array('label_hs_code' => $label_hs_code,'hs_code' => $hs_code,'label_country' => $label_country,'country' => $country));
+        $html = ob_get_clean();
+
+        return $html;
     }
 }
 

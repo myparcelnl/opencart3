@@ -23,7 +23,13 @@ class MyParcel_Shipment
     {
         $order_ids = isset($params['order_ids']) ? $params['order_ids'] : null;
         $log = MyParcel()->log;
-
+        // Declare model Shipment
+        /** @var ModelMyparcelnlShipment $model_shipment **/
+        $registry = MyParcel::$registry;
+        $loader = $registry->get('load');
+        $loader->model(MyParcel()->getModelPath('helper'));
+        /** @var ModelMyparcelnlHelper $model_helper **/
+        $model_helper = $registry->get('model_extension_myparcelnl_helper');
         if (!empty($order_ids)) {
             $log->add("*** -------------------------- ***");
             $log->add("*** Creating shipments started ***");
@@ -32,12 +38,9 @@ class MyParcel_Shipment
             /** @var MyParcel_Shipment_Helper $shipment_helper **/
             $helper = MyParcel()->helper;
             $shipment_helper = $this->shipment_helper;
-            $order_ids = $helper->filterEUOrders($order_ids);
+//            $order_ids = $helper->filterEUOrders($order_ids);
 
-            // Declare model Shipment
-            /** @var ModelMyparcelnlShipment $model_shipment **/
-            $registry = MyParcel::$registry;
-            $loader = $registry->get('load');
+
             $loader->model(MyParcel()->getModelPath('shipment'));
             $model_shipment = $registry->get('model_extension_myparcelnl_shipment');
 
@@ -52,6 +55,11 @@ class MyParcel_Shipment
             foreach ($order_ids as $order_id) {
                 $shipment_data_single = $shipment_helper->getOrderShipmentData($order_id);
                 if (!empty($shipment_data_single)) {
+                    //The maximum weight of a shipment to a rest of world country cannot be heavier than 20 kg
+                    if(isset($shipment_data_single['customs_declaration']['weight']) && $shipment_data_single['customs_declaration']['weight'] >= 20000){
+                        $this->errors[] = 'The maximum weight of a shipment to a rest of world country cannot be heavier than 20 kg';
+                        continue;
+                    }
                     $shipment_data[] = $shipment_data_single;
                 }
             }
@@ -68,10 +76,11 @@ class MyParcel_Shipment
                         MyParcel()->log->add("Prepared data:\n".var_export($shipment_data, true));
                         $response = $api->addShipments($shipment_data);
                         $responses[] = $response;
+                        MyParcel()->log->add("API response (order {$order_id}):\n" . var_export($response, true));
                     } catch (Exception $e) {
                         $this->errors[] = sprintf(MyParcel()->lang->get('entry_api_error_with_order_id'), $order_id) . $e->getMessage();
                     }
-                    MyParcel()->log->add("API response (order {$order_id}):\n" . var_export($response, true));
+
                 }
             }
 
@@ -111,19 +120,18 @@ class MyParcel_Shipment
                                 // Auto change order status when export process succeeded
                                 if (MyParcel()->settings->general->order_status_automation) {
                                     $loader->model('localisation/order_status');
+                                    $loader->model('sale/order');
+
                                     $model_order_status = $registry->get('model_localisation_order_status');
+                                    $model_model_sale_order = $registry->get('model_sale_order');
                                     $order_status_data = $model_order_status->getOrderStatus((int)MyParcel()->settings->general->automatic_order_status);
                                     if (!empty($order_status_data)) {
                                         if (version_compare(VERSION, '2.0.0.0', '>=')) {
-                                            /** @var MyParcel_Api $api * */
-                                            $api = MyParcel()->api;
-                                            $response = $api->getLocalRequest('extension/myparcelnl/myparcel_order/updateorderstatus', array('order_id' => $order_id));
-                                            if (empty($response['body']['success'])) {
-                                                $this->errors[] = MyParcel()->lang->get('entry_update_order_status_error') . ' - Order #' . $order_id;
-                                                MyParcel()->log->add('Update status error - Order #' . $order_id);
-                                            } else {
-                                                $new_order_status_name = !empty($order_status_data['name']) ? $order_status_data['name'] : null;
-                                            }
+                                            $order_info = $model_model_sale_order->getOrder($order_id);
+                                            $model_helper->addDeliveryDataIntoOrder($order_info);
+                                            $shipment_helper->updateOrderStatus($order_id,(int)MyParcel()->settings->general->automatic_order_status, MyParcel()->lang->get('mssg_order_status_changed_by_myparcel'));
+                                            $new_order_status_name = !empty($order_status_data['name']) ? $order_status_data['name'] : null;
+
                                         } else {
                                             $data = array(
                                                 'order_status_id' => MyParcel()->settings->general->automatic_order_status,
@@ -174,9 +182,7 @@ class MyParcel_Shipment
 
 
             $order_id = current($order_ids);
-            $loader->model(MyParcel()->getModelPath('helper'));
-            /** @var ModelMyparcelnlHelper $model_helper **/
-            $model_helper = $registry->get('model_extension_myparcelnl_helper');
+
             $action = 'refresh';
 
             if (count($order_ids) > 1) {
@@ -266,6 +272,8 @@ class MyParcel_Shipment
         if($position != null){
             $params['positions'] = $position;
         }
+        //get paper format
+        $params['format'] = $shipment_helper->getPaperFormat();
         try {
             if ($label_response_type == 'url') {
                 $response = $api->getShipmentLabels( $shipment_ids, array(), 'link' );

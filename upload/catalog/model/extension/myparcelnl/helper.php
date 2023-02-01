@@ -46,7 +46,7 @@ class ModelExtensionMyparcelnlHelper extends Model
 
     function getOrderCountryIsoCode($order_id)
     {
-        $order_query = $this->db->query("SELECT `shipping_country_id` FROM `" . DB_PREFIX . 'order' . "` WHERE order_id = " . $order_id . " LIMIT 1");
+        $order_query = $this->db->query("SELECT `shipping_country_id` FROM `" . DB_PREFIX . 'order' . "` WHERE order_id = " . (int)$order_id . " LIMIT 1");
 
         if ($order_query->num_rows) {
             $country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$order_query->row['shipping_country_id'] . "'");

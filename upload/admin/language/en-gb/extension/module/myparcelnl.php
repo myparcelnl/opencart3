@@ -1,6 +1,6 @@
 <?php
 // Heading
-$heading_title = 'Myparcel NL v1.1.3';
+$heading_title = 'Myparcel NL v1.1.10';
 $_['heading_title'] = $heading_title;
 // Text
 $_['text_module']         = 'Modules';
@@ -57,10 +57,13 @@ $_['entry_tab_1_diagnostic_tools'] = 'Diagnostic tools';
 $_['entry_tab_1_log_api_communication'] = 'Log API communication';
 $_['entry_tab_1_checkbox_log_api_communication'] = 'Only enable this option when debugging!';
 $_['entry_tab_1_download_log_file'] = 'Download log file';
+$_['entry_tab_1_title_paper_format'] = 'Paper format';
 
 
 $_['entry_tab_2_title_export_settings'] = 'Default export settings';
 $_['entry_tab_2_title_package_types']   = 'Package Types';
+$_['entry_tab_2_title_default_hs_code']   = 'Default HS code';
+$_['entry_tab_2_title_default_country_of_origin']   = 'The country of origin';
 $_['entry_tab_2_select_package_types'] = 'Select one or more shipping methods for each MyParcel package type';
 $_['entry_tab_2_title_connect_customer_email'] = 'Connect customer email';
 $_['entry_tab_2_checkbox_connect_customer_email'] = 'When you connect the customer email, MyParcel can send a Track&Trace email to this address. In your %s you can enable or disable this email and format it in your own style.';
@@ -182,6 +185,9 @@ $_['Wednesday'] = 'Wednesday';
 $_['Thursday']  = 'Thursday';
 $_['Friday']    = 'Friday';
 $_['Saturday']  = 'Saturday';
+
+$_['label_hs_code'] = 'HS Code';
+$_['label_country'] = 'Country Code';
 
 $_['button_save'] = 'Save';
 $_['button_send_to_customer'] = 'Send to customer';

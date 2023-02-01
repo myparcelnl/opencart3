@@ -513,6 +513,27 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
                 }
             });
         }
+        
+        //support onepage checkout plugin 10-10-2021
+        var onepagecheckout_status = window.onepagecheckout_status;
+        if(onepagecheckout_status){
+            $.ajax({
+                url: 'index.php?route=extension/onepagecheckout/shipping_method/saveshipping',
+                type:'post',
+                data:$('.delivery-method-content input[type="radio"]:checked,.parcel-shipping-method, #mypa-input, #mypa-signed:checked, #mypa-recipient-only:checked'),
+                dataType: 'json',
+                success: function(json){
+                    $('.alert, .text-danger').remove();
+                    if(json['error']){
+                        //$('.delivery-method-content').before('<div class="alert alert-danger">' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    }
+                    if(json['success']){
+                        LoadCartWithoutloader();
+                        $('.common-confirm-button').prop('disabled', false);
+                    }
+                }
+            })
+        }
     }
 
     $(document).ready(function ($) {

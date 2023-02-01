@@ -5,12 +5,22 @@ class MyParcel_Shipment_Helper
     public function getOrderShipmentData($order_id)
     {
         $registry = MyParcel::$registry;
+        $loader = $registry->get('load');
+        $loader->model('sale/order');
+        $loader->model('catalog/product');
+
         $model_order = $registry->get('model_sale_order');
+
+        $config = $registry->get('config');
+        $class_weight = $registry->get('weight');
+        $settings = $config->get('module_myparcelnl_fields_export');
+        $model_product = $registry->get('model_catalog_product');
         $order_data = $model_order->getOrder($order_id);
 
         if (empty($order_data)) {
             return null;
         }
+
 
         $shipment = array(
             'recipient' => $this->getRecipient( $order_data ),
@@ -37,6 +47,64 @@ class MyParcel_Shipment_Helper
         $shipment['physical_properties'] = $this->getPhysicalProperties($order_id, $shipment['options']['package_type']);
         if(empty($shipment['physical_properties'])){
             unset($shipment['physical_properties']);
+        }
+
+        // add international shipment if not EU
+        $order_products = $model_order->getOrderProducts($order_id);
+        $helper = MyParcel()->helper;
+        $shipping_country = $order_data['shipping_iso_code_2'];
+
+        if ( !$helper->isEUCountry( $shipping_country ) ) {
+            $totalWeight = 0;
+            $contentDefault = (isset($settings['default_contents'])) ? $settings['default_contents'] : 1;
+            $weightDefault = (isset($settings['default_weight'])) ? $settings['default_weight'] : 0;
+            $shipment['customs_declaration'] = array(
+                'contents'  => (int)$contentDefault,
+                'invoice'   => $order_id, //
+                'weight'    => $totalWeight, // total weight of order gram
+            );
+
+            foreach ($order_products as $key => $order_product){
+                $product_info = $model_product->getProduct($order_product['product_id']);
+
+                $hsCode = '';
+                if(isset($product_info['myparcel_hs_code']) && $product_info['myparcel_hs_code'] != ''){
+                    $hsCode = $product_info['myparcel_hs_code'];
+                }else{
+                    if(isset($settings['default_hs_code'])) $hsCode = $settings['default_hs_code'];
+                }
+
+                $country = '';
+                if(isset($product_info['myparcel_country']) && $product_info['myparcel_country'] != ''){
+                    $country = $product_info['myparcel_country'];
+                }else{
+                    if(isset($settings['default_country_code'])) $country = $settings['default_country_code'];
+                }
+
+                $weightItem = (isset($product_info['weight']) && is_numeric($product_info['weight'])) ? $product_info['weight'] : $weightDefault;
+                $weightItem = $class_weight->convert($weightItem, $product_info['weight_class_id'], 2);  // always convert to gram
+
+                $priceItem = (isset($product_info['price']) && is_numeric($product_info['price'])) ? $product_info['price'] : 1000;
+
+                $shipment['customs_declaration']['items'][] = array(
+                    'description'   => $order_product['name'], //product name
+                    'amount'        => (int)$order_product['quantity'] , //amount product
+                    'weight'        => (int) ($weightItem * $order_product['quantity']), // gram
+                    'item_value'    => array(
+                        'amount'    => intval($priceItem), // price of product
+                        'currency'  => $order_data['currency_code'], //
+                    ),
+                    'classification'=> $hsCode, // The International Standard Industry Classification code for this item.
+                    'country'       => $country , //The country of origin for this item., use iso_code_2
+                );
+                $totalWeight += (int) ($weightItem * $order_product['quantity']);
+            }
+
+            // totalWeight
+            $shipment['customs_declaration']['weight'] = (int) $totalWeight;
+            $shipment['physical_properties'] = array(
+                'weight' => (int) $totalWeight
+            );
         }
         if($shipment['options'] == null){
             return null;
@@ -127,6 +195,15 @@ class MyParcel_Shipment_Helper
         }
 
         return $properties;
+    }
+
+    public function getPaperFormat(){
+        /** @var ModelMyparcelnlShipment $model_shipment **/
+        $registry = MyParcel::$registry;
+
+        $config = $registry->get('config');
+        $general_settings = $config->get('module_myparcelnl_fields_general');
+        return $general_settings['paper_format'] ? $general_settings['paper_format'] : "A4";
     }
 
     /**
@@ -344,7 +421,7 @@ class MyParcel_Shipment_Helper
             if($export){
                 if(date('Y-m-d') >= date('Y-m-d',strtotime($date_time[0]))){
                     //if date is outdate, will update it to next working date
-                    $next_working_date = MyParcel()->helper->getDeliveryNextWorkingDate($options['delivery_type'],$order_data,$this->isPickup( $order_id ));
+                    $next_working_date = MyParcel()->helper->getDeliveryNextWorkingDate($order_data, $options['delivery_type'], $this->isPickup( $order_id ));
                     if($next_working_date == null){
                         return null;
                     }
@@ -1138,5 +1215,16 @@ class MyParcel_Shipment_Helper
         $description = str_replace(array_keys($replacements), array_values($replacements), $desc);
 
         return $description;
+    }
+
+    function updateOrderStatus($order_id, $order_status_id, $comment = '', $notify = true) {
+        $registry = MyParcel::$registry;
+        $db = $registry->get('db');
+
+        // Update the DB with the new statuses
+        $db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+
+        $db->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $db->escape($comment) . "', date_added = NOW()");
+
     }
 }

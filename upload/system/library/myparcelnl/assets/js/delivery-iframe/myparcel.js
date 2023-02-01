@@ -83,8 +83,10 @@
             }
             if (window.mailbox_enabled && window.mypa.settings.cc === NATIONAL) {
                 $('#mypa-mailbox-row').show();
+                if ($('#mypa-pickup-row').length > 0 ) $('#mypa-pickup-row').hide();
             } else {
                 $('#mypa-mailbox-row').hide();
+                if ($('#mypa-pickup-row').length > 0 ) $('#mypa-pickup-row').show();
             }
             this.expose(this.updatePage, 'updatePage');
             this.expose(this.showLoading, 'showLoading');
@@ -286,7 +288,7 @@
             if (typeof window.mypa.settings.deliverydays_window === "undefined") {
                 window.mypa.deliveryDays = 1;
             } else {
-            window.mypa.deliveryDays = deliveryDays.length;
+                window.mypa.deliveryDays = deliveryDays.length;
             }
             index = 0;
             ref = this.deliveryDays;
@@ -421,10 +423,8 @@
         if (response.data.message === 'No results') {
             $('#mypa-no-options').html('Geen bezorgopties gevonden voor het opgegeven adres.');
             $('.mypa-overlay').removeClass('mypa-hidden');
-            document.cookie = "myparcel_empty_results=1";
             return;
         }
-        document.cookie = "myparcel_empty_results=0";
         $('.mypa-overlay').addClass('mypa-hidden');
         if (window.mypa.settings.cc === NATIONAL) {
             $('#mypa-delivery-option-check').bind('click', function() {
@@ -474,7 +474,7 @@
         // End custom code
         // Custom code for journal2 theme
         $("#mypa-delivery-options-container").on("click", "input[name='mypa-delivery-time'], input[name='mypa-delivery-type'], .mypa-onoffswitch-checkbox,  input[name='mypa-pickup-option']", function(){
-            window.parent.window.MYPARCEL_CHECKOUT.journalThemeEventActivated(false,true);
+            window.parent.window.MYPARCEL_CHECKOUT.journalThemeEventActivated();
         });
         return updateInputField();
     };
@@ -499,13 +499,10 @@
      */
 
     setDefaultDelivery = function(deliveryObj) {
-        var time = { 0: deliveryObj.time[0] };
-        var options = {date: deliveryObj.date, time:time};
         var json;
-        json = JSON.stringify(options);
+        json = JSON.stringify(deliveryObj.time[0]);
         return $('#mypa-delivery-option-check').val(json);
     };
-
 
     preparePickup = function(pickupOptions) {
         var filter, i, j, len, len1, name1, pickupExpressPrice, pickupLocation, pickupPrice, ref, time;
@@ -545,9 +542,7 @@
             }
         }
         $('#mypa-pickup-address').off().bind('click', renderPickup);
-        $('#mypa-pickup-address').siblings(".edit").off().bind('click', renderPickup);
         $('#mypa-pickup-express-address').off().bind('click', renderExpressPickup);
-        $('#mypa-pickup-express-address').siblings(".edit").off().bind('click', renderExpressPickup);
         return $('.mypa-pickup-selector').on('click', updateInputField);
     };
 

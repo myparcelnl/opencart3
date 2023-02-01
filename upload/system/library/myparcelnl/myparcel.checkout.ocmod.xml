@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modification>
     <name>MyParcel NL - Default Checkout</name>
-    <version>1.0.0</version>
+    <version>1.1.7</version>
     <code>MyParcelNL_default_checkout</code>
     <author>MyParcel NL</author>
     <link>http://www.myparcel.nl</link>
@@ -425,4 +425,172 @@
             <add position="replace"><![CDATA[data: $('#collapse-shipping-method input[type=\'radio\']:checked, #collapse-shipping-method textarea, #mypa-input, #mypa-signed:checked, #mypa-recipient-only:checked'),]]></add>
         </operation>
     </file>
+
+    <!-- ________________ support onepage checkout plugin________________ -->
+
+    <file path="catalog/controller/extension/onepagecheckout/checkout.php">
+        <operation>
+            <search><![CDATA[public function index(){]]></search>
+            <add position="after"><![CDATA[
+                     /* MyParcel Ocmod Start */
+                    $this->load->model('extension/myparcelnl/helper');
+
+                    $this->model_extension_myparcelnl_helper->addCompatibleScript('delivery_iframe', $this->document);
+                    $this->document->addStyle($this->model_extension_myparcelnl_helper->getCssUrl() . 'checkout.css');
+
+                    /* MyParcel Ocmod End */
+                ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/extension/onepagecheckout/shipping_method.php">
+        <operation>
+            <search><![CDATA[public function index(){]]></search>
+            <add position="after"><![CDATA[
+                    /* MyParcel Ocmod Start */
+                    $this->load->model('extension/myparcelnl/helper');
+                    $this->model_extension_myparcelnl_helper->initMyParcel();
+                    $data['myparcel_delivery_iframe'] = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_options');
+                    $data['myparcel_delivery_checkout_header'] = $this->model_extension_myparcelnl_helper->getContent('iframe_delivery_checkout_header');
+                    if (!class_exists('MyParcel')) {
+                        require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                        MyParcel($this->registry);
+                    }
+                    if(isset($this->session->data['shipping_address']['iso_code_2'])){
+                        $data['myparcel_delivery_iframe_height'] = MyParcel()->helper->getHeightMyparcelIframe($this->cart->getSubTotal(),$this->session->data['shipping_address']['iso_code_2']);
+                    }
+                    /* MyParcel Ocmod End */
+                ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[$data['loadpayments'] = $this->config->get('onepagecheckout_payment_method_load_payment_method');]]></search>
+            <add position="before"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                foreach ($data['shipping_methods'] as $i => $shipping_method) {
+                    $data['shipping_methods'][$i]['is_visible_shipping_quote'] = MyParcel()->shipment->checkout->isVisibleShippingQuote($shipping_method);
+                    $data['shipping_methods'][$i]['is_parcel_shipping_method'] = MyParcel()->shipment->checkout->isParcelShippingMethod($shipping_method);
+                }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function saveshipping(){]]></search>
+            <add position="after"><![CDATA[
+                 /* MyParcel Ocmod Start */
+                $this->load->model('extension/myparcelnl/helper');
+				$this->model_extension_myparcelnl_helper->saveDeliveryOptionsInCheckout();
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/extension/onepagecheckout/ordersuccess.php">
+        <operation>
+            <search><![CDATA[unset($this->session->data['shipping_method']);]]></search>
+            <add position="before"><![CDATA[
+                /* MyParcel Ocmod Start */
+                if(isset($this->session->data['myparcel_shipping_choosed']) && isset($this->session->data['shipping_method']['code'])
+                        && ($this->session->data['shipping_method']['code'] == ($this->session->data['myparcel_shipping_choosed']['code'] . '.' . $this->session->data['myparcel_shipping_choosed']['code']))){
+                if (!class_exists('MyParcel')) {
+                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                }
+                $registry = MyParcel::$registry;
+                $loader = $registry->get('load');
+                $loader->model(MyParcel()->getModelPath('shipment'));
+                $model_shipment = $registry->get('model_extension_myparcelnl_shipment');
+                $myparcel_shipping_choosed = $this->session->data['myparcel_shipping_choosed'];
+                $additional_service = $myparcel_shipping_choosed['additional_service'];
+                $myparcel_shipping_code = $myparcel_shipping_choosed['code'];
+                unset($myparcel_shipping_choosed['code']);
+                unset($myparcel_shipping_choosed['additional_service']);
+                $signed = (isset($additional_service['signed']) && $additional_service['signed'] ) ? 1: 0;
+                $recipient_only = (isset($additional_service['only_recipient']) && $additional_service['only_recipient'] ) ? 1: 0;
+                $current_prices = null;
+                if(isset($this->session->data['additional_service'])){
+                    $current_prices = array(
+                        'NL' => $this->session->data['additional_service']
+                    );
+                }
+                $model_shipment->saveDeliveryOptions($this->session->data['order_id'], $myparcel_shipping_choosed, $signed, $recipient_only, $current_prices);
+                $model_shipment->update($this->session->data['order_id'],'type',$myparcel_shipping_code . '.' . $myparcel_shipping_code);
+            }
+            if(isset($this->session->data['myparcel_shipping_choosed'])){
+                unset($this->session->data['myparcel_shipping_choosed']);
+            }
+            if(isset($this->session->data['additional_service'])){
+                unset($this->session->data['additional_service']);
+            }
+            if(isset($this->session->data['pickup_time_start'])){
+                unset($this->session->data['pickup_time_start']);
+            }
+            if(isset($this->session->data['additional_service_checked'])){
+                unset($this->session->data['additional_service_checked']);
+            }
+            if(isset($this->session->data['pickup_time_start'])){
+                unset($this->session->data['pickup_time_start']);
+            }
+            if(isset($this->session->data['myparcel_price_pickup'])){
+                unset($this->session->data['myparcel_price_pickup']);
+            }
+            if(isset($this->session->data['myparcel_price_delivery'])){
+                unset($this->session->data['myparcel_price_delivery']);
+            }
+            if(isset($this->session->data['delivery_time_start'])){
+                unset($this->session->data['delivery_time_start']);
+            }
+            if(isset($this->session->data['delivery_time_end'])){
+                unset($this->session->data['delivery_time_end']);
+            }
+            if(isset($this->session->data['delivery_date'])){
+                unset($this->session->data['delivery_date']);
+            }
+            if(isset($this->session->data['pickup_location'])){
+                unset($this->session->data['pickup_location']);
+            }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/view/theme/default/template/extension/onepagecheckout/shipping_method.twig">
+        <operation>
+            <search><![CDATA[{% if shipping_methods %}]]></search>
+            <add position="after"><![CDATA[
+                {{ myparcel_delivery_checkout_header }}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[{% for shipping_method in shipping_methods %}]]></search>
+            <add position="before"><![CDATA[
+                {% set continue = false %}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[{% for shipping_method in shipping_methods %}]]></search>
+            <add position="after"><![CDATA[
+                {% if shipping_method.is_visible_shipping_quote == false %}
+                    {% set continue = true %}
+                {% endif %}
+
+                {% if not continue %}
+                    {% set valid_quote = shipping_method.is_parcel_shipping_method %}
+                    {% if valid_quote %}
+                        {% if valid_quote == code or code is empty %}
+                            {% set code = valid_quote %}
+                            <input type="radio" class="parcel-shipping-method" name="shipping_method" value="{{code}}" checked="checked" />
+                        {% else %}
+                            {% set code = valid_quote %}
+                            <input type="radio" class="parcel-shipping-method" name="shipping_method" value="{{code}}" />
+                        {% endif %}
+                        {{ myparcel_delivery_iframe }}
+                    {% else %}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[<div class="alert alert-danger">{{shipping_method['error']}}</div>]]></search>
+            <add position="after"><![CDATA[
+                {% endif %}
+                {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+    <!-- ******************************************************************** -->
 </modification>

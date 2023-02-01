@@ -22,6 +22,14 @@ $session = $registry->get('session');
 /** @var \Cart\Currency $currency **/
 $currency = $registry->get('currency');
 
+//support onepage checkout plugin 10-10-2021
+$loader = $registry->get('load');
+$loader->model('setting/setting');
+$model_setting = $registry->get('model_setting_setting');
+$onepagecheckout_info = $model_setting->getSetting('onepagecheckout', $config->get('config_store_id'));
+$onepagecheckout_status = (!empty($onepagecheckout_info['onepagecheckout_status'])) ? true : false;
+
+
 if (isset($session->data['myparcel'])) {
     unset($session->data['myparcel']);
 }
@@ -228,5 +236,6 @@ $ajax_get_loading_icon =  MyParcel()->getImageUrl() . 'myparcel-spin.gif';
         window.myparcel_loading_icon = "<?php echo $ajax_get_loading_icon ?>";
         window.entry_loading = "<?php echo MyParcel()->lang->get('entry_loading') . '...' ?>";
         window.myparcel_current_theme = "<?php echo $theme; ?>"
+        window.onepagecheckout_status = "<?php echo $onepagecheckout_status; ?>"
     });
 </script>

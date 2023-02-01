@@ -22,7 +22,8 @@ class MyParcel_Helper
 
     function isEUCountry($country_code)
     {
-        $eu_countries = array( 'GB', 'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE' );
+//        $eu_countries = array( 'GB', 'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE' );
+        $eu_countries = array( 'NL',  'BE', 'AT','BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'XK' );
         return in_array( $country_code, $eu_countries);
     }
 
@@ -241,7 +242,7 @@ class MyParcel_Helper
                 $value->$property_name = $this->map_deep( $property_value, $callback );
             }
         } else {
-            $value = call_user_func( $callback, $value );
+            $value = $this->stripslashes_from_strings_only($value );
         }
 
         return $value;
@@ -687,9 +688,12 @@ class MyParcel_Helper
         $data['entry_tab_1_log_api_communication'] = $language->get('entry_tab_1_log_api_communication');
         $data['entry_tab_1_checkbox_log_api_communication'] = $language->get('entry_tab_1_checkbox_log_api_communication');
         $data['entry_tab_1_download_log_file'] = $language->get('entry_tab_1_download_log_file');
+        $data['entry_tab_1_title_paper_format']              = $language->get('entry_tab_1_title_paper_format');
 
         $data['entry_tab_2_title_export_settings']           = $language->get('entry_tab_2_title_export_settings');
         $data['entry_tab_2_title_package_types']             = $language->get('entry_tab_2_title_package_types');
+        $data['entry_tab_2_title_default_hs_code']           = $language->get('entry_tab_2_title_default_hs_code');
+        $data['entry_tab_2_title_default_country_of_origin'] = $language->get('entry_tab_2_title_default_country_of_origin');
         $data['entry_tab_2_title_connect_customer_email']    = $language->get('entry_tab_2_title_connect_customer_email');
         $data['entry_tab_2_checkbox_connect_customer_email'] = sprintf($language->get('entry_tab_2_checkbox_connect_customer_email'), '<a href="https://backoffice.myparcel.nl/ttsettingstable">MyParcel backend</a>');
         $data['entry_tab_2_title_connect_customer_phone']    = $language->get('entry_tab_2_title_connect_customer_phone');
@@ -713,7 +717,7 @@ class MyParcel_Helper
         $data['entry_tab_2_title_empty_parcel_weight']       = $language->get('entry_tab_2_title_empty_parcel_weight');
         $data['entry_tab_2_textbox_empty_parcel_weight']     = $language->get('entry_tab_2_textbox_empty_parcel_weight');
         $data['entry_tab_2_select_package_types']            = $language->get('entry_tab_2_select_package_types');
-        $data['entry_tab_2_default_weight']            = $language->get('entry_tab_2_default_weight');
+        $data['entry_tab_2_default_weight']                  = $language->get('entry_tab_2_default_weight');
 
         $data['entry_tab_2_select_insured_up_to_50']  = $language->get('entry_tab_2_select_insured_up_to_50');
         $data['entry_tab_2_select_insured_up_to_250'] = $language->get('entry_tab_2_select_insured_up_to_250');
@@ -797,6 +801,11 @@ class MyParcel_Helper
         $data['digital_stamp_default_weight'] = $this->_getDigitalStampDefaultWeight();
         $data['digital_stamp_code'] = $this->_getDigitalStampCode();
 
+        //paper format
+        $data['paper_format'] = array(
+            'A4' => 'A4',
+            'A6' => 'A6',
+        );
         return $data;
     }
 
@@ -1216,7 +1225,7 @@ class MyParcel_Helper
         }
     }
 
-    public function getDeliveryNextWorkingDate($delivery_type = MyParcel_Shipment_Checkout::DELIVERY_TYPE_STANDARD,$order_data , $is_pickup = false){
+    public function getDeliveryNextWorkingDate($order_data, $delivery_type = MyParcel_Shipment_Checkout::DELIVERY_TYPE_STANDARD , $is_pickup = false){
         $disable_days = [0];
         //if delivery option is not standard, explude Saturday when choose the next day working
         if($delivery_type != MyParcel_Shipment_Checkout::DELIVERY_TYPE_STANDARD){

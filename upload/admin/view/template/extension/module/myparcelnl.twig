@@ -76,6 +76,17 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="input-title" >{{ entry_tab_1_title_paper_format }}</label>
+                                    <div class="col-sm-10 col-md-6 col-lg-3">
+                                        <select name="module_myparcelnl_fields_general[paper_format]" class="form-control" style="width:100%;">
+                                            {% for key,value in paper_format %}
+                                                {% set selected = (module_myparcelnl_fields_general.paper_format and key == module_myparcelnl_fields_general.paper_format ) ? ' selected="selected"' : ''  %}
+                                                <option {{ selected }} value="{{ key }}">{{ value }}</option>
+                                            {%  endfor %}
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <div class="form-group">
                                     <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_1_trackandtrace_email }}</label>
@@ -84,7 +95,7 @@
                                         <div class="checkbox">
                                             <label>
 
-                                                {% set checked = (module_myparcelnl_fields_general.trackandtrace_email and module_myparcelnl_fields_general.trackandtrace_email==1) ? 'checked="checked"' : '' %}
+                                                {% set checked = (module_myparcelnl_fields_general.trackandtrace_email and module_myparcelnl_fields_general.trackandtrace_email==1) ? ' checked="checked"' : '' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_general[trackandtrace_email]" value="0" />
                                                 <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_general[trackandtrace_email]"> {{ entry_tab_1_checkbox_trackandtrace_email }}
 
@@ -100,7 +111,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_general.trackandtrace_myaccount and module_myparcelnl_fields_general.trackandtrace_myaccount==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_general.trackandtrace_myaccount and module_myparcelnl_fields_general.trackandtrace_myaccount==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_general[trackandtrace_myaccount]" value="0" />
                                                 <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_general[trackandtrace_myaccount]"> {{ entry_tab_1_checkbox_trackandtrace_myaccount }}
                                             </label>
@@ -115,7 +126,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_general.shipment_directly and module_myparcelnl_fields_general.shipment_directly==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_general.shipment_directly and module_myparcelnl_fields_general.shipment_directly==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_general[shipment_directly]" value="0" />
                                                 <input {{ checked }} value="1" type="checkbox" name="module_myparcelnl_fields_general[shipment_directly]"> {{ entry_tab_1_checkbox_shipment_directly }}
                                             </label>
@@ -129,7 +140,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_general.order_status_automation and module_myparcelnl_fields_general.order_status_automation==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_general.order_status_automation and module_myparcelnl_fields_general.order_status_automation==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_general[order_status_automation]" value="0" />
                                                 <input {{ checked }} id="enable_order_status_automation" value="1" type="checkbox"  name="module_myparcelnl_fields_general[order_status_automation]" > {{ entry_tab_1_checkbox_order_status_automation }}
                                             </label>
@@ -143,7 +154,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <select class="selectpicker" style="padding:2px;height: 28px;" name="module_myparcelnl_fields_general[automatic_order_status]">
                                             {% for status in order_status %}
-                                                {% set selected = (module_myparcelnl_fields_general.automatic_order_status and status.order_status_id==module_myparcelnl_fields_general.automatic_order_status)?'selected="selected"' : '' %}
+                                                {% set selected = (module_myparcelnl_fields_general.automatic_order_status and status.order_status_id==module_myparcelnl_fields_general.automatic_order_status)?' selected="selected"' : '' %}
                                                 <option {{ selected }} value="{{  status.order_status_id }}">{{ status.name }}</option>
                                             {%  endfor %}
                                         </select>
@@ -156,9 +167,9 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_general.keep_old_shipments and module_myparcelnl_fields_general.keep_old_shipments==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_general.keep_old_shipments and module_myparcelnl_fields_general.keep_old_shipments==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_general[keep_old_shipments]" value="0" />
-                                                <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_general[keep_old_shipments]" {{ (module_myparcelnl_fields_general.keep_old_shipments and module_myparcelnl_fields_general.keep_old_shipments==1)?'checked="checked"':"" }}> {{ entry_tab_1_checkbox_keep_old_shipments }}
+                                                <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_general[keep_old_shipments]" {{ (module_myparcelnl_fields_general.keep_old_shipments and module_myparcelnl_fields_general.keep_old_shipments==1)?' checked="checked"':"" }}> {{ entry_tab_1_checkbox_keep_old_shipments }}
                                             </label>
                                         </div>
                                     </div>
@@ -175,16 +186,16 @@
                                         </div>
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="module_myparcelnl_fields_general[use_addition_address_as_number_suffix]" value="1" {{ (module_myparcelnl_fields_general.use_addition_address_as_number_suffix and module_myparcelnl_fields_general.use_addition_address_as_number_suffix==1)?'checked="checked"':"" }}/>{{ entry_tab_1_checkbox_use_address2_as_number_suffix }}
+                                                <input type="radio" name="module_myparcelnl_fields_general[use_addition_address_as_number_suffix]" value="1" {{ (module_myparcelnl_fields_general.use_addition_address_as_number_suffix and module_myparcelnl_fields_general.use_addition_address_as_number_suffix==1)?' checked="checked"':"" }}/>{{ entry_tab_1_checkbox_use_address2_as_number_suffix }}
                                             </label>
                                         </div>
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="module_myparcelnl_fields_general[use_addition_address_as_number_suffix]" value="2" {{ (module_myparcelnl_fields_general.use_addition_address_as_number_suffix and module_myparcelnl_fields_general.use_addition_address_as_number_suffix==2)?'checked="checked"':"" }}/>
+                                                <input type="radio" name="module_myparcelnl_fields_general[use_addition_address_as_number_suffix]" value="2" {{ (module_myparcelnl_fields_general.use_addition_address_as_number_suffix and module_myparcelnl_fields_general.use_addition_address_as_number_suffix==2)?' checked="checked"':"" }}/>
                                                 <span>{{ entry_tab_1_checkbox_use_address3_as_number_suffix_1 }}</span>
                                                 <select class="form-control" id="select_homenumber_suffix" name="module_myparcelnl_fields_general[general_custom_field_homenumber_suffix]"  >
                                                     {% for custom_field in custom_field_address %}
-                                                        {% set selected = (module_myparcelnl_fields_general.general_custom_field_homenumber_suffix and custom_field.id == module_myparcelnl_fields_general.general_custom_field_homenumber_suffix) ? 'selected="selected"' : ''  %}
+                                                        {% set selected = (module_myparcelnl_fields_general.general_custom_field_homenumber_suffix and custom_field.id == module_myparcelnl_fields_general.general_custom_field_homenumber_suffix) ? ' selected="selected"' : ''  %}
                                                         <option {{ selected }} value="{{ custom_field.id }}">{{ custom_field.name }}</option>
                                                     {%  endfor %}
                                                 </select>
@@ -203,7 +214,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_general.log_api_communication and module_myparcelnl_fields_general.log_api_communication==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_general.log_api_communication and module_myparcelnl_fields_general.log_api_communication==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_general[log_api_communication]" value="0" />
                                                 <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_general[log_api_communication]" > {{ entry_tab_1_checkbox_log_api_communication }}
                                             </label>
@@ -237,7 +248,7 @@
                                                         {% else %}
                                                             <select {{ (package_code == 1) ? '' : 'multiple="multiple"' }} name="module_myparcelnl_fields_export[shipping_methods_package_types][{{ package_code }}][]" class="form-control shipping_methods_package_types" style="width:100%;">
                                                                 {% for shipping_method in shipping_methods  %}
-                                                                    {% set selected = (module_myparcelnl_fields_export.shipping_methods_package_types[package_code] and shipping_method.code in module_myparcelnl_fields_export.shipping_methods_package_types[package_code]) ? 'selected="selected"' : ''  %}
+                                                                    {% set selected = (module_myparcelnl_fields_export.shipping_methods_package_types[package_code] and shipping_method.code in module_myparcelnl_fields_export.shipping_methods_package_types[package_code]) ? ' selected="selected"' : ''  %}
                                                                     <option {{ selected }} value="{{ shipping_method.code }}">{{ shipping_method.name }}</option>
                                                                 {% endfor %}
                                                             </select>
@@ -250,7 +261,7 @@
                                                         <td style="min-width: 200px;">
                                                             <select name="module_myparcelnl_fields_export[digital_stamp_default_weight]" class="form-control" style="width:100%;">
                                                                 {%  for key , weight in digital_stamp_default_weight  %}
-                                                                    {% set selected = (module_myparcelnl_fields_export.digital_stamp_default_weight and key ==  module_myparcelnl_fields_export.digital_stamp_default_weight) ? 'selected="selected"' : ''  %}
+                                                                    {% set selected = (module_myparcelnl_fields_export.digital_stamp_default_weight and key ==  module_myparcelnl_fields_export.digital_stamp_default_weight) ? ' selected="selected"' : ''  %}
                                                                     <option {{ selected }} value="{{ key }}">{{  weight }}</option>
                                                                 {% endfor %}
                                                             </select>
@@ -266,7 +277,19 @@
                                         {{ entry_tab_2_select_package_types }}
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="input-title" >{{ entry_tab_2_title_default_hs_code }}</label>
+                                    <div class="col-sm-10 col-md-6 col-lg-6">
+                                        <input type="text" name="module_myparcelnl_fields_export[default_hs_code]" value="{{ (module_myparcelnl_fields_export.default_hs_code) ? module_myparcelnl_fields_export.default_hs_code:'' }}" class="form-control"/>
 
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="input-title" >{{ entry_tab_2_title_default_country_of_origin }}</label>
+                                    <div class="col-sm-10 col-md-6 col-lg-6">
+                                        <input type="text" name="module_myparcelnl_fields_export[default_country_origin]" value="{{ (module_myparcelnl_fields_export.default_country_origin) ? module_myparcelnl_fields_export.default_country_origin:'' }}" class="form-control"/>
+                                    </div>
+                                </div>
 
                                 <div class="form-group">
                                     <label class="text-left col-sm-2 control-label" for="input-title" >{{ entry_tab_2_title_connect_customer_email }}</label>
@@ -274,7 +297,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_export.connect_customer_email and module_myparcelnl_fields_export.connect_customer_email==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_export.connect_customer_email and module_myparcelnl_fields_export.connect_customer_email==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_export[connect_customer_email]" value="0" />
                                                 <input {{ checked }}  type="checkbox" value="1" name="module_myparcelnl_fields_export[connect_customer_email]" > {{ entry_tab_2_checkbox_connect_customer_email }}
                                             </label>
@@ -289,7 +312,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_export.connect_customer_phone and module_myparcelnl_fields_export.connect_customer_phone==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_export.connect_customer_phone and module_myparcelnl_fields_export.connect_customer_phone==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_export[connect_customer_phone]" value="0" />
                                                 <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_export[connect_customer_phone]" > {{ entry_tab_2_checkbox_connect_customer_phone }}
                                             </label>
@@ -303,7 +326,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_export.extra_large_size and module_myparcelnl_fields_export.extra_large_size==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_export.extra_large_size and module_myparcelnl_fields_export.extra_large_size==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_export[extra_large_size]" value="0" />
                                                 <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_export[extra_large_size]" > {{ entry_tab_2_checkbox_extra_large_size }}
                                             </label>
@@ -318,7 +341,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_export.address_only and module_myparcelnl_fields_export.address_only==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_export.address_only and module_myparcelnl_fields_export.address_only==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_export[address_only]" value="0" />
                                                 <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_export[address_only]" > {{ entry_tab_2_checkbox_address_only }}
                                             </label>
@@ -332,7 +355,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_export.signature_delivery and module_myparcelnl_fields_export.signature_delivery==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_export.signature_delivery and module_myparcelnl_fields_export.signature_delivery==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_export[signature_delivery]" value="0" />
                                                 <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_export[signature_delivery]" > {{ entry_tab_2_checkbox_signature_delivery }}
                                             </label>
@@ -345,7 +368,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_export.age_check and module_myparcelnl_fields_export.age_check==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_export.age_check and module_myparcelnl_fields_export.age_check==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_export[age_check]" value="0" />
                                                 <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_export[age_check]" > {{ entry_tab_2_title_age_check_desrition }}
                                             </label>
@@ -358,7 +381,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_export.return_no_answer and module_myparcelnl_fields_export.return_no_answer==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_export.return_no_answer and module_myparcelnl_fields_export.return_no_answer==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_export[return_no_answer]" value="0" />
                                                 <input {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_export[return_no_answer]" > {{ entry_tab_2_checkbox_return_no_answer }}
                                             </label>
@@ -372,26 +395,26 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_export.insured and module_myparcelnl_fields_export.insured==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_export.insured and module_myparcelnl_fields_export.insured==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_export[insured]" value="0" />
                                                 <input id="checkbox_insured" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_export[insured]" > {{ entry_tab_2_checkbox_insured_shipment }}
                                             </label>
                                         </div>
 
-                                        <div id="div_checkbox_insured" class="{{ (module_myparcelnl_fields_export.insured and module_myparcelnl_fields_export.insured==1)?'show':'hidden' }}">
+                                        <div id="div_checkbox_insured" class="{{ (module_myparcelnl_fields_export.insured and module_myparcelnl_fields_export.insured==1)?' show ':' hidden ' }}">
                                             <div class="form-group">
                                                 <label class="text-left col-sm-3 control-label" for="input-title" >{{ entry_tab_2_title_insured_amount }}</label>
                                                 <div class="col-sm-9 col-md-4 col-lg-4">
                                                     <select id="select_insured_amount" name="module_myparcelnl_fields_export[insured_amount_selectbox]" class="form-control" style="width:100%;">
                                                         {% for key, insured_amount in insured_amounts %}
-                                                            {% set selected = (module_myparcelnl_fields_export.insured_amount_selectbox and key == module_myparcelnl_fields_export.insured_amount_selectbox) ? 'selected="selected"' : ''  %}
+                                                            {% set selected = (module_myparcelnl_fields_export.insured_amount_selectbox and key == module_myparcelnl_fields_export.insured_amount_selectbox) ? ' selected="selected"' : ''  %}
                                                             <option {{ selected }} value="{{ key }}">{{ insured_amount }}</option>
                                                         {%  endfor %}
                                                     </select>
                                                 </div>
                                             </div>
 
-                                            <div class="form-group {{ (module_myparcelnl_fields_export.insured_amount_selectbox is empty)?'show':'hidden' }}" id="input_insured_amount_custom">
+                                            <div class="form-group {{ (module_myparcelnl_fields_export.insured_amount_selectbox is empty)?' show ':' hidden ' }}" id="input_insured_amount_custom">
                                                 <label class="text-left col-sm-3 control-label" for="input-title" >{{ entry_tab_2_title_insured_amount_custom }}</label>
                                                 <div class="col-sm-9 col-md-4 col-lg-4">
                                                     <input id="insured_amount_custom" name="module_myparcelnl_fields_export[insured_amount_custom]" value="{{ (module_myparcelnl_fields_export.insured_amount_custom) ? module_myparcelnl_fields_export.insured_amount_custom:'' }}" size="5" placeholder="" class="insured_amount" style="" type="text">
@@ -410,6 +433,7 @@
                                     </div>
                                 </div>
 
+
                             </div>
 
                             <!-- _______________________ CONTENT OF CHECKOUT _______________________ -->
@@ -422,7 +446,7 @@
                                     <div class="col-sm-10 col-md-6 col-lg-6">
                                         <div class="checkbox">
                                             <label>
-                                                {% set checked = (module_myparcelnl_fields_checkout.enable_delivery and module_myparcelnl_fields_checkout.enable_delivery==1)?'checked="checked"':'' %}
+                                                {% set checked = (module_myparcelnl_fields_checkout.enable_delivery and module_myparcelnl_fields_checkout.enable_delivery==1)?' checked="checked"':'' %}
                                                 <input type="hidden" name="module_myparcelnl_fields_checkout[enable_delivery]" value="0" />
                                                 <input id="enable_delivery" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[enable_delivery]" />
                                             </label>
@@ -430,7 +454,7 @@
                                     </div>
                                 </div>
 
-                                <div id="settings_delivery" class="{{ (module_myparcelnl_fields_checkout.enable_delivery and module_myparcelnl_fields_checkout.enable_delivery==1)?'show':'hidden'}}">
+                                <div id="settings_delivery" class="{{ (module_myparcelnl_fields_checkout.enable_delivery and module_myparcelnl_fields_checkout.enable_delivery==1)?' show ':' hidden '}}">
 
                                     <!-- MAILBOX SETTINGS -->
                                     <div class="form-group">
@@ -438,13 +462,13 @@
                                         <div class="col-sm-10 col-md-6 col-lg-6">
                                             <div class="checkbox">
                                                 <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.mailbox_enabled and module_myparcelnl_fields_checkout.mailbox_enabled==1)?'checked="checked"':'' %}
+                                                    {% set checked = (module_myparcelnl_fields_checkout.mailbox_enabled and module_myparcelnl_fields_checkout.mailbox_enabled==1)?' checked="checked"':'' %}
                                                     <input type="hidden" name="module_myparcelnl_fields_checkout[mailbox_enabled]" value="0" />
                                                     <input id="checkbox_mailbox" class="checkbox_delivery_options" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[mailbox_enabled]" />
                                                 </label>
 
                                             </div>
-                                            <table id="table_mailbox" class="{{ (module_myparcelnl_fields_checkout.mailbox_enabled and module_myparcelnl_fields_checkout.mailbox_enabled==1)?'show':'hidden'}}">
+                                            <table id="table_mailbox" class="{{ (module_myparcelnl_fields_checkout.mailbox_enabled and module_myparcelnl_fields_checkout.mailbox_enabled==1)?' show ':' hidden '}}">
                                                 <tr>
                                                     <td>{{ entry_tab_3_label_mailbox_title }}:</td>
                                                     <td>
@@ -510,8 +534,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        {% set input_checked = (module_myparcelnl_fields_checkout.only_recipient_enabled and module_myparcelnl_fields_checkout.only_recipient_enabled==1)?'checked':'' %}
-                                        {% set class_checked = (module_myparcelnl_fields_checkout.only_recipient_enabled and module_myparcelnl_fields_checkout.only_recipient_enabled==1)?'show':'hidden' %}
+                                        {% set input_checked = (module_myparcelnl_fields_checkout.only_recipient_enabled and module_myparcelnl_fields_checkout.only_recipient_enabled==1)?' checked':'' %}
+                                        {% set class_checked = (module_myparcelnl_fields_checkout.only_recipient_enabled and module_myparcelnl_fields_checkout.only_recipient_enabled==1)?' show ':' hidden ' %}
                                         <label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_home_address_only }}</label>
                                         <label class="text-center col-sm-1" style="padding-top: 9px;">
                                             <input type="hidden" name="module_myparcelnl_fields_checkout[only_recipient_enabled]" value="0" />
@@ -532,8 +556,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        {% set input_checked = (module_myparcelnl_fields_checkout.signed_enabled and module_myparcelnl_fields_checkout.signed_enabled==1)?'checked':'' %}
-                                        {% set class_checked = (module_myparcelnl_fields_checkout.signed_enabled and module_myparcelnl_fields_checkout.signed_enabled==1)?'show':'hidden' %}
+                                        {% set input_checked = (module_myparcelnl_fields_checkout.signed_enabled and module_myparcelnl_fields_checkout.signed_enabled==1)?' checked':'' %}
+                                        {% set class_checked = (module_myparcelnl_fields_checkout.signed_enabled and module_myparcelnl_fields_checkout.signed_enabled==1)?' show ':' hidden ' %}
                                         <label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_signature_on_delivery }}</label>
                                         <label class="text-center col-sm-1" style="padding-top: 9px;">
                                             <input type="hidden" name="module_myparcelnl_fields_checkout[signed_enabled]" value="0" />
@@ -554,8 +578,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        {% set input_checked = (module_myparcelnl_fields_checkout.default_enabled and module_myparcelnl_fields_checkout.default_enabled==1)?'checked':'' %}
-                                        {% set class_checked = (module_myparcelnl_fields_checkout.default_enabled and module_myparcelnl_fields_checkout.default_enabled==1)?'show':'hidden' %}
+                                        {% set input_checked = (module_myparcelnl_fields_checkout.default_enabled and module_myparcelnl_fields_checkout.default_enabled==1)?' checked':'' %}
+                                        {% set class_checked = (module_myparcelnl_fields_checkout.default_enabled and module_myparcelnl_fields_checkout.default_enabled==1)?' show ':' hidden ' %}
                                         <label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_standard_delivery }}</label>
                                         <label class="text-center col-sm-1" style="padding-top: 9px;">
                                             <input type="hidden" name="module_myparcelnl_fields_checkout[default_enabled]" value="0" />
@@ -576,8 +600,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        {% set input_checked = (module_myparcelnl_fields_checkout.night_enabled and module_myparcelnl_fields_checkout.night_enabled==1)?'checked':'' %}
-                                        {% set class_checked = (module_myparcelnl_fields_checkout.night_enabled and module_myparcelnl_fields_checkout.night_enabled==1)?'show':'hidden' %}
+                                        {% set input_checked = (module_myparcelnl_fields_checkout.night_enabled and module_myparcelnl_fields_checkout.night_enabled==1)?' checked':'' %}
+                                        {% set class_checked = (module_myparcelnl_fields_checkout.night_enabled and module_myparcelnl_fields_checkout.night_enabled==1)?' show ':' hidden ' %}
                                         <label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_evening_delivery }}</label>
                                         <label class="text-center col-sm-1" style="padding-top: 9px;">
                                             <input type="hidden" name="module_myparcelnl_fields_checkout[night_enabled]" value="0" />
@@ -598,8 +622,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        {% set input_checked = (module_myparcelnl_fields_checkout.morning_enabled and module_myparcelnl_fields_checkout.morning_enabled==1)?'checked':'' %}
-                                        {% set class_checked = (module_myparcelnl_fields_checkout.morning_enabled and module_myparcelnl_fields_checkout.morning_enabled==1)?'show':'hidden' %}
+                                        {% set input_checked = (module_myparcelnl_fields_checkout.morning_enabled and module_myparcelnl_fields_checkout.morning_enabled==1)?' checked':'' %}
+                                        {% set class_checked = (module_myparcelnl_fields_checkout.morning_enabled and module_myparcelnl_fields_checkout.morning_enabled==1)?' show ':' hidden ' %}
                                         <label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_morning_delivery }}</label>
                                         <label class="text-center col-sm-1" style="padding-top: 9px;">
                                             <input type="hidden" name="module_myparcelnl_fields_checkout[morning_enabled]" value="0" />
@@ -620,8 +644,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        {% set input_checked = (module_myparcelnl_fields_checkout.pickup_enabled and module_myparcelnl_fields_checkout.pickup_enabled==1)?'checked':'' %}
-                                        {% set class_checked = (module_myparcelnl_fields_checkout.pickup_enabled and module_myparcelnl_fields_checkout.pickup_enabled==1)?'show':'hidden' %}
+                                        {% set input_checked = (module_myparcelnl_fields_checkout.pickup_enabled and module_myparcelnl_fields_checkout.pickup_enabled==1)?' checked':'' %}
+                                        {% set class_checked = (module_myparcelnl_fields_checkout.pickup_enabled and module_myparcelnl_fields_checkout.pickup_enabled==1)?' show ':' hidden ' %}
                                         <label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_postnl_pickup }}</label>
                                         <label class="text-center col-sm-1" style="padding-top: 9px;">
                                             <input type="hidden" name="module_myparcelnl_fields_checkout[pickup_enabled]" value="0" />
@@ -642,8 +666,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        {% set input_checked = (module_myparcelnl_fields_checkout.pickup_express_enabled and module_myparcelnl_fields_checkout.pickup_express_enabled==1)?'checked':'' %}
-                                        {% set class_checked = (module_myparcelnl_fields_checkout.pickup_express_enabled and module_myparcelnl_fields_checkout.pickup_express_enabled==1)?'show':'hidden' %}
+                                        {% set input_checked = (module_myparcelnl_fields_checkout.pickup_express_enabled and module_myparcelnl_fields_checkout.pickup_express_enabled==1)?' checked':'' %}
+                                        {% set class_checked = (module_myparcelnl_fields_checkout.pickup_express_enabled and module_myparcelnl_fields_checkout.pickup_express_enabled==1)?' show ':' hidden ' %}
                                         <label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_early_postnl_pickup }}</label>
                                         <label class="text-center col-sm-1" style="padding-top: 9px;">
                                             <input type="hidden" name="module_myparcelnl_fields_checkout[pickup_express_enabled]" value="0" />
@@ -664,8 +688,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        {% set input_checked = (module_myparcelnl_fields_checkout.belgium_enabled and module_myparcelnl_fields_checkout.belgium_enabled==1)?'checked':'' %}
-                                        {% set class_checked = (module_myparcelnl_fields_checkout.belgium_enabled and module_myparcelnl_fields_checkout.belgium_enabled==1)?'show':'hidden' %}
+                                        {% set input_checked = (module_myparcelnl_fields_checkout.belgium_enabled and module_myparcelnl_fields_checkout.belgium_enabled==1)?' checked':'' %}
+                                        {% set class_checked = (module_myparcelnl_fields_checkout.belgium_enabled and module_myparcelnl_fields_checkout.belgium_enabled==1)?' show ':' hidden ' %}
                                         <label class="text-right col-sm-2 control-label">{{ entry_tab_3_label_belgium_settings }}</label>
                                         <label class="text-center col-sm-1" style="padding-top: 9px;">
                                             <input type="hidden" name="module_myparcelnl_fields_checkout[belgium_enabled]" value="0" />
@@ -706,7 +730,7 @@
                                         <div class="col-sm-10 col-md-6 col-lg-3">
                                             <select multiple="multiple" name="module_myparcelnl_fields_checkout[dropoff_days][]" class="form-control dropoff_days" style="width:100%;">
                                                 {% for weekday_digit, day in days_of_the_week %}
-                                                    {% set selected = (module_myparcelnl_fields_checkout.dropoff_days and weekday_digit in module_myparcelnl_fields_checkout.dropoff_days ) ? 'selected="selected"' : ''  %}
+                                                    {% set selected = (module_myparcelnl_fields_checkout.dropoff_days and weekday_digit in module_myparcelnl_fields_checkout.dropoff_days ) ? ' selected="selected"' : ''  %}
                                                     <option {{ selected }} value="{{ weekday_digit }}">{{ day }}</option>
                                                 {%  endfor %}
                                             </select>
@@ -719,7 +743,7 @@
                                         <div class="col-sm-10 col-md-6 col-lg-3">
                                             <div class="checkbox">
                                                 <label>
-                                                    {% set cut_off_weekdays_checked = (module_myparcelnl_fields_checkout.cut_off_weekday and module_myparcelnl_fields_checkout.cut_off_weekday==1)?'checked="checked"':'' %}
+                                                    {% set cut_off_weekdays_checked = (module_myparcelnl_fields_checkout.cut_off_weekday and module_myparcelnl_fields_checkout.cut_off_weekday==1)?' checked="checked"':'' %}
                                                     <input type="hidden" name="module_myparcelnl_fields_checkout[cut_off_weekday]" value="0" />
                                                     <input id="checkout_cut_off_weekday" {{ cut_off_weekdays_checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[cut_off_weekday]" />
                                                 </label>
@@ -771,7 +795,7 @@
                                         <div class="col-sm-10 col-md-6 col-lg-3">
                                             <select name="module_myparcelnl_fields_checkout[distance_format]" class="form-control" style="width:100%;">
                                                 {% for key,value in distance_format %}
-                                                    {% set selected = (module_myparcelnl_fields_checkout.distance_format and key == module_myparcelnl_fields_checkout.distance_format ) ? 'selected="selected"' : ''  %}
+                                                    {% set selected = (module_myparcelnl_fields_checkout.distance_format and key == module_myparcelnl_fields_checkout.distance_format ) ? ' selected="selected"' : ''  %}
                                                     <option {{ selected }} value="{{ key }}">{{ value }}</option>
                                                 {%  endfor %}
                                             </select>
@@ -838,7 +862,7 @@
                                         <div class="col-sm-10 col-md-6 col-lg-6">
                                             <div class="checkbox">
                                                 <label>
-                                                    {% set checked = (module_myparcelnl_fields_checkout.auto_google_fonts and module_myparcelnl_fields_checkout.auto_google_fonts==1)?'checked="checked"':'' %}
+                                                    {% set checked = (module_myparcelnl_fields_checkout.auto_google_fonts and module_myparcelnl_fields_checkout.auto_google_fonts==1)?' checked="checked"':'' %}
                                                     <input type="hidden" name="module_myparcelnl_fields_checkout[auto_google_fonts]" value="0" />
                                                     <input id="checkout_auto_google_fronts" {{ checked }} type="checkbox" value="1" name="module_myparcelnl_fields_checkout[auto_google_fonts]" />
                                                 </label>
