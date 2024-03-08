@@ -23,6 +23,7 @@ class MyParcel_Shipment_Helper
 
 
         $shipment = array(
+            'reference_identifier' => 'Order_' . $order_id,
             'recipient' => $this->getRecipient( $order_data ),
             'options'	=> $this->getOptions( $order_data , false, true ),
             'carrier'	=> 1, // default to POSTNL for now
@@ -78,13 +79,13 @@ class MyParcel_Shipment_Helper
                 if(isset($product_info['myparcel_country']) && $product_info['myparcel_country'] != ''){
                     $country = $product_info['myparcel_country'];
                 }else{
-                    if(isset($settings['default_country_code'])) $country = $settings['default_country_code'];
+                    if(isset($settings['default_country_origin'])) $country = $settings['default_country_origin'];
                 }
 
                 $weightItem = (isset($product_info['weight']) && is_numeric($product_info['weight'])) ? $product_info['weight'] : $weightDefault;
                 $weightItem = $class_weight->convert($weightItem, $product_info['weight_class_id'], 2);  // always convert to gram
 
-                $priceItem = (isset($product_info['price']) && is_numeric($product_info['price'])) ? $product_info['price'] : 1000;
+                $priceItem = (isset($product_info['price']) && is_numeric($product_info['price'])) ? $product_info['price'] * 100 : 1000;
 
                 $shipment['customs_declaration']['items'][] = array(
                     'description'   => $order_product['name'], //product name
@@ -105,6 +106,9 @@ class MyParcel_Shipment_Helper
             $shipment['physical_properties'] = array(
                 'weight' => (int) $totalWeight
             );
+            $shipment['options'] = [
+                "package_type" => 1
+            ];
         }
         if($shipment['options'] == null){
             return null;
@@ -161,6 +165,7 @@ class MyParcel_Shipment_Helper
                     'number' => $house_number,
                     'number_suffix' => $number_addition,
                     'postal_code' => $order['shipping_postcode'],
+                    'street_additional_info' => strlen($order['shipping_address_2']) >= 6 ? $order['shipping_address_2'] : ""
                 );
         }
         $address = array_merge($address, $address_intl);
@@ -1226,5 +1231,12 @@ class MyParcel_Shipment_Helper
 
         $db->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $db->escape($comment) . "', date_added = NOW()");
 
+    }
+
+    public function checkMultiCollo ($order_country_code, $package_type) {
+        return in_array(
+                $order_country_code,
+                [MyParcel::COUNTRY_CODE_NL, MyParcel::COUNTRY_CODE_BE]
+            ) && $package_type == MyParcel::PACKAGE_TYPE_STANDARD;
     }
 }

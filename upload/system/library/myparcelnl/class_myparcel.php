@@ -19,6 +19,10 @@ class MyParcel
     const PACKAGE_TYPE_MAILBOX = 2;
     const PACKAGE_TYPE_LETTER = 3;
     const PACKAGE_TYPE_DIGITAL_STAMP = 4;
+
+    const COUNTRY_CODE_NL = 'NL';
+    const COUNTRY_CODE_BE = 'BE';
+
     /**
      * MyParcel constructor.
      * @param null $registry

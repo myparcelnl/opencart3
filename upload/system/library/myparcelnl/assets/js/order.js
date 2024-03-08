@@ -289,8 +289,6 @@ var MYPARCEL_SHIPMENT = MYPARCEL_SHIPMENT || {};
                                 }
 
                                 $("#button-print-batch")[0].click();
-
-                                $('input[name="selected[]"]').prop('checked', false)
                             }
 
                         } else{

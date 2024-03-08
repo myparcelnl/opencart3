@@ -88,7 +88,7 @@ class MyParcel_Curl
 
         $this->_curl = curl_init();
 
-        if (!is_resource($this->_curl) || !isset($this->_curl)) {
+        if (!($this->_curl instanceof CurlHandle) && (!is_resource($this->_curl) || !isset($this->_curl))) {
             throw new Exception("Unable to create cURL session");
         }
 
