@@ -14,6 +14,8 @@ class MyParcel
     public $log;
     public $settings;
     public $lang;
+    public $shipment;
+    public $url;
 
     const PACKAGE_TYPE_STANDARD = 1;
     const PACKAGE_TYPE_MAILBOX = 2;
