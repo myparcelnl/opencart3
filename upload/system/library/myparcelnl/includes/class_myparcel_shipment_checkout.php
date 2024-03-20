@@ -438,26 +438,6 @@ class MyParcel_Shipment_Checkout
         );
     }
 
-    function getTaxFromCart(){
-        $registry = MyParcel::$registry;
-        /** @var \Cart\Cart $cart **/
-        $cart = $registry->get('cart');
-
-        /** @var Cart\Tax $tax **/
-        $tax = $cart->tax;
-        if (!$tax || !$cart) {
-            return '';
-        }
-
-        foreach ($cart->getProducts() as $product) {
-            if ($product['tax_class_id']) {
-                return $product['tax_class_id'];
-            }
-        }
-        return '';
-
-    }
-
     /**
      * Converts price string to float value, assuming no thousand-separators used
      * @param float $price
@@ -480,21 +460,11 @@ class MyParcel_Shipment_Checkout
     function getTotalDeliveryTaxAmountFromCart($delivery_fee, $cart)
     {
         /** @var Cart\Tax $tax **/
-        $tax = $cart->tax;
+        $taxes = $cart->getTaxes();
         $total = $delivery_fee;
 
-        if (!$tax || !$cart) {
+        if (!$taxes || !$cart) {
             return $total;
-        }
-
-        $taxes = array();
-        foreach ($cart->getProducts() as $product) {
-            if ($product['tax_class_id']) {
-                // Check if tax_class_id takes affect to current shipping address
-                if (!in_array($product['tax_class_id'], $taxes)) {
-                    $taxes[] = $product['tax_class_id'];
-                }
-            }
         }
 
         if (empty($taxes)) {

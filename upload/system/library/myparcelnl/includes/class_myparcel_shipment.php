@@ -60,6 +60,18 @@ class MyParcel_Shipment
                         $this->errors[] = 'The maximum weight of a shipment to a rest of world country cannot be heavier than 20 kg';
                         continue;
                     }
+                    $saved_extra_settings = $model_shipment->getSavedExtraExportSettings($order_id);
+                    $number_of_copies = (!empty($saved_extra_settings['number_of_copies']) ? $saved_extra_settings['number_of_copies'] : 1);
+                    if($number_of_copies > 1 && $shipment_helper->checkMultiCollo($shipment_data_single['recipient']['cc'],$shipment_data_single['options']['package_type'])){
+                        $secondary_shipments = array ();
+
+                        for ($i = 0; $i < $number_of_copies - 1; $i++){
+                            $secondary_shipments[] = array (
+                                'reference_identifier' => $shipment_data_single['reference_identifier'],
+                            );
+                        }
+                        $shipment_data_single['secondary_shipments'] = $secondary_shipments;
+                    }
                     $shipment_data[] = $shipment_data_single;
                 }
             }
@@ -68,19 +80,13 @@ class MyParcel_Shipment
             // And receive shipment_id from the API
             $responses = array();
             if (!empty($shipment_data)) {
-                $saved_extra_settings = $model_shipment->getSavedExtraExportSettings($order_id);
-                $number_of_copies = (!empty($saved_extra_settings['number_of_copies']) ? $saved_extra_settings['number_of_copies'] : 1);
-
-                for ($i = 1; $i <= intval($number_of_copies); $i++) {
-                    try {
-                        MyParcel()->log->add("Prepared data:\n".var_export($shipment_data, true));
-                        $response = $api->addShipments($shipment_data);
-                        $responses[] = $response;
-                        MyParcel()->log->add("API response (order {$order_id}):\n" . var_export($response, true));
-                    } catch (Exception $e) {
-                        $this->errors[] = sprintf(MyParcel()->lang->get('entry_api_error_with_order_id'), $order_id) . $e->getMessage();
-                    }
-
+                try {
+                    MyParcel()->log->add("Prepared data:\n".var_export($shipment_data, true));
+                    $response = $api->addShipments($shipment_data);
+                    $responses[] = $response;
+                    MyParcel()->log->add("API response (order {$order_id}):\n" . var_export($response, true));
+                } catch (Exception $e) {
+                    $this->errors[] = sprintf(MyParcel()->lang->get('entry_api_error_with_order_id'), $order_id) . $e->getMessage();
                 }
             }
 
@@ -127,11 +133,15 @@ class MyParcel_Shipment
                                     $order_status_data = $model_order_status->getOrderStatus((int)MyParcel()->settings->general->automatic_order_status);
                                     if (!empty($order_status_data)) {
                                         if (version_compare(VERSION, '2.0.0.0', '>=')) {
-                                            $order_info = $model_model_sale_order->getOrder($order_id);
-                                            $model_helper->addDeliveryDataIntoOrder($order_info);
-                                            $shipment_helper->updateOrderStatus($order_id,(int)MyParcel()->settings->general->automatic_order_status, MyParcel()->lang->get('mssg_order_status_changed_by_myparcel'));
-                                            $new_order_status_name = !empty($order_status_data['name']) ? $order_status_data['name'] : null;
-
+                                            /** @var MyParcel_Api $api * */
+                                            $api = MyParcel()->api;
+                                            $response = $api->getLocalRequest('extension/myparcelnl/myparcel_order/updateorderstatus', array('order_id' => $order_id));
+                                            if (empty($response['body']['success'])) {
+                                                $this->errors[] = MyParcel()->lang->get('entry_update_order_status_error') . ' - Order #' . $order_id;
+                                                MyParcel()->log->add('Update status error - Order #' . $order_id);
+                                            } else {
+                                                $new_order_status_name = !empty($order_status_data['name']) ? $order_status_data['name'] : null;
+                                            }
                                         } else {
                                             $data = array(
                                                 'order_status_id' => MyParcel()->settings->general->automatic_order_status,

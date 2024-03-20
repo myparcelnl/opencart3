@@ -37,20 +37,20 @@ class MyParcel_Api extends MyParcel_Curl
 
 		$endpoint = 'shipments';
 		// define content type
-		switch ($type) {
-			case 'standard': default:
-				$content_type = 'application/vnd.shipment+json';
-				$data_key = 'shipments';
-				break;
-			case 'return':
-				$content_type = 'application/vnd.return_shipment+json';
-				$data_key = 'return_shipments';
-				break;
-			case 'unrelated_return':
-				$content_type = 'application/vnd.unrelated_return_shipment+json';
-				$data_key = 'unrelated_return_shipments';
-				break;
-		}
+        switch ($type) {
+            case 'standard': default:
+            $content_type = 'application/vnd.shipment+json;charset=utf-8;version=1.1';
+            $data_key = 'shipments';
+            break;
+            case 'return':
+                $content_type = 'application/vnd.return_shipment+json; charset=utf-8; version=1.1';
+                $data_key = 'return_shipments';
+                break;
+            case 'unrelated_return':
+                $content_type = 'application/vnd.unrelated_return_shipment+json; charset=utf-8; version=1.1';
+                $data_key = 'unrelated_return_shipments';
+                break;
+        }
 
 		$data = array(
 			'data' => array (
@@ -166,55 +166,64 @@ class MyParcel_Api extends MyParcel_Curl
 		return $response;
 	}
 
-	/**
-	 * Track shipments
-	 * @param  array  $ids    shipment ids
-	 * @param  array  $params request parameters
-	 * @return array          response
-	 */
-	public function getTracktraces ( $ids, $params = array() )
-	{
-		$endpoint = 'tracktraces';
+    /**
+     * Track shipments
+     * @param  array  $ids    shipment ids
+     * @param  array  $params request parameters
+     * @return array          response
+     */
+    public function getTracktraces ( $ids, $params = array() )
+    {
+        $endpoint = 'tracktraces';
 
-		$headers = array (
-			'Authorization: basic '. base64_encode("{$this->key}"),
-		);
+        $headers = array (
+            'Authorization: basic '. base64_encode("{$this->key}"),
+        );
 
-		$request_url = MyParcel()->helper->add_query_arg( $params, $this->api_domain . $endpoint . '/' . implode(';', $ids) );
-		$response = $this->get($request_url, $headers, false);
+        $request_url = MyParcel()->helper->add_query_arg( $params, $this->api_domain . $endpoint . '/' . implode(';', $ids) );
+        $response = $this->sendRequest($request_url, 'GET', null, $headers);
+        return $response;
+    }
 
-		return $response;
-	}
-
-	public function getTracktraceUrl( $order_id, $tracktrace )
-	{
-		if (empty($order_id))
-			return;
-		$registry = MyParcel::$registry;
+    public function getTracktraceUrl( $order_id, $tracktrace )
+    {
+        if (empty($order_id))
+            return;
+        $registry = MyParcel::$registry;
 
         $loader = $registry->get('load');
-		$loader->model(MyParcel()->getModelPath('shipment'));
-		$model_shipment = $registry->get('model_extension_myparcelnl_shipment');
+        $loader->model(MyParcel()->getModelPath('shipment'));
+        $model_shipment = $registry->get('model_extension_myparcelnl_shipment');
 
-		$order_info = MyParcel()->helper->getShippingOrder($order_id);
-		$country = $order_info['shipping_iso_code_2'];
-		$postcode = $order_info['shipping_postcode'];
-		// set url for NL or foreign orders
-		$shipment_helper = MyParcel()->shipment->shipment_helper;
-		$is_pickup = $shipment_helper->isPickup( $order_id );
-		if ($country == 'NL') {
-			// use billing postcode for pickup/pakjegemak
-			if ( $is_pickup ) {
-				$postcode = $order_info['payment_postcode'];;
-			}
-			// $tracktrace_url = sprintf('https://mijnpakket.postnl.nl/Inbox/Search?lang=nl&B=%s&P=%s', $tracktrace, $postcode);
-			$tracktrace_url = sprintf('https://mijnpakket.postnl.nl/Claim?Barcode=%s&Postalcode=%s', $tracktrace, $postcode);
-		} else {
-			$tracktrace_url = sprintf('https://www.internationalparceltracking.com/Main.aspx#/track/%s/%s/%s', $tracktrace, $country, $postcode);
-		}
+        $shipment_data = $model_shipment->getSavedMyParcelShipments($order_id);
+        $shipment_data = array_shift($shipment_data);
+        $response = $this->getTracktraces([$shipment_data['shipment_id']]);
 
-		return $tracktrace_url;
-	}
+        if ($response['code'] === 200) {
+            $tracktrace = array_shift($response['body']['data']['tracktraces']);
+            return $tracktrace['link_consumer_portal'];
+        }
+
+        $order_info = MyParcel()->helper->getShippingOrder($order_id);
+        $country = $order_info['shipping_iso_code_2'];
+        $postcode = $order_info['shipping_postcode'];
+        // set url for NL or foreign orders
+        $shipment_helper = MyParcel()->shipment->shipment_helper;
+        $is_pickup = $shipment_helper->isPickup( $order_id );
+        if ($country == 'NL') {
+            // use billing postcode for pickup/pakjegemak
+            if ( $is_pickup ) {
+                $postcode = $order_info['payment_postcode'];;
+            }
+            // $tracktrace_url = sprintf('https://mijnpakket.postnl.nl/Inbox/Search?lang=nl&B=%s&P=%s', $tracktrace, $postcode);
+            // $tracktrace_url = sprintf('https://mijnpakket.postnl.nl/Claim?Barcode=%s&Postalcode=%s', $tracktrace, $postcode);
+            $tracktrace_url = sprintf('https://jouw.postnl.nl/track-and-trace/%s-NL-%s?language=nl', $tracktrace, $postcode);
+        } else {
+            $tracktrace_url = sprintf('https://www.internationalparceltracking.com/Main.aspx#/track/%s/%s/%s', $tracktrace, $country, $postcode);
+        }
+
+        return $tracktrace_url;
+    }
 
 	public function getTracktraceLinks ( $order_id )
 	{

@@ -56,9 +56,11 @@ class MyParcel_Curl
 
         $this->setOption(CURLOPT_URL, $url);
 
-        if ((ini_get('open_basedir') == '') AND (!ini_get('safe_mode'))) {
-            $this->setOption(CURLOPT_FOLLOWLOCATION, true);
-        }
+        // only in use for php 5.4 and lower so no need updated by Vanest ict
+
+        // if ((ini_get('open_basedir') == '') && (!ini_get('safe_mode'))) {
+        //     $this->setOption(CURLOPT_FOLLOWLOCATION, true);
+        // }
 
         switch ($method) {
             case "PUT":
@@ -88,12 +90,12 @@ class MyParcel_Curl
 
         $this->_curl = curl_init();
 
-        if (!is_resource($this->_curl) || !isset($this->_curl)) {
+        if (!($this->_curl instanceof CurlHandle) && (!is_resource($this->_curl) || !isset($this->_curl))) {
             throw new Exception("Unable to create cURL session");
         }
 
         $result_setopt = curl_setopt_array($this->_curl, $this->getOptions());
-        if ($result_setopt !== TRUE) {
+        if ($result_setopt !== true) {
             throw new Exception(curl_error($this->_curl));
         }
 
