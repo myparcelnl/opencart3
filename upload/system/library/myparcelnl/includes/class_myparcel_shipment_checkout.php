@@ -1,5 +1,7 @@
 <?php
 
+use Cart\Cart;
+
 class MyParcel_Shipment_Checkout
 {
     const DELIVERY_TYPE_MORNING = 1;
@@ -281,7 +283,7 @@ class MyParcel_Shipment_Checkout
      * @param string prefix
      * @return array prices of delivery types
      */
-    function getDeliveryPrices($price_format = true, $color_format = true, $prefix = '', $taxIncluded = true, $order_id = 0, $value = 0)
+    function getDeliveryPrices($price_format = true, $color_format = true, $prefix = '', $addTax = true, $order_id = 0, $value = 0)
     {
         $registry = MyParcel::$registry;
         /** @var \Cart\Cart $cart **/
@@ -330,7 +332,7 @@ class MyParcel_Shipment_Checkout
                         $fee = $this->convertPriceToFloat($fee);
 
                         //$fee += $this->getMyParcelShippingCost();
-                        if ($taxIncluded) {
+                        if ($addTax) {
                             $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
                         } else {
                             $fee_including_tax = $fee;
@@ -353,7 +355,7 @@ class MyParcel_Shipment_Checkout
                         $fee = $this->convertPriceToFloat($fee);
 
                         //$fee += $this->getMyParcelShippingCost();
-                        if ($taxIncluded) {
+                        if ($addTax) {
                             $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
                         } else {
                             $fee_including_tax = $fee;
@@ -394,7 +396,7 @@ class MyParcel_Shipment_Checkout
                     $fee = (float)$checkout_settings['belgium_' . $option . '_fee'];
                     $fee = $this->convertPriceToFloat($fee);
 //                    $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
-                    if ($taxIncluded) {
+                    if ($addTax) {
                         $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
                     } else {
                         $fee_including_tax = $fee;
@@ -411,7 +413,7 @@ class MyParcel_Shipment_Checkout
                     $fee = (float)$checkout_settings['belgium_' . $option . '_fee2'];
                     $fee = $this->convertPriceToFloat($fee);
 //                    $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
-                    if ($taxIncluded) {
+                    if ($addTax) {
                         $fee_including_tax = $this->getTotalDeliveryTaxAmountFromCart($fee, $cart);
                     } else {
                         $fee_including_tax = $fee;
@@ -453,48 +455,25 @@ class MyParcel_Shipment_Checkout
 
     /**
      * Calculate a price base on taxes that affect in cart session
-     * @param float $delivery_fee
+     * @param float $deliveryFee
      * @param Cart $cart
      * @return float price with taxes included
      */
-    function getTotalDeliveryTaxAmountFromCart($delivery_fee, $cart)
+    function getTotalDeliveryTaxAmountFromCart($deliveryFee, $cart)
     {
-        /** @var Cart\Tax $tax **/
-        $taxes = $cart->getTaxes();
-        $total = $delivery_fee;
-
-        if (!$taxes || !$cart) {
-            return $total;
+        if (! $deliveryFee) {
+            return 0;
         }
 
-        if (empty($taxes)) {
-            return $delivery_fee;
-        } else {
-            $total = 0;
+        $registry = MyParcel::$registry;
+        $tax = $registry->get('tax');
 
-            foreach ($taxes as $tax_class_id) {
-                $rates = $tax->getRates($delivery_fee, $tax_class_id);
+        if ($cart instanceof Cart && ($taxes = $cart->getTaxes())) {
 
-                /**
-                 * Only apply VAT tax to tax shipping price
-                 **/
-                foreach ($rates as $key => &$rate) {
-                    if (strpos($rate['name'], 'VAT') === false && strpos($rate['name'], 'BTW') === false) {
-                        unset($rates[$key]);
-                    }
-                }
-
-                if (!empty($rates)) {
-                    $total += $tax->calculate($delivery_fee, $tax_class_id);
-                }
-            }
-
-            if ($total == 0) {
-                $total = $delivery_fee;
-            }
+            return $tax->calculate($deliveryFee, $taxes, true);
         }
 
-        return $total;
+        return $deliveryFee;
     }
 
     function formatDeliveryPrice($price, $currency = null, $color_format = true, $prefix = '')
