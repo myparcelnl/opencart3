@@ -455,33 +455,25 @@ class MyParcel_Shipment_Checkout
 
     /**
      * Calculate a price base on taxes that affect in cart session
-     * @param float $delivery_fee
+     * @param float $deliveryFee
      * @param Cart $cart
      * @return float price with taxes included
      */
-    function getTotalDeliveryTaxAmountFromCart($delivery_fee, $cart)
+    function getTotalDeliveryTaxAmountFromCart($deliveryFee, $cart)
     {
+        if (! $deliveryFee) {
+            return 0;
+        }
+
         $registry = MyParcel::$registry;
-        $db = $registry->get('db');
+        $tax = $registry->get('tax');
 
-        /**
-         * Find the highest tax rate percentage (type="P") in this cart, or overall when cart is empty
-         */
-        if ($cart instanceof Cart && ($taxIds = array_keys($cart->getTaxes()))) {
-            $sql = 'SELECT * FROM ' . DB_PREFIX . 'tax_rate WHERE type="P" AND tax_rate_id IN (' . implode(',', $taxIds) . ') ORDER BY rate DESC LIMIT 1;';
-        } else {
-            $sql = 'SELECT * FROM ' . DB_PREFIX . 'tax_rate WHERE type="P" ORDER BY rate DESC LIMIT 1;';
+        if ($cart instanceof Cart && ($taxes = $cart->getTaxes())) {
+
+            return $tax->calculate($deliveryFee, $taxes, true);
         }
 
-        $query = $db->query($sql);
-
-        if (!$query->rows) {
-            return $delivery_fee;
-        }
-
-        $percentage = (float) $query->rows[0]['rate'];
-
-        return $delivery_fee * 100.0 / $percentage;
+        return $deliveryFee;
     }
 
     function formatDeliveryPrice($price, $currency = null, $color_format = true, $prefix = '')
