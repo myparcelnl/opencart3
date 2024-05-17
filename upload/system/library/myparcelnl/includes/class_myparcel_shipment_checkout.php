@@ -456,24 +456,19 @@ class MyParcel_Shipment_Checkout
     /**
      * Calculate a price base on taxes that affect in cart session
      * @param float $deliveryFee
-     * @param Cart $cart
      * @return float price with taxes included
      */
-    function getTotalDeliveryTaxAmountFromCart($deliveryFee, $cart)
+    public function getTotalDeliveryTaxAmountFromCart($deliveryFee)
     {
         if (! $deliveryFee) {
             return 0;
         }
 
         $registry = MyParcel::$registry;
-        $tax = $registry->get('tax');
+        $config = $registry->get('config');
+        $taxClassId = (int) $config->get('shipping_myparcel_shipping_tax_class_id');
 
-        if ($cart instanceof Cart && ($taxes = $cart->getTaxes())) {
-
-            return $tax->calculate($deliveryFee, $taxes, true);
-        }
-
-        return $deliveryFee;
+        return $registry->get('tax')->calculate($deliveryFee, $taxClassId, true);
     }
 
     function formatDeliveryPrice($price, $currency = null, $color_format = true, $prefix = '')

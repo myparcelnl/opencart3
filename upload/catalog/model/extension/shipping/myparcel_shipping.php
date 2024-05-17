@@ -44,8 +44,8 @@ class ModelExtensionShippingMyparcelShipping extends Model {
 			$quote_data['myparcel_shipping'] = array(
 				'code'         => 'myparcel_shipping.myparcel_shipping',
 				'title'        => $this->config->get('shipping_myparcel_shipping_title'),
-				'cost'         => $total_price,
-				'tax_class_id' => '',
+				'cost'         => $total_price + $this->config->get('shipping_myparcel_shipping_cost'),
+				'tax_class_id' => $this->config->get('shipping_myparcel_shipping_tax_class_id'),
 				'text'         => $this->currency->format($this->tax->calculate($total_price, '', ''), $this->session->data['currency'])
 			);
 
