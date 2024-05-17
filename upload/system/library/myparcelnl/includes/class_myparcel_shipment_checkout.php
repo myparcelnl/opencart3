@@ -310,7 +310,7 @@ class MyParcel_Shipment_Checkout
             $feeSuffix = '2';
         }
 
-        $getOptions = function(array $priceOptions, string $optionPrefix = '') use ($checkoutSettings, $addTax, $priceFormat, $feeSuffix, $currency, $colorFormat, $prefix) {
+        $getOptions = function(array $priceOptions, string $optionPrefix = '') use ($checkoutSettings, $feeSuffix, $currency, $addTax, $priceFormat, $colorFormat, $prefix) {
             $prices = array();
             foreach ($priceOptions as $option) {
                 $isShipmentOption = in_array($option, self::$delivery_extra_options, true);
