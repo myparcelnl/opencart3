@@ -1,6 +1,6 @@
 <?php
 
-use Cart\Cart;
+use Cart\Tax;
 
 class MyParcel_Shipment_Checkout
 {
@@ -108,8 +108,7 @@ class MyParcel_Shipment_Checkout
             $recipient_only = true;
         }
 
-        $total_array = $this->getDeliveryTotalsFromSavedData($delivery_options, $signed, $recipient_only, $price_format, $order_id, $prefix, $taxIncluded);
-        return $total_array;
+        return $this->getDeliveryTotalsFromSavedData($delivery_options, $signed, $recipient_only, $price_format, $order_id, $prefix, $taxIncluded);
     }
 
     /**
@@ -387,7 +386,9 @@ class MyParcel_Shipment_Checkout
         $config = $registry->get('config');
         $taxClassId = (int) $config->get('shipping_myparcel_shipping_tax_class_id');
 
-        return $registry->get('tax')->calculate($deliveryFee, $taxClassId, true);
+        /** @var $tax Tax/Tax */
+        $tax = $registry->get('tax');
+        return $tax->calculate($deliveryFee, $taxClassId);
     }
 
     function formatDeliveryPrice($price, $currency = null, $color_format = true, $prefix = '')

@@ -11,8 +11,8 @@ if(version_compare(VERSION, '2.2.0.0', '>=')) {
                 }
 
                 if (MyParcel()->shipment->checkout->checkValidShippingMethod()) {
-
                     $total_total_code = version_compare(VERSION, '3.0.0.0', '>=') ? 'myparcel_total' : 'total_myparcel_total';
+                    $total_price = $this->config->get('shipping_myparcel_shipping_cost');
 
                     if (!empty($this->session->data['myparcel']['data'])) {
 
@@ -54,15 +54,29 @@ if(version_compare(VERSION, '2.2.0.0', '>=')) {
                             $total['total'] += $total_price;
                         }
                     } else {
+                        /* when the estimate is requested using the ‘Get Quotes’ modal in cart */
                         $session_data = $this->session->data;
-                        $shipping_code  = version_compare(VERSION, '3.0.0.0', '>=') ? 'myparcel_shipping.myparcel_shipping' : 'shipping_myparcel_shipping.shipping_myparcel_shipping';
+                        $shipping_code = version_compare(VERSION, '3.0.0.0', '>=') ? 'myparcel_shipping.myparcel_shipping' : 'shipping_myparcel_shipping.shipping_myparcel_shipping';
                         if (!empty($session_data['shipping_method']['code']) && $session_data['shipping_method']['code'] == $shipping_code) {
                             $total['totals'][] = array(
                                 'code' => $total_total_code,
                                 'title' => $this->config->get('shipping_myparcel_shipping_title'),
-                                'value' => $this->config->get('shipping_myparcel_shipping_cost'),
-                                'sort_order' => $this->config->get('shipping_sort_order')
+                                'value' => $total_price,
+                                'sort_order' => $this->config->get('shipping_myparcel_shipping_sort_order') ?? 2
                             );
+                            $total['total'] += $total_price;
+                        }
+                    }
+
+                    if ($this->session->data['shipping_method']['tax_class_id']) {
+                        $tax_rates = $this->tax->getRates($total_price, $this->session->data['shipping_method']['tax_class_id']);
+
+                        foreach ($tax_rates as $tax_rate) {
+                            if (!isset($total['taxes'][$tax_rate['tax_rate_id']])) {
+                                $total['taxes'][$tax_rate['tax_rate_id']] = $tax_rate['amount'];
+                            } else {
+                                $total['taxes'][$tax_rate['tax_rate_id']] += $tax_rate['amount'];
+                            }
                         }
                     }
                 }

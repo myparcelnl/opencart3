@@ -2,11 +2,11 @@
 class ModelExtensionShippingMyparcelShipping extends Model {
 	function getQuote($address) {
 
-        $checkout_settings          = $this->config->get('module_myparcelnl_fields_checkout');
+        $checkout_settings = $this->config->get('module_myparcelnl_fields_checkout');
         $status_config = $this->config->get('shipping_myparcel_shipping_status');
-		$status = !empty($status_config) ? true : false;
-        $belgium_enabled = !empty($checkout_settings['belgium_enabled']) ? true : false;
-		$country_iso_code = isset($address['iso_code_2']) ? $address['iso_code_2'] : null;
+		$status = !empty($status_config);
+        $belgium_enabled = !empty($checkout_settings['belgium_enabled']);
+		$country_iso_code = $address['iso_code_2'] ?? null;
 
 		$method_data = array();
 
@@ -29,7 +29,7 @@ class ModelExtensionShippingMyparcelShipping extends Model {
 
 				$checkout_helper = MyParcel()->shipment->checkout;
 				$checkout_helper->setSessionOrderDeliveryOptions($this->session->data['myparcel_order_id']);
-				$data = isset($this->session->data['myparcel']) ? $this->session->data['myparcel'] : false;
+				$data = $this->session->data['myparcel'] ?? false;
 
 				if ($data) {
 					$total_array = $checkout_helper->getTotalArray($data);
@@ -40,13 +40,14 @@ class ModelExtensionShippingMyparcelShipping extends Model {
 			}
 
 			$quote_data = array();
+            $total_price += $this->config->get('shipping_myparcel_shipping_cost');
 
 			$quote_data['myparcel_shipping'] = array(
 				'code'         => 'myparcel_shipping.myparcel_shipping',
 				'title'        => $this->config->get('shipping_myparcel_shipping_title'),
-				'cost'         => $total_price + $this->config->get('shipping_myparcel_shipping_cost'),
+				'cost'         => $total_price,
 				'tax_class_id' => $this->config->get('shipping_myparcel_shipping_tax_class_id'),
-				'text'         => $this->currency->format($this->tax->calculate($total_price, '', ''), $this->session->data['currency'])
+				'text'         => $this->currency->format($this->tax->calculate($total_price, $this->config->get('shipping_myparcel_shipping_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency'])
 			);
 
 			$method_data = array(

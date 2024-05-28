@@ -567,7 +567,7 @@
                                         <div class="mypa-checkmark-kick"></div>
                                     </div>
                                     <span class='mypa-price mypa-mailbox-price'>
-                                        <?php echo MyParcel()->shipment->checkout->formatDeliveryPrice(MyParcel()->settings->checkout->mailbox_fee, null, false); ?>
+                                        <?php echo MyParcel()->shipment->checkout->formatDeliveryPrice(MyParcel()->shipment->checkout->addTaxToDeliveryFee(MyParcel()->settings->checkout->mailbox_fee ?: 0), null, false); ?>
                                     </span>
                                     <span class="mypa-highlight">
                                         <?php echo MyParcel()->settings->checkout->mailbox_title; ?>
