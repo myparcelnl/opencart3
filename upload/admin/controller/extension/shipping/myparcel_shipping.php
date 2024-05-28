@@ -18,7 +18,7 @@ class ControllerExtensionShippingMyparcelShipping extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			//$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true));
+			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true));
 		}
 
 		$data['heading_title'] = $this->language->get('heading_title');
