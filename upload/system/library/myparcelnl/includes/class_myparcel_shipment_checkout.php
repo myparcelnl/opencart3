@@ -275,39 +275,39 @@ class MyParcel_Shipment_Checkout
         }
     }
 
-    /**
-     * Retrieve delivery prices that are set in admin settings
-     * @param boolean $priceFormat (add currency symbol and convert dot/comma)
-     * @param boolean $colorFormat (add color code into price)
-     * @param string $prefix prefix
-     * @return array prices of delivery types
-     */
-    function getDeliveryPrices($priceFormat = true, $colorFormat = true, $prefix = '', $addTax = true, $order_id = 0, $value = 0)
-    {
-        $registry         = MyParcel::$registry;
-        /** @var \Cart\Currency $currency * */
-        $currency         = $registry->get('currency');
-        $config           = $registry->get('config');
-        $checkoutSettings = $config->get('module_myparcelnl_fields_checkout');
+	/**
+	 * Retrieve delivery prices that are set in admin settings
+	 * @param boolean $priceFormat (add currency symbol and convert dot/comma)
+	 * @param boolean $colorFormat (add color code into price)
+	 * @param string $prefix prefix
+	 * @return array prices of delivery types
+	 */
+	function getDeliveryPrices($priceFormat = true, $colorFormat = true, $prefix = '', $addTax = true, $order_id = 0, $value = 0)
+	{
+		$registry = MyParcel::$registry;
+		/** @var \Cart\Currency $currency * */
+		$currency = $registry->get('currency');
+		$config = $registry->get('config');
+		$checkoutSettings = $config->get('module_myparcelnl_fields_checkout');
 
-        /**
-         * overwrite (!) $value with total order value if $order_id is set
-         */
-        if ($order_id > 0) {
-            $loader = $registry->get('load');
-            $loader->model('checkout/order');
-            $order = $registry->get('model_checkout_order')->getOrder($order_id);
-            $value = $order['total'];
-        }
+		/**
+		 * overwrite (!) $value with total order value if $order_id is set
+		 */
+		if ($order_id > 0) {
+			$loader = $registry->get('load');
+			$loader->model('checkout/order');
+			$order = $registry->get('model_checkout_order')->getOrder($order_id);
+			$value = $order['total'];
+		}
 
-        // default settings
-        $feeSuffix = '';
-        $subtotal2Min = $checkoutSettings['subtotal2_min'] ?? 50.01;
-        $subtotal2Max = $checkoutSettings['subtotal2_max'] ?? 1000000;
+		// default settings
+		$feeSuffix = '';
+		$subtotal2Min = $checkoutSettings['subtotal2_min'] ?? 50.01;
+		$subtotal2Max = $checkoutSettings['subtotal2_max'] ?? 1000000;
 
-	    if ($subtotal2Min <= $value && $value < $subtotal2Max) {
-		    $feeSuffix = '2';
-	    }
+		if ($subtotal2Min <= $value && $value < $subtotal2Max) {
+			$feeSuffix = '2';
+		}
 
 		$getOptions = function (array $priceOptions, string $optionPrefix = '') use ($checkoutSettings, $feeSuffix, $currency, $addTax, $priceFormat, $colorFormat, $prefix) {
 			$prices = array();
@@ -340,25 +340,25 @@ class MyParcel_Shipment_Checkout
 			return $prices;
 		};
 
-	    $prices = $getOptions(array_merge(self::$delivery_extra_options, self::$delivery_types));
+		$prices = $getOptions(array_merge(self::$delivery_extra_options, self::$delivery_types));
 
-        if (!$prices) {
-            $prices['pickup'] = '';
-            $prices['pickup_express'] = '';
-        }
+		if (!$prices) {
+			$prices['pickup'] = '';
+			$prices['pickup_express'] = '';
+		}
 
-        if (!empty($checkoutSettings['belgium_enabled'])) {
+		if (!empty($checkoutSettings['belgium_enabled'])) {
 
-            return array(
-                'NL' => $prices,
-                'BE' => $getOptions(self::$belgium_delivery_types, 'belgium_')
-            );
-        }
+			return array(
+				'NL' => $prices,
+				'BE' => $getOptions(self::$belgium_delivery_types, 'belgium_')
+			);
+		}
 
-        return array(
-            'NL' => $prices,
-        );
-    }
+		return array(
+			'NL' => $prices,
+		);
+	}
 
     /**
      * Converts price string to float value, assuming no thousand-separators used
