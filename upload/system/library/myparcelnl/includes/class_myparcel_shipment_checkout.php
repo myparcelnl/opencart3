@@ -59,12 +59,12 @@ class MyParcel_Shipment_Checkout
             $delivery_options = $data['data'];
         }
 
-        $registry          = MyParcel::$registry;
-		$cart              = $registry->get('cart');
-        $config            = $registry->get('config');
-        $checkout_settings = $config->get('module_myparcelnl_fields_checkout');
-        $belgium_enabled   = !empty($checkout_settings['belgium_enabled']) ? true : false;
-        $country_code      = MyParcel()->helper->getCountryIsoCodeFromSession();
+	    $registry          = MyParcel::$registry;
+	    $cart              = $registry->get('cart');
+	    $config            = $registry->get('config');
+	    $checkout_settings = $config->get('module_myparcelnl_fields_checkout');
+	    $belgium_enabled   = !empty($checkout_settings['belgium_enabled']) ? true : false;
+	    $country_code      = MyParcel()->helper->getCountryIsoCodeFromSession();
         /**
          * If country is BE
          * Then check if the BE setting is enabled
@@ -305,42 +305,42 @@ class MyParcel_Shipment_Checkout
         $subtotal2Min = $checkoutSettings['subtotal2_min'] ?? 50.01;
         $subtotal2Max = $checkoutSettings['subtotal2_max'] ?? 1000000;
 
-        if ($subtotal2Min <= $value && $value < $subtotal2Max) {
-            $feeSuffix = '2';
-        }
+	    if ($subtotal2Min <= $value && $value < $subtotal2Max) {
+		    $feeSuffix = '2';
+	    }
 
-        $getOptions = function(array $priceOptions, string $optionPrefix = '') use ($checkoutSettings, $feeSuffix, $currency, $addTax, $priceFormat, $colorFormat, $prefix) {
-            $prices = array();
-            foreach ($priceOptions as $option) {
-                $isShipmentOption = in_array($option, self::$delivery_extra_options, true);
+		$getOptions = function (array $priceOptions, string $optionPrefix = '') use ($checkoutSettings, $feeSuffix, $currency, $addTax, $priceFormat, $colorFormat, $prefix) {
+			$prices = array();
+			foreach ($priceOptions as $option) {
+				$isShipmentOption = in_array($option, self::$delivery_extra_options, true);
 
-                if (empty($checkoutSettings["$optionPrefix{$option}_enabled"])) {
-                    if ($isShipmentOption) {
-                        $prices[$option] = 'disabled';
-                    }
-                    continue;
-                }
+				if (empty($checkoutSettings["$optionPrefix{$option}_enabled"])) {
+					if ($isShipmentOption) {
+						$prices[$option] = 'disabled';
+					}
+					continue;
+				}
 
-                $fee = $this->convertPriceToFloat($checkoutSettings["$optionPrefix{$option}_fee$feeSuffix"] ?? 0);
+				$fee = $this->convertPriceToFloat($checkoutSettings["$optionPrefix{$option}_fee$feeSuffix"] ?? 0);
 
-                if (!$isShipmentOption) {
-                    $fee += $this->getMyParcelShippingCost();
-                }
+				if (!$isShipmentOption) {
+					$fee += $this->getMyParcelShippingCost();
+				}
 
-                if ($addTax) {
-                    $fee = $this->addTaxToDeliveryFee($fee);
-                }
+				if ($addTax) {
+					$fee = $this->addTaxToDeliveryFee($fee);
+				}
 
-                if ($priceFormat) {
-                    $prices[$option] = $this->formatDeliveryPrice($fee, $currency, $colorFormat, $prefix);
-                } else {
-                    $prices[$option] = $fee;
-                }
-            }
-            return $prices;
-        };
+				if ($priceFormat) {
+					$prices[$option] = $this->formatDeliveryPrice($fee, $currency, $colorFormat, $prefix);
+				} else {
+					$prices[$option] = $fee;
+				}
+			}
+			return $prices;
+		};
 
-        $prices = $getOptions(array_merge(self::$delivery_extra_options, self::$delivery_types));
+	    $prices = $getOptions(array_merge(self::$delivery_extra_options, self::$delivery_types));
 
         if (!$prices) {
             $prices['pickup'] = '';
@@ -376,20 +376,20 @@ class MyParcel_Shipment_Checkout
      * @param float $deliveryFee
      * @return float price with taxes included
      */
-    public function addTaxToDeliveryFee($deliveryFee)
-    {
-        if (! $deliveryFee) {
-            return 0;
-        }
+	public function addTaxToDeliveryFee($deliveryFee)
+	{
+		if (!$deliveryFee) {
+			return 0;
+		}
 
-        $registry = MyParcel::$registry;
-        $config = $registry->get('config');
-        $taxClassId = (int) $config->get('shipping_myparcel_shipping_tax_class_id');
+		$registry = MyParcel::$registry;
+		$config = $registry->get('config');
+		$taxClassId = (int)$config->get('shipping_myparcel_shipping_tax_class_id');
 
-        /** @var $tax Tax/Tax */
-        $tax = $registry->get('tax');
-        return $tax->calculate($deliveryFee, $taxClassId);
-    }
+		/** @var $tax Tax/Tax */
+		$tax = $registry->get('tax');
+		return $tax->calculate($deliveryFee, $taxClassId);
+	}
 
     function formatDeliveryPrice($price, $currency = null, $color_format = true, $prefix = '')
     {

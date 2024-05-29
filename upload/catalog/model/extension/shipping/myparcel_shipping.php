@@ -2,10 +2,10 @@
 class ModelExtensionShippingMyparcelShipping extends Model {
 	function getQuote($address) {
 
-        $checkout_settings = $this->config->get('module_myparcelnl_fields_checkout');
-        $status_config = $this->config->get('shipping_myparcel_shipping_status');
+		$checkout_settings = $this->config->get('module_myparcelnl_fields_checkout');
+		$status_config = $this->config->get('shipping_myparcel_shipping_status');
 		$status = !empty($status_config);
-        $belgium_enabled = !empty($checkout_settings['belgium_enabled']);
+		$belgium_enabled = !empty($checkout_settings['belgium_enabled']);
 		$country_iso_code = $address['iso_code_2'] ?? null;
 
 		$method_data = array();
