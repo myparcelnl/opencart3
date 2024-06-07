@@ -23,7 +23,7 @@ class MyParcel_Helper
     function isEUCountry($country_code)
     {
 //        $eu_countries = array( 'GB', 'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE' );
-        $eu_countries = array( 'NL',  'BE', 'AT','BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'XK' );
+        $eu_countries = array( 'NL',  'BE', 'AT', 'BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'XK' );
         return in_array( $country_code, $eu_countries);
     }
 
@@ -736,7 +736,6 @@ class MyParcel_Helper
         $data['entry_tab_3_label_early_postnl_pickup'] = $language->get('entry_tab_3_label_early_postnl_pickup');
         $data['entry_tab_3_title_shipment_processing_parameters'] = $language->get('entry_tab_3_title_shipment_processing_parameters');
         $data['entry_tab_3_label_dropoff_days'] = $language->get('entry_tab_3_label_dropoff_days');
-        $data['entry_tab_3_label_cut_off_time'] = $language->get('entry_tab_3_label_cut_off_time');
         $data['entry_tab_3_label_cut_off_time'] = $language->get('entry_tab_3_label_cut_off_time');
         $data['entry_tab_3_label_dropoff_delay'] = $language->get('entry_tab_3_label_dropoff_delay');
         $data['entry_tab_3_label_delivery_days_window'] = $language->get('entry_tab_3_label_delivery_days_window');

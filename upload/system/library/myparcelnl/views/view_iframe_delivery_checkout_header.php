@@ -1,7 +1,6 @@
 <?php
-/** @var MyParcel_Shipment $checkout_helper **/
+/** @var MyParcel_Shipment $shipment_class **/
 $shipment_class = MyParcel()->shipment;
-/** @var MyParcel_Shipment_Checkout $checkout_helper **/
 $checkout_helper = $shipment_class->checkout;
 $frontend_api_url = 'https://api.myparcel.nl/delivery_options';
 

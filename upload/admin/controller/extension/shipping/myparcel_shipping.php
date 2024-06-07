@@ -78,6 +78,16 @@ class ControllerExtensionShippingMyparcelShipping extends Controller {
 			$data['shipping_myparcel_shipping_cost'] = $this->config->get('shipping_myparcel_shipping_cost');
 		}
 
+		if (isset($this->request->post['shipping_myparcel_shipping_tax_class_id'])) {
+			$data['shipping_myparcel_shipping_tax_class_id'] = $this->request->post['shipping_myparcel_shipping_tax_class_id'];
+		} else {
+			$data['shipping_myparcel_shipping_tax_class_id'] = $this->config->get('shipping_myparcel_shipping_tax_class_id');
+		}
+
+		$this->load->model('localisation/tax_class');
+
+		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+
 		if (isset($this->request->post['shipping_myparcel_shipping_status'])) {
 			$data['shipping_myparcel_shipping_status'] = $this->request->post['shipping_myparcel_shipping_status'];
 		} else {
@@ -115,6 +125,7 @@ class ControllerExtensionShippingMyparcelShipping extends Controller {
 		$this->model_setting_setting->editSetting('shipping_myparcel_shipping', array(
 			'shipping_myparcel_shipping_title' => 'Shipping & Handling',
 			'shipping_myparcel_shipping_cost' => 0,
+			'shipping_myparcel_shipping_tax_class_id' => 0,
 			'shipping_myparcel_shipping_status' => 1,
 			'shipping_myparcel_shipping_sort_order' => 0
 		));

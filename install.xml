@@ -11,7 +11,7 @@
     <link>https://www.myparcel.nl/</link>
 
     <!-- checked with compatible with Opencart 1x-->
-    <!-- yes is compatible, no is no compatible -->
+    <!-- yes is compatible, no is not compatible -->
     <!-- ****************** ORDER_LIST.TWIG ******************* -->
     <!-- ***************************************************** -->
     <file path="admin/view/template/sale/order_list.twig"><!-- checked -->

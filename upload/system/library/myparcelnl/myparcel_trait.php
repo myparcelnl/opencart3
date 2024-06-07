@@ -1,128 +1,102 @@
 <?php
-if(version_compare(VERSION, '2.2.0.0', '>=')) {
-    trait MyparcelT {
-        public function getTotal($total)
-        {
-            if ($this->cart->hasShipping() && isset($this->session->data['shipping_method'])) {
+if (version_compare(VERSION, '2.2.0.0', '>=')) {
+	trait MyparcelT {
+		public function getTotal() {
+			if ($this->cart->hasShipping() && isset($this->session->data['shipping_method'])) {
+				if (!class_exists('MyParcel')) {
+					require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+					MyParcel($this->registry);
+				}
 
-                if (!class_exists('MyParcel')) {
-                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
-                    MyParcel($this->registry);
-                }
+				if (MyParcel()->shipment->checkout->checkValidShippingMethod()
+					&& !empty($this->session->data['myparcel']['data'])
+				) {
 
-                if (MyParcel()->shipment->checkout->checkValidShippingMethod()) {
+					/** @var MyParcel_Shipment_Checkout $checkout_helper * */
+					$checkout_helper = MyParcel()->shipment->checkout;
+					$data = $this->session->data['myparcel'];
 
-                    $total_total_code = version_compare(VERSION, '3.0.0.0', '>=') ? 'myparcel_total' : 'total_myparcel_total';
+					// Get current shipping title
+					$checkout_shipping_method = MyParcel()->shipment->shipment_helper->getShippingCodeByShippingQuote($this->session->data['shipping_method']['code']);
 
-                    if (!empty($this->session->data['myparcel']['data'])) {
+					$total_array = $checkout_helper->getTotalArray($data, false, null, '', false);
+					$total_price = 0;
 
-                        /** @var MyParcel_Shipment_Checkout $checkout_helper * */
-                        $checkout_helper = MyParcel()->shipment->checkout;
-                        $data = $this->session->data['myparcel'];
+					foreach ($total_array as $total_code => $total_item) {
+						$total_price += $total_item['price'];
+					}
 
-                        // Get current shipping title
-                        $checkout_shipping_method = MyParcel()->shipment->shipment_helper->getShippingCodeByShippingQuote($this->session->data['shipping_method']['code']);
+					if (version_compare(VERSION, '2.3.0.0', '>=')) {
+						$this->load->language('extension/shipping/' . $checkout_shipping_method);
+					} else {
+						$this->load->language('shipping/' . $checkout_shipping_method);
+					}
 
-                        $total_array = $checkout_helper->getTotalArray($data, false, null, '', false);
-                        $total_price = 0;
-
-                        foreach ($total_array as $total_code => $total_item) {
-                            $total_price += $total_item['price'];
-                        }
-
-                        if(version_compare(VERSION, '2.3.0.0', '>=')) {
-                            $this->load->language('extension/shipping/' . $checkout_shipping_method);
-                        } else {
-                            $this->load->language('shipping/' . $checkout_shipping_method);
-                        }
-
-
-                        if ($total_price > 0) {
-                            $total['totals'][] = array(
-                                'code' => $total_total_code,
-                                'title' => $this->config->get('shipping_myparcel_shipping_title') .
-                                    '
-							<a class="button-myparcel-total-details" data-collapse="1">'
-                                    . MyParcel()->lang->get('entry_details') .
-                                    '<i class="fa fa-caret-down"></i>
-							</a>
-						',
-                                'value' => $total_price,
-                                'sort_order' => $this->config->get('total_myparcel_total_sort_order')
-                            );
-
-                            $total['total'] += $total_price;
-                        }
-                    } else {
-                        $session_data = $this->session->data;
-                        $shipping_code  = version_compare(VERSION, '3.0.0.0', '>=') ? 'myparcel_shipping.myparcel_shipping' : 'shipping_myparcel_shipping.shipping_myparcel_shipping';
-                        if (!empty($session_data['shipping_method']['code']) && $session_data['shipping_method']['code'] == $shipping_code) {
-                            $total['totals'][] = array(
-                                'code' => $total_total_code,
-                                'title' => $this->config->get('shipping_myparcel_shipping_title'),
-                                'value' => $this->config->get('shipping_myparcel_shipping_cost'),
-                                'sort_order' => $this->config->get('shipping_sort_order')
-                            );
-                        }
-                    }
-                }
-            }
-        }
-    }
+					if ($total_price > 0) {
+						$details = MyParcel()->lang->get('entry_details');
+						$title = $this->config->get('shipping_myparcel_shipping_title');
+						$this->session->data['shipping_method']['title'] =
+							"$title <a class=\"button-myparcel-total-details\" data-collapse=\"1\">$details<i class=\"fa fa-caret-down\"></i></a>";
+						$this->session->data['shipping_method']['cost'] = $total_price;
+						$this->session->data['shipping_method']['text'] = $title; // currently not used in OC that I can see
+					}
+				}
+			}
+		}
+	}
 } else {
-    trait MyparcelT {
-        public function getTotal(&$totals, &$price, &$taxes)
-        {
-            if ($this->cart->hasShipping() && isset($this->session->data['shipping_method'])) {
+	trait MyparcelT {
+		public function getTotal(&$totals, &$price, &$taxes) {
+			if ($this->cart->hasShipping() && isset($this->session->data['shipping_method'])) {
 
-                if (!class_exists('MyParcel')) {
-                    require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
-                    MyParcel($this->registry);
-                }
+				if (!class_exists('MyParcel')) {
+					require_once DIR_SYSTEM . 'library/myparcelnl/class_myparcel.php';
+					MyParcel($this->registry);
+				}
 
-                if (MyParcel()->shipment->checkout->checkValidShippingMethod()) {
+				if (MyParcel()->shipment->checkout->checkValidShippingMethod()) {
 
-                    if (!empty($this->session->data['myparcel']['data'])) {
+					if (!empty($this->session->data['myparcel']['data'])) {
 
-                        /** @var MyParcel_Shipment_Checkout $checkout_helper * */
-                        $checkout_helper = MyParcel()->shipment->checkout;
-                        $data = $this->session->data['myparcel'];
+						/** @var MyParcel_Shipment_Checkout $checkout_helper * */
+						$checkout_helper = MyParcel()->shipment->checkout;
+						$data = $this->session->data['myparcel'];
 
-                        // Get current shipping title
-                        $checkout_shipping_method = MyParcel()->shipment->shipment_helper->getShippingCodeByShippingQuote($this->session->data['shipping_method']['code']);
+						// Get current shipping title
+						$checkout_shipping_method = MyParcel()->shipment->shipment_helper->getShippingCodeByShippingQuote($this->session->data['shipping_method']['code']);
 
-                        $total_array = $checkout_helper->getTotalArray($data, false, null, '', false);
-                        $total_price = 0;
+						$total_array = $checkout_helper->getTotalArray($data, false, null, '', false);
+						$total_price = 0;
 
-                        foreach ($total_array as $total_code => $total_item) {
-                            $total_price += $total_item['price'];
-                        }
+						foreach ($total_array as $total_code => $total_item) {
+							$total_price += $total_item['price'];
+						}
 
-                        if(version_compare(VERSION, '2.3.0.0', '>=')) {
-                            $this->load->language('extension/shipping/' . $checkout_shipping_method);
-                        } else {
-                            $this->load->language('shipping/' . $checkout_shipping_method);
-                        }
+						if (version_compare(VERSION, '2.3.0.0', '>=')) {
+							$this->load->language('extension/shipping/' . $checkout_shipping_method);
+						} else {
+							$this->load->language('shipping/' . $checkout_shipping_method);
+						}
 
-                        if ($total_price > 0) {
-                            $totals[] = array(
-                                'code' => 'total_myparcel_total',
-                                'title' => $this->config->get('shipping_myparcel_shipping_title') .
-                                    '
+						if ($total_price > 0) {
+							$totals[] = array(
+								'code' => 'total_myparcel_total',
+								'title' => $this->config->get('shipping_myparcel_shipping_title') .
+									'
 							<a class="button-myparcel-total-details" data-collapse="1">'
-                                    . MyParcel()->lang->get('entry_details') .
-                                    '<i class="fa fa-caret-down"></i>
+									. MyParcel()->lang->get('entry_details') .
+									'<i class="fa fa-caret-down"></i>
 							</a>
 						',
-                                'value' => $total_price,
-                                'sort_order' => $this->config->get('total_myparcel_total_sort_order')
-                            );
+								'value' => $total_price,
+								'sort_order' => $this->config->get('total_myparcel_total_sort_order')
+							);
 
-                            $price += $total_price;
-                        }
-                    }
-                }
-            }
-        }
-    }
+							$price += $total_price;
+						}
+					}
+				}
+			}
+		}
+	}
 }

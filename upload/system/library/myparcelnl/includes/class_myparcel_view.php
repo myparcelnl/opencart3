@@ -64,15 +64,11 @@ class MyParcel_View extends MyParcel_View_Core
         $session = $registry->get('session');
         $url = $registry->get('url');
         $token = $session->data['user_token'];
-        if (version_compare(VERSION, '2.0.0.0', '>=')) {
-            $formAction = $url->link(MyParcel()->getMyparcelControllerPath('myparcelnl', 'exportPrintBatch'), array('user_token' => $token));
-        } else {
-            $formAction = $url->link(MyParcel()->getMyparcelControllerPath('myparcelnl', 'exportPrintBatch'), array('user_token' => $token));
-        }
+        $formAction = $url->link(MyParcel()->getMyparcelControllerPath('myparcelnl', 'exportPrintBatch'), array('user_token' => $token), true);
         ob_start();
         $this->render('view_export_print_batch', array('formAction' => $formAction));
-        $html = ob_get_clean();
-        return $html;
+
+        return ob_get_clean();
     }
 
     function column_myparcel($order_id, $screen = 'order_overview')

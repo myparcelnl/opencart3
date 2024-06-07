@@ -89,7 +89,6 @@ class ControllerExtensionTotalMyparcelTotal extends Controller {
         } else {
             $this->response->setOutput($this->load->view(MyParcel()->getTotalPath() . 'myparcel_total.tpl', $data));
         }
-
 	}
 
 	function validate()
