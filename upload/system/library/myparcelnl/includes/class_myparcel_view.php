@@ -320,9 +320,10 @@ class MyParcel_View extends MyParcel_View_Core
             $model_shipment->saveShipmentData($order_id, $shipment_data);
 
             // skip concepts, letters & mailbox packages
-            if (empty($shipment_data['tracktrace'])) {
+            if (false === $shipment_data || empty($shipment_data['tracktrace'])) {
                 unset($consignments[$shipment_id]);
-                // continue;
+
+                return '';
             }
 
             $api = MyParcel()->api;
@@ -385,9 +386,10 @@ class MyParcel_View extends MyParcel_View_Core
             $shipment_data = MyParcel()->shipment->shipment_helper->getShipmentData($shipment_id);
 
             // skip concepts, letters & mailbox packages
-            if (empty($shipment_data['tracktrace'])) {
+            if (false === $shipment_data || empty($shipment_data['tracktrace'])) {
                 unset($consignments[$shipment_id]);
-                //continue;
+
+                return '';
             }
 
             $api = MyParcel()->api;
