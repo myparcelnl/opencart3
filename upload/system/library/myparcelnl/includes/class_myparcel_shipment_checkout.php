@@ -52,7 +52,7 @@ class MyParcel_Shipment_Checkout
     function getTotalArray($data, $price_format = false, $order_id = null, $prefix = '', $taxIncluded = true)
     {
         // If this request is called from admin, $data is already an array so no need to encode
-        if (!isset($$data['data'])) {
+        if (!isset($data['data'])) {
             $delivery_options = [];
         } elseif (!is_array($data['data'])) {
             $delivery_options = json_decode(html_entity_decode($data['data']), true);
