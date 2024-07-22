@@ -1831,49 +1831,6 @@
             ]]></add>
         </operation>
     </file>
-
-    <!-- ________________ MODIFY TOTAL TAX ________________ -->
-    <!-- _________ ADD SHIPPING TAX TO TOTAL OF TAX _______ -->
-    <!-- __________________________________________________ -->
-    <file path="catalog/model/extension/total/tax.php">
-        <operation>
-            <search><![CDATA[if ($value > 0) {]]></search>
-            <add position="after"><![CDATA[
-                /* MyParcel Ocmod Start */
-                $tax = 0;
-                if (!empty($this->session->data['myparcel']['data'])) {
-                    /** @var MyParcel_Shipment_Checkout $checkout_helper * */
-                    $this->load->model('extension/myparcelnl/helper');
-                    $checkout_helper = MyParcel($this->registry)->shipment->checkout;
-                    $helper = MyParcel()->helper;
-                    $data = $this->session->data['myparcel'];
-
-                    if ((is_array($data['data']) && count($data['data'])) || (!is_array($data['data']) && count(json_decode(html_entity_decode($data['data']), true)))) {
-                        $total_array = $checkout_helper->getTotalArray($data, false, null, '', false);
-                        $total_price_without_tax = 0;
-
-                        foreach ($total_array as $total_code => $total_item) {
-                            $total_price_without_tax += $total_item['price'];
-                        }
-                        //get tax
-                        $currentTax =$helper->getTaxRate($key);
-                        if($currentTax !== false){
-                            switch ($currentTax['type']){
-                                case 'P' :
-                                    $tax = $total_price_without_tax * ($currentTax['rate']/100);
-                                    break;
-                                case 'F':
-                                    $tax = $currentTax['rate'];
-                                    break;
-                            }
-                        }
-                    }
-                }
-                $value += $tax;
-                /* MyParcel Ocmod End */
-            ]]></add>
-        </operation>
-    </file>
     <file path="admin/view/template/catalog/product_form.twig">
         <operation><!-- yes -->
             <search><![CDATA[<li><a href="#tab-data" data-toggle="tab">{{ tab_data }}</a></li>]]></search>
