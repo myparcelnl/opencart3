@@ -3,10 +3,17 @@
 #  1. Copies OpenCart core into the (empty) volume on first start
 #  2. Waits for the database and runs the CLI installer once
 #  3. Links the plugin from the git checkout (/plugin) into OpenCart
-#  4. Refreshes OCMOD modifications in the background
+#  4. Installs the plugin and refreshes OCMOD in the background
+# Each start logs one line "[opencart] setup finished: OK" or
+# "[opencart] setup finished: FAILED (<step>)".
 set -euo pipefail
 
 WEBROOT=/var/www/html
+
+fail_setup() {
+  echo "[opencart] setup finished: FAILED ($1)"
+  exit 1
+}
 
 if [ ! -f "${WEBROOT}/index.php" ]; then
   echo "[opencart] Copying OpenCart core into ${WEBROOT}..."
@@ -22,19 +29,21 @@ done
 
 FIRST_INSTALL=0
 if [ ! -s "${WEBROOT}/config.php" ]; then
-  oc-install
+  oc-install || fail_setup "opencart install"
   FIRST_INSTALL=1
 fi
 
-oc-link
+oc-link || fail_setup "plugin link"
 
-# Once Apache is up (needs an HTTP login to the admin):
+# Once Apache is up (oc-admin-token waits for the admin login page):
 #  - first install: install the MyParcel extensions
-#  - every start: refresh OCMOD so install.xml is applied
+#  - every start: refresh OCMOD modifications
 (
-  sleep 3
-  if [ "${FIRST_INSTALL}" = 1 ]; then oc-plugin-install || echo "[opencart] plugin install failed, run 'make install-plugin'"; fi
-  oc-ocmod-refresh || echo "[opencart] OCMOD refresh failed, run 'make ocmod'"
+  if [ "${FIRST_INSTALL}" = 1 ]; then
+    oc-plugin-install || fail_setup "plugin install"
+  fi
+  oc-ocmod-refresh || fail_setup "ocmod refresh"
+  echo "[opencart] setup finished: OK"
 ) &
 
 exec docker-php-entrypoint "$@"

@@ -1,10 +1,51 @@
 #!/usr/bin/env bash
-# Installs the MyParcel module, shipping and order-total extensions in OpenCart
-# (same as clicking "Install" in Extensions > Extensions). Safe to re-run.
+# Installs MyParcel extensions in OpenCart, as Extensions > Extensions > Install does.
+# Arguments: extensions as <type>/<code>; default: the module and the shipping extension.
+# Core answers the install route with a success page even when the install fails,
+# so success is the extension's row in oc_extension. Exits 1 when an extension fails.
 set -euo pipefail
-token="$(oc-admin-token)"
-for ext in module/myparcelnl shipping/myparcel_shipping total/myparcel_total; do
-  curl -s -b /tmp/oc-admin.jar -o /dev/null \
-    "http://localhost/admin/index.php?route=extension/extension/${ext%%/*}/install&extension=${ext#*/}&user_token=${token}"
+WEBROOT=/var/www/html
+PREFIX="${DB_PREFIX:-oc_}"
+
+extensions=("$@")
+if [ "${#extensions[@]}" -eq 0 ]; then
+  extensions=(module/myparcelnl shipping/myparcel_shipping)
+fi
+
+is_registered() {
+  local count
+  count="$(mysql -h"${DB_HOST}" -P"${DB_PORT}" -u"${DB_USER}" -p"${DB_PASSWORD}" "${DB_NAME}" -N -e \
+    "SELECT COUNT(*) FROM ${PREFIX}extension WHERE type = '$1' AND code = '$2'")"
+  [ "${count}" -gt 0 ]
+}
+
+# Installs one extension and checks that it is registered.
+install_extension() {
+  local type="${1%%/*}"
+  local code="${1#*/}"
+
+  # Core also registers a code without a controller file, so the row alone proves nothing then.
+  [[ "$1" =~ ^[a-z]+/[a-z0-9_]+$ ]] \
+    && [ -f "${WEBROOT}/admin/controller/extension/${type}/${code}.php" ] \
+    && curl -fs -b /tmp/oc-admin.jar -o /dev/null \
+      "http://localhost/admin/index.php?route=extension/extension/${type}/install&extension=${code}&user_token=${token}" \
+    && is_registered "${type}" "${code}"
+}
+
+if ! token="$(oc-admin-token)"; then
+  echo "[opencart] plugin install failed: ${extensions[*]} (no admin login)" >&2
+  exit 1
+fi
+
+failed=0
+for ext in "${extensions[@]}"; do
+  if ! install_extension "${ext}"; then
+    echo "[opencart] plugin install failed: ${ext}" >&2
+    failed=1
+    continue
+  fi
+
+  echo "[opencart] plugin installed: ${ext} (registered in ${PREFIX}extension)"
 done
-echo "[opencart] MyParcel extensions installed."
+
+exit "${failed}"

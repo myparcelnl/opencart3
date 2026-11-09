@@ -20,7 +20,4 @@ while IFS= read -r -d '' file; do
   count=$((count + 1))
 done < <(find "${SRC}" -type f ! -name '.DS_Store' -print0)
 
-# Plugin writes its own log here
-chown -R www-data:www-data "${SRC}/system/library/myparcelnl/logs" 2>/dev/null || true
-
 echo "[opencart] Linked ${count} plugin files."

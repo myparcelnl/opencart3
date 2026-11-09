@@ -1,0 +1,32 @@
+#!/bin/sh
+# Downloads the OpenCart release zip to /tmp/opencart.zip and checks its SHA-256.
+# Usage: opencart-download <version> <zip url or empty> <sha256 or empty> <releases file>
+# A version in the releases file always gets a checksum check. A version outside it
+# (no guarantee) may skip the check, with a warning in the build log.
+set -eu
+version="$1"
+url="$2"
+sha256="$3"
+releases="$4"
+
+release="$(awk -v v="${version}" '$1 == v { print $2, $3 }' "${releases}")"
+
+if [ -n "${release}" ]; then
+  if [ -n "${url}" ] && [ -z "${sha256}" ]; then
+    echo "[opencart] OPENCART_ZIP_URL is set for ${version} without OPENCART_ZIP_SHA256; set both or neither" >&2
+    exit 1
+  fi
+  url="${url:-${release% *}}"
+  sha256="${sha256:-${release#* }}"
+fi
+
+url="${url:-https://github.com/opencart/opencart/releases/download/${version}/opencart-${version}.zip}"
+echo "[opencart] Downloading ${url}"
+curl -fsSL -o /tmp/opencart.zip "${url}"
+
+if [ -z "${sha256}" ]; then
+  echo "[opencart] WARNING: no SHA-256 for OpenCart ${version}; the zip is not verified" >&2
+  exit 0
+fi
+
+echo "${sha256}  /tmp/opencart.zip" | sha256sum -c -

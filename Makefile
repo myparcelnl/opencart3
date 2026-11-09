@@ -8,7 +8,7 @@ VERSION := $(shell sed -n 's:.*<version>\(.*\)</version>.*:\1:p' install.xml | h
 	cp .env.example .env
 
 help: ## Show available commands
-	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-8s\033[0m %s\n", $$1, $$2}'
+	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 up: .env ## Build and start the environment
 	$(DC) up -d --build
@@ -24,7 +24,7 @@ down: ## Stop the environment
 reset: ## Stop and DELETE all data (fresh OpenCart install on next 'make up')
 	$(DC) down -v
 
-logs: ## Follow OpenCart container logs
+logs: ## Follow OpenCart container logs (wait for "setup finished")
 	$(DC) logs -f opencart
 
 shell: ## Bash shell in the OpenCart container
@@ -33,11 +33,11 @@ shell: ## Bash shell in the OpenCart container
 link: ## Re-link plugin files (after adding/removing files)
 	$(DC) exec opencart oc-link
 
-ocmod: ## Re-apply install.xml (after changing install.xml)
+ocmod: ## Refresh OCMOD modifications (Extensions > Modifications > Refresh)
 	$(DC) exec opencart oc-ocmod-refresh
 
-install-plugin: ## (Re)install the MyParcel extensions in OpenCart
-	$(DC) exec opencart oc-plugin-install
+install-plugin: ## (Re)install the MyParcel extensions; EXT="module/<code> ..." to choose
+	$(DC) exec opencart oc-plugin-install $(EXT)
 
 db: ## MariaDB console
 	$(DC) exec db mariadb -u$(or $(DB_USER),opencart) -p$(or $(DB_PASSWORD),opencart) $(or $(DB_NAME),opencart)

@@ -1,5 +1,5 @@
 # Local OpenCart 3 development environment for the MyParcel plugin.
-# Usage: make up   (see DEVELOPMENT.md)
+# Usage: make up   (see CONTRIBUTING.md)
 name: myparcel-opencart3
 
 services:
@@ -7,11 +7,16 @@ services:
     build:
       context: .docker
       args:
-        PHP_VERSION: ${PHP_VERSION:-8.1}
-        OPENCART_VERSION: ${OPENCART_VERSION:-3.0.3.9}
-    image: myparcel-opencart3:${OPENCART_VERSION:-3.0.3.9}-php${PHP_VERSION:-8.1}
+        PHP_VERSION: ${PHP_VERSION:-8.3}
+        DEBIAN_VARIANT: ${DEBIAN_VARIANT:-trixie}
+        OPENCART_VERSION: ${OPENCART_VERSION:-3.0.5.0}
+        OPENCART_ZIP_URL: ${OPENCART_ZIP_URL:-}
+        OPENCART_ZIP_SHA256: ${OPENCART_ZIP_SHA256:-}
+        XDEBUG_VERSION: ${XDEBUG_VERSION:-3.5.3}
+    image: myparcel-opencart3:${OPENCART_VERSION:-3.0.5.0}-php${PHP_VERSION:-8.3}
+    # Ports only on the loopback interface: the default passwords are acceptable only because of this
     ports:
-      - "${OC_PORT:-8080}:80"
+      - "127.0.0.1:${OC_PORT:-8080}:80"
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -24,18 +29,22 @@ services:
       OC_ADMIN_PASSWORD: ${OC_ADMIN_PASSWORD:-admin}
       OC_ADMIN_EMAIL: ${OC_ADMIN_EMAIL:-admin@example.com}
       XDEBUG_MODE: ${XDEBUG_MODE:-off}
-      # Never point local development at production
-      MYPARCEL_API_URL: ${MYPARCEL_API_URL:-https://api.acceptance.myparcel.nl/}
     volumes:
       # OpenCart core (persisted in a volume, not in git)
       - opencart:/var/www/html
       # Plugin source = this git checkout, symlinked into OpenCart by oc-link
       - ./upload:/plugin/upload
-      - ./install.xml:/plugin/install.xml:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      # Safety net: the production API is unreachable from the dev container
+      # Safety net: MyParcel production hosts are unreachable from the shop container.
+      # The acceptance API stays reachable. See CONTRIBUTING.md before you add a host.
       - "api.myparcel.nl:127.0.0.1"
+      - "iam.api.myparcel.nl:127.0.0.1"
+      - "order.api.myparcel.nl:127.0.0.1"
+      - "printing.api.myparcel.nl:127.0.0.1"
+      - "backoffice.myparcel.nl:127.0.0.1"
+      - "account.myparcel.nl:127.0.0.1"
+      - "admin.myparcel.nl:127.0.0.1"
     depends_on:
       - db
 
@@ -47,7 +56,7 @@ services:
       MARIADB_PASSWORD: ${DB_PASSWORD:-opencart}
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
     ports:
-      - "${DB_PORT_HOST:-3307}:3306"
+      - "127.0.0.1:${DB_PORT_HOST:-3307}:3306"
     volumes:
       - db:/var/lib/mysql
 
@@ -58,14 +67,14 @@ services:
       PMA_USER: ${DB_USER:-opencart}
       PMA_PASSWORD: ${DB_PASSWORD:-opencart}
     ports:
-      - "${PMA_PORT:-8081}:80"
+      - "127.0.0.1:${PMA_PORT:-8081}:80"
     depends_on:
       - db
 
   mailpit:
     image: axllent/mailpit:v1.21
     ports:
-      - "${MAILPIT_PORT:-8025}:8025"
+      - "127.0.0.1:${MAILPIT_PORT:-8025}:8025"
 
 volumes:
   opencart:

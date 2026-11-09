@@ -1,0 +1,6 @@
+# OpenCart releases with a guaranteed Docker combination: <version> <zip url> <sha256>
+# 3.0.5.0 and 3.0.5.1: SHA-256 from the GitHub release asset digest.
+# 3.0.4.1: GitHub has no digest for this asset; SHA-256 calculated from the download on 2026-11-09.
+3.0.4.1 https://github.com/opencart/opencart/releases/download/3.0.4.1/3.0.4.1.zip 79fb91fd7cc548efd4a325237cc07828bfcea2b9b63156576f7c17d44354a114
+3.0.5.0 https://github.com/opencart/opencart/releases/download/3.0.5.0/opencart-3.0.5.0.zip b697e1df5b7cf6c777d5b0627c18ac491aae3f36ab202e37402d5280eb8c1269
+3.0.5.1 https://github.com/opencart/opencart/releases/download/3.0.5.1/opencart-3.0.5.1.zip 4cc13139b75bc2b590614d58d4ec84ed69463d94cb99e64a9e2621c6f84c9fa8
