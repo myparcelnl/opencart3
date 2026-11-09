@@ -71,8 +71,10 @@ make reset           delete everything; the next `make up` installs a fresh shop
 install other extensions, give them in `EXT`, for example
 `make install-plugin EXT="module/myparcelnl"`. The script checks the extension's row in
 `oc_extension`, because OpenCart shows a success page also when an install fails. When an
-extension is not installed, the script logs `[opencart] plugin install failed: <extension>`
-and exits with code 1. The shop and the admin stay available.
+extension is not installed, the script writes
+`[opencart] plugin install failed: <extension> (<reason>)` and exits with code 1. When you
+run `make install-plugin` yourself, the line shows in your terminal. On the first start
+the entrypoint runs the script, so the line shows in `make logs`.
 
 ## OpenCart and PHP combinations
 
@@ -128,8 +130,7 @@ Rules for `OPENCART_ZIP_URL` and `OPENCART_ZIP_SHA256`:
 
 The PHP image for PHP 8.1 exists on Debian `bookworm`, the images for PHP 7.4 and 8.0 only
 on `bullseye`.
-Xdebug `3.5.3` builds on PHP 8.1 to 8.5 (tested). For PHP 7.4, set `XDEBUG_VERSION=3.1.6`
-(not tested). For example:
+For PHP 7.4, set `XDEBUG_VERSION=3.1.6` (not tested). For example:
 
 ```
 OPENCART_VERSION=3.0.3.9
@@ -141,7 +142,8 @@ DEBIAN_VARIANT=bookworm
 
 Set `XDEBUG_MODE=debug` in `.env`, run `make up` and listen on port 9003. PhpStorm: map
 `/plugin/upload` to `<project>/upload`. The image installs Xdebug `3.5.3`. It builds and
-loads on all guaranteed combinations (PHP 8.2 to 8.5); a debug session is not tested. To
+loads on PHP 8.1 to 8.5, which covers all guaranteed combinations; a debug session is not
+tested. To
 use another version, set `XDEBUG_VERSION` in `.env`.
 
 ### Upload limit
