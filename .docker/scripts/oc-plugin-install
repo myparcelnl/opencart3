@@ -25,7 +25,8 @@ install_extension() {
   local code="${1#*/}"
   local reason=""
 
-  # Core also registers a code without a controller file, so the row alone proves nothing then.
+  # The controller file is checked before the oc_extension row, because core also
+  # registers a code without a controller file.
   if [[ ! "$1" =~ ^[a-z]+/[a-z0-9_]+$ ]]; then
     reason="invalid name, expected <type>/<code>"
   elif [ ! -f "${WEBROOT}/admin/controller/extension/${type}/${code}.php" ]; then
@@ -46,7 +47,9 @@ install_extension() {
 }
 
 if ! token="$(oc-admin-token)"; then
-  echo "[opencart] plugin install failed: ${extensions[*]} (no admin login)" >&2
+  for ext in "${extensions[@]}"; do
+    echo "[opencart] plugin install failed: ${ext} (no admin login)" >&2
+  done
   exit 1
 fi
 

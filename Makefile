@@ -37,6 +37,7 @@ ocmod: ## Refresh OCMOD modifications (Extensions > Modifications > Refresh)
 	$(DC) exec opencart oc-ocmod-refresh
 
 install-plugin: ## (Re)install the MyParcel extensions; EXT="module/<code> ..." to choose
+	@# Quote each EXT word for the shell, so a stray quote cannot break the command
 	$(DC) exec opencart oc-plugin-install $(foreach e,$(EXT),'$(subst ','\'',$(e))')
 
 db: ## MariaDB console
