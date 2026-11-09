@@ -19,17 +19,30 @@ is_registered() {
   [ "${count}" -gt 0 ]
 }
 
-# Installs one extension and checks that it is registered.
+# Installs one extension. On failure, logs which check failed and returns 1.
 install_extension() {
   local type="${1%%/*}"
   local code="${1#*/}"
+  local reason=""
 
   # Core also registers a code without a controller file, so the row alone proves nothing then.
-  [[ "$1" =~ ^[a-z]+/[a-z0-9_]+$ ]] \
-    && [ -f "${WEBROOT}/admin/controller/extension/${type}/${code}.php" ] \
-    && curl -fs -b /tmp/oc-admin.jar -o /dev/null \
-      "http://localhost/admin/index.php?route=extension/extension/${type}/install&extension=${code}&user_token=${token}" \
-    && is_registered "${type}" "${code}"
+  if [[ ! "$1" =~ ^[a-z]+/[a-z0-9_]+$ ]]; then
+    reason="invalid name, expected <type>/<code>"
+  elif [ ! -f "${WEBROOT}/admin/controller/extension/${type}/${code}.php" ]; then
+    reason="no controller file"
+  elif ! curl -fs -b /tmp/oc-admin.jar -o /dev/null \
+    "http://localhost/admin/index.php?route=extension/extension/${type}/install&extension=${code}&user_token=${token}"; then
+    reason="install request failed"
+  elif ! is_registered "${type}" "${code}"; then
+    reason="not registered in ${PREFIX}extension"
+  fi
+
+  if [ -n "${reason}" ]; then
+    echo "[opencart] plugin install failed: $1 (${reason})" >&2
+    return 1
+  fi
+
+  echo "[opencart] plugin installed: $1 (registered in ${PREFIX}extension)"
 }
 
 if ! token="$(oc-admin-token)"; then
@@ -39,13 +52,7 @@ fi
 
 failed=0
 for ext in "${extensions[@]}"; do
-  if ! install_extension "${ext}"; then
-    echo "[opencart] plugin install failed: ${ext}" >&2
-    failed=1
-    continue
-  fi
-
-  echo "[opencart] plugin installed: ${ext} (registered in ${PREFIX}extension)"
+  install_extension "${ext}" || failed=1
 done
 
 exit "${failed}"

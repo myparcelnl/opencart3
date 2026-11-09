@@ -37,7 +37,7 @@ ocmod: ## Refresh OCMOD modifications (Extensions > Modifications > Refresh)
 	$(DC) exec opencart oc-ocmod-refresh
 
 install-plugin: ## (Re)install the MyParcel extensions; EXT="module/<code> ..." to choose
-	$(DC) exec opencart oc-plugin-install $(EXT)
+	$(DC) exec opencart oc-plugin-install $(foreach e,$(EXT),'$(subst ','\'',$(e))')
 
 db: ## MariaDB console
 	$(DC) exec db mariadb -u$(or $(DB_USER),opencart) -p$(or $(DB_PASSWORD),opencart) $(or $(DB_NAME),opencart)

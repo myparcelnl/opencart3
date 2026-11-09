@@ -43,9 +43,14 @@ When the setup is done, the log shows exactly one of these lines:
 [opencart] setup finished: FAILED (<step>)
 ```
 
-`<step>` is `opencart install`, `plugin link`, `plugin install` or `ocmod refresh`. Each
-start of the container writes one setup line. The lines above it
-tell you what failed.
+`<step>` is `opencart install`, `plugin link`, `plugin install` or `ocmod refresh`. The
+lines above it tell you what failed. A failure in `opencart install` or `plugin link`
+stops the container. A failure in `plugin install` or `ocmod refresh` does not: the shop
+and the admin stay available. The plugin is installed only on the first start; after a
+failure, fix the cause and run `make install-plugin`.
+
+Each start of the container writes one setup line, so after a restart without
+`make reset` the log shows more than one.
 
 ## Daily commands
 
@@ -123,7 +128,8 @@ Rules for `OPENCART_ZIP_URL` and `OPENCART_ZIP_SHA256`:
 
 The PHP image for PHP 8.1 exists on Debian `bookworm`, the images for PHP 7.4 and 8.0 only
 on `bullseye`.
-Xdebug `3.5.3` supports PHP 8.0 to 8.5; PHP 7.4 needs Xdebug `3.1.6`. For example:
+Xdebug `3.5.3` builds on PHP 8.1 to 8.5 (tested). For PHP 7.4, set `XDEBUG_VERSION=3.1.6`
+(not tested). For example:
 
 ```
 OPENCART_VERSION=3.0.3.9
@@ -134,9 +140,9 @@ DEBIAN_VARIANT=bookworm
 ### Xdebug
 
 Set `XDEBUG_MODE=debug` in `.env`, run `make up` and listen on port 9003. PhpStorm: map
-`/plugin/upload` to `<project>/upload`. The image installs Xdebug `3.5.3`, which works on
-all guaranteed combinations (PHP 8.2 to 8.5). To use another version, set `XDEBUG_VERSION`
-in `.env`.
+`/plugin/upload` to `<project>/upload`. The image installs Xdebug `3.5.3`. It builds and
+loads on all guaranteed combinations (PHP 8.2 to 8.5); a debug session is not tested. To
+use another version, set `XDEBUG_VERSION` in `.env`.
 
 ### Upload limit
 

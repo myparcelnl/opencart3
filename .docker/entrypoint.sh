@@ -3,7 +3,7 @@
 #  1. Copies OpenCart core into the (empty) volume on first start
 #  2. Waits for the database and runs the CLI installer once
 #  3. Links the plugin from the git checkout (/plugin) into OpenCart
-#  4. Installs the plugin and refreshes OCMOD in the background
+#  4. Installs the plugin (first start only) and refreshes OCMOD in the background
 # Each start logs one line "[opencart] setup finished: OK" or
 # "[opencart] setup finished: FAILED (<step>)".
 set -euo pipefail
