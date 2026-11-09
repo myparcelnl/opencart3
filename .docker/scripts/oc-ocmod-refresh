@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Re-applies the plugin's OCMOD files after you edited them (make ocmod):
+#  1. copies the XML from the repo into the oc_modification rows the plugin
+#     created on install (OpenCart keeps its own copy in the database)
+#  2. triggers Extensions > Modifications > Refresh
+set -euo pipefail
+
+php -r '
+$map = [
+  "MyParcelNL"                 => "/plugin/install.xml",
+  "MyParcelNL_default_checkout"=> "/plugin/upload/system/library/myparcelnl/myparcel.checkout.ocmod.xml",
+  "MyParcelNL_ajax_checkout"   => "/plugin/upload/system/library/myparcelnl/myparcel.aqc.ocmod.xml",
+];
+$db = new mysqli(getenv("DB_HOST"), getenv("DB_USER"), getenv("DB_PASSWORD"), getenv("DB_NAME"), (int)getenv("DB_PORT"));
+$table = (getenv("DB_PREFIX") ?: "oc_") . "modification";
+$stmt = $db->prepare("UPDATE `$table` SET xml = ? WHERE code = ?");
+foreach ($map as $code => $file) {
+  $xml = file_get_contents($file);
+  $stmt->bind_param("ss", $xml, $code);
+  $stmt->execute();
+  if ($stmt->affected_rows > 0) echo "[opencart] synced $code from " . basename($file) . "\n";
+}
+'
+
+token="$(oc-admin-token)"
+curl -s -b /tmp/oc-admin.jar -o /dev/null \
+  "http://localhost/admin/index.php?route=marketplace/modification/refresh&user_token=${token}"
+echo "[opencart] OCMOD modifications refreshed."

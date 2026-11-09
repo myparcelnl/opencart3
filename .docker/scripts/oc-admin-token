@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Logs in to the OpenCart admin and prints a user_token.
+# Session cookie is stored in /tmp/oc-admin.jar for follow-up requests.
+set -euo pipefail
+BASE="http://localhost/admin/index.php"
+JAR=/tmp/oc-admin.jar
+
+for i in $(seq 1 30); do
+  curl -fs -o /dev/null "${BASE}?route=common/login" && break
+  sleep 1
+done
+
+location="$(curl -s -c "${JAR}" -b "${JAR}" -o /dev/null -D - \
+  --data-urlencode "username=${OC_ADMIN_USER}" \
+  --data-urlencode "password=${OC_ADMIN_PASSWORD}" \
+  "${BASE}?route=common/login" | tr -d '\r' | awk -F': ' 'tolower($1)=="location"{print $2}')"
+
+token="$(sed -n 's/.*user_token=\([A-Za-z0-9]*\).*/\1/p' <<< "${location}")"
+if [ -z "${token}" ]; then
+  echo "[opencart] admin login failed" >&2
+  exit 1
+fi
+echo "${token}"

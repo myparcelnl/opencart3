@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Symlinks every plugin file from the git checkout (/plugin/upload) into OpenCart,
+# so edits in your IDE are live immediately. Run again after adding/removing files.
+set -euo pipefail
+WEBROOT=/var/www/html
+SRC=/plugin/upload
+
+# Remove dangling links from files that were deleted/renamed in the repo
+find "${WEBROOT}" -xtype l -lname '/plugin/*' -print -delete 2>/dev/null | sed 's/^/[opencart] removed stale link: /' || true
+
+count=0
+while IFS= read -r -d '' file; do
+  rel="${file#${SRC}/}"
+  target="${WEBROOT}/${rel}"
+  mkdir -p "$(dirname "${target}")"
+  if [ -e "${target}" ] && [ ! -L "${target}" ]; then
+    rm -f "${target}"   # replace a copied file by the link
+  fi
+  ln -sfn "${file}" "${target}"
+  count=$((count + 1))
+done < <(find "${SRC}" -type f ! -name '.DS_Store' -print0)
+
+# Plugin writes its own log here
+chown -R www-data:www-data "${SRC}/system/library/myparcelnl/logs" 2>/dev/null || true
+
+echo "[opencart] Linked ${count} plugin files."

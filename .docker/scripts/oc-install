@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Runs the OpenCart CLI installer and applies dev-friendly settings.
+set -euo pipefail
+WEBROOT=/var/www/html
+PREFIX="${DB_PREFIX:-oc_}"
+
+echo "[opencart] Installing OpenCart (${OC_URL})..."
+cd "${WEBROOT}/install"
+php cli_install.php install \
+  --db_hostname "${DB_HOST}" \
+  --db_username "${DB_USER}" \
+  --db_password "${DB_PASSWORD}" \
+  --db_database "${DB_NAME}" \
+  --db_driver mysqli \
+  --db_port "${DB_PORT}" \
+  --db_prefix "${PREFIX}" \
+  --username "${OC_ADMIN_USER}" \
+  --password "${OC_ADMIN_PASSWORD}" \
+  --email "${OC_ADMIN_EMAIL}" \
+  --http_server "${OC_URL}"
+
+cd "${WEBROOT}"
+rm -rf "${WEBROOT}/install"
+
+mysql_q() { mysql -h"${DB_HOST}" -P"${DB_PORT}" -u"${DB_USER}" -p"${DB_PASSWORD}" "${DB_NAME}" -e "$1"; }
+set_setting() {
+  mysql_q "DELETE FROM ${PREFIX}setting WHERE store_id=0 AND \`key\`='$1';
+           INSERT INTO ${PREFIX}setting (store_id, code, \`key\`, value, serialized) VALUES (0, 'config', '$1', '$2', 0);"
+}
+
+# Mail -> Mailpit, show PHP errors, Dutch defaults for the MyParcel plugin
+set_setting config_mail_engine smtp
+set_setting config_mail_smtp_hostname "${MAIL_HOST:-mailpit}"
+set_setting config_mail_smtp_port "${MAIL_PORT:-1025}"
+set_setting config_error_display 1
+set_setting config_error_log 1
+set_setting config_country_id 150
+
+chown -R www-data:www-data "${WEBROOT}"
+echo "[opencart] Install complete."

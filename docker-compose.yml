@@ -1,0 +1,72 @@
+# Local OpenCart 3 development environment for the MyParcel plugin.
+# Usage: make up   (see DEVELOPMENT.md)
+name: myparcel-opencart3
+
+services:
+  opencart:
+    build:
+      context: .docker
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.1}
+        OPENCART_VERSION: ${OPENCART_VERSION:-3.0.3.9}
+    image: myparcel-opencart3:${OPENCART_VERSION:-3.0.3.9}-php${PHP_VERSION:-8.1}
+    ports:
+      - "${OC_PORT:-8080}:80"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-opencart}
+      DB_USER: ${DB_USER:-opencart}
+      DB_PASSWORD: ${DB_PASSWORD:-opencart}
+      DB_PREFIX: ${DB_PREFIX:-oc_}
+      OC_URL: http://localhost:${OC_PORT:-8080}/
+      OC_ADMIN_USER: ${OC_ADMIN_USER:-admin}
+      OC_ADMIN_PASSWORD: ${OC_ADMIN_PASSWORD:-admin}
+      OC_ADMIN_EMAIL: ${OC_ADMIN_EMAIL:-admin@example.com}
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      # Never point local development at production
+      MYPARCEL_API_URL: ${MYPARCEL_API_URL:-https://api.acceptance.myparcel.nl/}
+    volumes:
+      # OpenCart core (persisted in a volume, not in git)
+      - opencart:/var/www/html
+      # Plugin source = this git checkout, symlinked into OpenCart by oc-link
+      - ./upload:/plugin/upload
+      - ./install.xml:/plugin/install.xml:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      # Safety net: the production API is unreachable from the dev container
+      - "api.myparcel.nl:127.0.0.1"
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:-opencart}
+      MARIADB_USER: ${DB_USER:-opencart}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-opencart}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+    ports:
+      - "${DB_PORT_HOST:-3307}:3306"
+    volumes:
+      - db:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    environment:
+      PMA_HOST: db
+      PMA_USER: ${DB_USER:-opencart}
+      PMA_PASSWORD: ${DB_PASSWORD:-opencart}
+    ports:
+      - "${PMA_PORT:-8081}:80"
+    depends_on:
+      - db
+
+  mailpit:
+    image: axllent/mailpit:v1.21
+    ports:
+      - "${MAILPIT_PORT:-8025}:8025"
+
+volumes:
+  opencart:
+  db:

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Installs the MyParcel module, shipping and order-total extensions in OpenCart
+# (same as clicking "Install" in Extensions > Extensions). Safe to re-run.
+set -euo pipefail
+token="$(oc-admin-token)"
+for ext in module/myparcelnl shipping/myparcel_shipping total/myparcel_total; do
+  curl -s -b /tmp/oc-admin.jar -o /dev/null \
+    "http://localhost/admin/index.php?route=extension/extension/${ext%%/*}/install&extension=${ext#*/}&user_token=${token}"
+done
+echo "[opencart] MyParcel extensions installed."
